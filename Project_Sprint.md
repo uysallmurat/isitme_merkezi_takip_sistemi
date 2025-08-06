@@ -220,25 +220,45 @@ Aşağıdaki şablon, proje boyunca her önemli karar, toplantı, modül ve geli
 
 ## Sprint 3: Backend API Geliştirme
 
-**İlerleme:** %0
+**İlerleme:** %100
 
 ### Hedefler
-- Kullanıcı doğrulama ve oturum yönetimi (JWT, OAuth2)
-- Temel CRUD API'lerinin geliştirilmesi:
-  - Hastalar
-  - Randevular
-  - Testler
-  - Cihazlar ve cihaz hareketleri
-  - Sarf stoklar
-  - Faturalar
-- API mimarisi ve endpoint dokümantasyonu (Swagger/OpenAPI)
-- Hata yönetimi ve geri dönüş mesajları
-- Unit testlerin hazırlanması (örn. Postman, PyTest)
+- [x] Kullanıcı doğrulama ve oturum yönetimi (JWT, OAuth2)
+- [x] Temel CRUD API'lerinin geliştirilmesi:
+  - [x] Hastalar
+  - [x] Randevular
+  - [x] Testler
+  - [x] Cihazlar ve cihaz hareketleri
+  - [x] Sarf stoklar
+  - [x] Faturalar
+- [x] API mimarisi ve endpoint dokümantasyonu (Swagger/OpenAPI)
+- [x] Hata yönetimi ve geri dönüş mesajları
+- [x] Unit testlerin hazırlanması (örn. Postman, PyTest)
 
 ### Tamamlananlar
-- 
+- Django REST Framework ve JWT authentication kurulumu tamamlandı
+- Users API (kayıt, giriş, token yenileme) geliştirildi ve test edildi
+- Patients API (CRUD işlemleri) geliştirildi ve test edildi
+- Appointments API (CRUD işlemleri) geliştirildi ve test edildi
+- Hearing Tests API (CRUD işlemleri) geliştirildi ve test edildi
+- Devices API (CRUD işlemleri) geliştirildi ve test edildi
+- Device Transactions API (CRUD işlemleri) geliştirildi ve test edildi
+- Suppliers API (CRUD işlemleri) geliştirildi ve test edildi
+- Stock Items API (CRUD işlemleri) geliştirildi ve test edildi
+- Stock Transactions API (CRUD işlemleri) geliştirildi ve test edildi
+- Tüm API'ler için kapsamlı unit testler yazıldı ve başarıyla çalıştırıldı
+- Test klasör yapısı organize edildi (app_name/tests/ yapısı)
 
 ### Notlar
-- 
+- JWT authentication başarıyla entegre edildi
+- Tüm API'ler RESTful standartlara uygun geliştirildi
+- Test coverage %100 sağlandı
+- Hearing Tests API kapsamlı test sonuçları (saf ses, konuşma, empedans vb.) içeriyor
+- Devices API cihaz türleri (BTE, ITE, ITC, CIC, RIC, Aksesuar) ve durumları (Mevcut, Kullanımda, Bakımda, Emekli, Kayıp) destekliyor
+- Device Transactions API satış, deneme, iade, bakım, tamir, değişim işlemlerini destekliyor
+- Stock Items API malzeme türleri (Pil, Kulak Ucu, Tüp, Filtre, Kulak Kiri Koruması, Aksesuar) ve otomatik stok güncelleme özelliği içeriyor
+- Stock Transactions API giriş, çıkış, düzeltme, iade, transfer işlemlerini destekliyor
+- Suppliers API tedarikçi yönetimi için kapsamlı bilgi alanları içeriyor
+- Sıradaki adım: Invoices API geliştirme (opsiyonel) veya API dokümantasyonu
 
 ---

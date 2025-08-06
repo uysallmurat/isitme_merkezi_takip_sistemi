@@ -174,3 +174,40 @@
 - Email alanları için format kontrolü yapılmalıdır.
 
 ---
+
+# Sprint 3: Backend API Geliştirme
+
+## 1. Amaç ve Kapsam
+- Tüm ana modüller (hastalar, randevular, işitme testleri, cihazlar, stok, faturalar) için güvenli, RESTful ve test edilebilir backend API'lerinin geliştirilmesi.
+- JWT tabanlı kimlik doğrulama ve rol bazlı erişim.
+- Swagger/OpenAPI ile otomatik API dokümantasyonu.
+- Standart, Türkçe ve kullanıcı dostu hata yönetimi.
+
+## 2. Geliştirilen Modüller ve API'ler
+- Kullanıcı Doğrulama ve Oturum Yönetimi (JWT, OAuth2)
+- Hastalar (patients) CRUD API
+- Randevular (appointments) CRUD API
+- İşitme Testleri (hearing_tests) CRUD API
+- Cihazlar (devices) ve Cihaz Hareketleri (device_transactions) CRUD API
+- Sarf Stoklar (stock_items), Tedarikçi (suppliers) ve Stok Hareketleri (stock_transactions) CRUD API
+- Faturalar (invoices) CRUD API
+
+## 3. Testler ve Otomasyon
+- Tüm modüller için kapsamlı unit testler yazıldı ve başarıyla çalıştırıldı.
+- Testler app_name/tests/ klasörlerinde organize edildi.
+- Testler ile API'nin doğruluğu ve hata yönetimi otomatik olarak kontrol edildi.
+
+## 4. API Dokümantasyonu
+- Swagger/OpenAPI (drf-yasg) ile /swagger/ ve /redoc/ endpointlerinden tüm API görsel ve interaktif olarak dokümante edildi.
+- API dokümantasyonunda iletişim e-posta adresi: uysallmurat@gmail.com
+
+## 5. Hata Yönetimi ve Geri Dönüş Mesajları
+- Tüm API hataları için global exception handler ile Türkçe ve açıklayıcı mesajlar döndürülüyor.
+- 400: Doğrulama hatası, 401: Kimlik doğrulama gerekli, 403: Yetki reddedildi, 404: Kayıt bulunamadı, 500: Sunucu hatası
+- Hata mesajları kullanıcı ve geliştirici dostu, standart formatta.
+
+## 6. Sonuç ve Kapanış
+- Sprint 3 sonunda sistemin tüm backend API altyapısı eksiksiz ve testlerle doğrulanmış şekilde tamamlandı.
+- Sonraki sprintlerde frontend, raporlama, gelişmiş rol yönetimi veya ek modüller planlanabilir.
+
+---

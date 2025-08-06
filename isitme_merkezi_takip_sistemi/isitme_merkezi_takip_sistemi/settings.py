@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'patients',
     'appointments',
     'hearing_tests',
+    'devices',
+    'stock_items',
+    'invoices',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +135,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'EXCEPTION_HANDLER': 'isitme_merkezi_takip_sistemi.exception_handler.custom_exception_handler',
 }
 
 # İleride Custom User modeli için (ör: users.User)

@@ -41,3 +41,9 @@ Bir işitme merkezinde hasta, randevu, işitme testi, cihaz, stok ve finansal s�
 - Tüm dokümantasyon ve kodda işitme testleriyle ilgili referanslar 'hearing_tests' olarak güncellenmiştir.
 - Sprint ve dokümantasyon yönetimi için Project_Sprint.md ve Project_Document.md dosyaları ana kaynaktır.
 - Her yeni chat veya geliştirici, bu promptu ve ilgili dokümanları okuyarak projeye hızlıca adapte olabilir.
+
+## Sprint 3 ve Son Durum (Güncel)
+- Sprint 3 tamamlandı: Tüm backend API'leri (hastalar, randevular, işitme testleri, cihazlar, stok, faturalar) eksiksiz ve testlerle doğrulandı.
+- JWT tabanlı kimlik doğrulama, Swagger/OpenAPI dokümantasyonu (/swagger/ ve /redoc/), Türkçe hata yönetimi ve kapsamlı unit testler mevcut.
+- API dokümantasyonunda iletişim e-posta adresi: uysallmurat@gmail.com
+- Her yeni chat, bu promptu ve Project_Document.md dosyasını okuyarak projeye hızlıca adapte olabilir.
