@@ -197,14 +197,43 @@ Aşağıdaki şablon, proje boyunca her önemli karar, toplantı, modül ve geli
 
 ## Sprint 2: Bilgi Mimarisi ve Veritabanı Tasarımı
 
+**İlerleme:** %100
+
+### Hedefler
+- [x] ER Diyagramı oluşturulması (Hastalar, Cihazlar, Randevular, Testler, Faturalar)
+- [x] Veritabanı modeli ve tablo yapısının tasarlanması (PostgreSQL/MySQL)
+- [x] Tabloların normalizasyonu (1NF, 2NF, 3NF)
+- [x] Foreign key ve index yapılandırmasının planlanması
+- [x] Test verisi oluşturulması ve veri doğrulama senaryolarının hazırlanması
+
+### Tamamlananlar
+- ER Diyagramı hazırlandı ve dokümana eklendi.
+- Ana tabloların detaylı veritabanı şeması oluşturuldu.
+- Tabloların normalizasyonu (1NF, 2NF, 3NF) sağlandı.
+- Foreign key ve index yapılandırması planlandı.
+- Test verisi örnekleri ve veri doğrulama senaryoları hazırlandı.
+
+### Notlar
+- Sprint 2 tüm hedefleriyle tamamlandı.
+
+---
+
+## Sprint 3: Backend API Geliştirme
+
 **İlerleme:** %0
 
 ### Hedefler
-- [ ] ER Diyagramı oluşturulması (Hastalar, Cihazlar, Randevular, Testler, Faturalar)
-- [ ] Veritabanı modeli ve tablo yapısının tasarlanması (PostgreSQL/MySQL)
-- [ ] Tabloların normalizasyonu (1NF, 2NF, 3NF)
-- [ ] Foreign key ve index yapılandırmasının planlanması
-- [ ] Test verisi oluşturulması ve veri doğrulama senaryolarının hazırlanması
+- Kullanıcı doğrulama ve oturum yönetimi (JWT, OAuth2)
+- Temel CRUD API'lerinin geliştirilmesi:
+  - Hastalar
+  - Randevular
+  - Testler
+  - Cihazlar ve cihaz hareketleri
+  - Sarf stoklar
+  - Faturalar
+- API mimarisi ve endpoint dokümantasyonu (Swagger/OpenAPI)
+- Hata yönetimi ve geri dönüş mesajları
+- Unit testlerin hazırlanması (örn. Postman, PyTest)
 
 ### Tamamlananlar
 - 

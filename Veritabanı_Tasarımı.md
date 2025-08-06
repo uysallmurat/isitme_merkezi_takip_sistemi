@@ -25,7 +25,7 @@
 
 ---
 
-### 3. `tests` (İşitme Testleri)
+### 3. `hearing_tests` (İşitme Testleri)
 - `test_id` (PK, INT, AUTO_INCREMENT)
 - `patient_id` (FK, INT, references `patients.patient_id`)
 - `test_type` (VARCHAR(50))

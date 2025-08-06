@@ -38,7 +38,7 @@
   - [ ] `emergency_contacts` - Acil durumlar için yakın bilgileri
 
 - [ ] **Test ve Muayene Tabloları:**
-  - [ ] `tests` - Genel test bilgileri
+  - [ ] `hearing_tests` - Genel test bilgileri
   - [ ] `audiometry_tests` - Odyometri sonuçları (sağ/sol kulak ayrı)
   - [ ] `tympanometry_tests` - Timpanometri sonuçları
   - [ ] `speech_audiometry` - Konuşma odyometrisi
