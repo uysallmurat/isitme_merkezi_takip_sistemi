@@ -37,6 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'users',
+    'patients',
+    'appointments',
+    'hearing_tests',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'isitme_merkezi_backend.urls'
+ROOT_URLCONF = 'isitme_merkezi_takip_sistemi.urls'
 
 TEMPLATES = [
     {
@@ -66,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'isitme_merkezi_backend.wsgi.application'
+WSGI_APPLICATION = 'isitme_merkezi_takip_sistemi.wsgi.application'
 
 
 # Database
@@ -120,3 +126,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django REST Framework ve JWT ayarları
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# İleride Custom User modeli için (ör: users.User)
+# AUTH_USER_MODEL = 'users.User'
