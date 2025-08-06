@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'devices',
     'stock_items',
     'invoices',
+    'frontend',
 ]
 
 MIDDLEWARE = [

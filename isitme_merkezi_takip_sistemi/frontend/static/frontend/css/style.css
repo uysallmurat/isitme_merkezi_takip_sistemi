@@ -1,0 +1,88 @@
+:root {
+  --main-orange: #F57C00;
+  --main-orange-light: #FF9800;
+  --main-orange-dark: #BF360C;
+  --main-bg: #f9f9f9;
+  --main-text: #23272e;
+  --error: #e53935;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Menlo', 'monospace';
+}
+
+body, input, button, select, textarea {
+  font-family: var(--font-mono);
+  color: var(--main-text);
+}
+
+body.login-bg {
+  background: var(--main-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 2.5rem 2rem 2rem 2rem;
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+}
+
+.login-container h1 {
+  color: var(--main-orange);
+  margin-bottom: 2rem;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fafafa;
+  transition: border 0.2s;
+}
+
+.login-container input:focus {
+  border: 1.5px solid var(--main-orange);
+  outline: none;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--main-orange);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-container button:hover {
+  background: var(--main-orange-dark);
+}
+
+.error {
+  color: #fff;
+  background: var(--error);
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 500px) {
+  .login-container {
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+    max-width: 98vw;
+  }
+}

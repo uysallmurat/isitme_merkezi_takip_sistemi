@@ -262,3 +262,53 @@ Aşağıdaki şablon, proje boyunca her önemli karar, toplantı, modül ve geli
 - Sıradaki adım: Invoices API geliştirme (opsiyonel) veya API dokümantasyonu
 
 ---
+
+## Sprint 4: Frontend Geliştirme ve Entegrasyon
+
+**İlerleme:** %0
+
+### Hedefler
+- [ ] Wireframe ve temel arayüz tasarımlarının hazırlanması (Figma/AdobeXD/Mockflow)
+- [ ] React/Vue/Django Templates ile temel kullanıcı panellerinin oluşturulması (Admin, Odyolog, Sekreter)
+- [ ] API entegrasyonlarının yapılması (hasta, randevu, test, cihaz, stok, fatura)
+- [ ] Responsive tasarım ve temel UX iyileştirmelerinin uygulanması
+- [ ] Frontend için temel hata yönetimi ve kullanıcıya bildirimlerin eklenmesi
+- [ ] Frontend unit ve entegrasyon testlerinin yazılması
+- [ ] Kullanıcı kılavuzu ve yardım sayfalarının hazırlanması
+- [ ] (Opsiyonel) Raporlama ve grafik ekranlarının eklenmesi
+
+### Tamamlananlar
+-
+
+### Notlar
+- Öncelik: Wireframe ve temel arayüz → API entegrasyonu → responsive/UX → hata yönetimi → testler → dokümantasyon
+- Geliştirme sırasında backend API dokümantasyonu ve testleri referans alınacaktır.
+---
+
+### Wireframe ve Sayfa Akışı (Detay)
+
+#### Hedefler (İşaretlenebilir Adımlar)
+- [ ] Giriş ve Dashboard temel iskeletinin oluşturulması
+- [ ] Patients modülü (liste, detay, ekle/güncelle) arayüzü
+- [ ] Appointments modülü arayüzü
+- [ ] Devices modülü arayüzü
+- [ ] Test Reports modülü arayüzü
+- [ ] Bildirimler ve hata yönetimi bileşenleri
+- [ ] Responsive/UX iyileştirmeleri
+- [ ] Profil/Çıkış ve yardım sayfaları
+- [ ] (Opsiyonel) Raporlama/grafik ekranları
+
+#### Akış ve Sayfa Listesi (Bilgilendirme)
+- Kullanıcı giriş yapar → Dashboard (Ana Panel)
+- Dashboard'da özet kutular (Patients, Appointments, Test Reports)
+- Altında: Patient List, Upcoming Appointments, Device Inventory tabloları
+- Üst menüden veya sol menüden modüller arası geçiş yapılır
+- Her modülün kendi liste, detay, ekle/güncelle ekranı vardır
+- Bildirimler ve hata mesajları üstte/sağda gösterilir
+- Profil/Çıkış ve yardım menüsü erişilebilir
+
+#### Notlar:
+- Tüm sayfalarda arama ve filtreleme olacak.
+- Dashboard ve modül sayfaları wireframe.png ile uyumlu olacak.
+- Geliştirme sırasında backend API endpointleri ve Swagger/OpenAPI dokümantasyonu referans alınacak.
+---

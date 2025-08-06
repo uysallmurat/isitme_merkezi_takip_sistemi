@@ -1,39 +1,41 @@
 **📊 İŞitme Merkezi Web Projesi: Detaylı To-Do Listesi**
 
+> Not: Aşağıda [x] ile işaretli olanlar Sprint 1-3 kapsamında tamamlanmıştır. Kalan işler Sprint 4 ve sonrası için netleştirilmiştir.
+
 ---
 
 **🌐 1. Proje Planlama ve Hazırlık**
-- [ ] Proje kapsamını tanımla (Hasta kayıt, test raporu, cihaz takibi, stok vs.)
-- [ ] Hedef kitle analizi (Kullanıcı profilleri: sekreter, odyolog, tekniker, hasta)
+- [x] Proje kapsamını tanımla (Hasta kayıt, test raporu, cihaz takibi, stok vs.)
+- [x] Hedef kitle analizi (Kullanıcı profilleri: sekreter, odyolog, tekniker, hasta)
 - [ ] Rekabet ve rakip sistem incelemesi
-- [ ] Gereksinim toplama (Yöneticilerle toplantı, mevcut işleyişin analizi)
-- [ ] MVP (Minimum Viable Product) sürümü tanımla
+- [x] Gereksinim toplama (Yöneticilerle toplantı, mevcut işleyişin analizi)
+- [x] MVP (Minimum Viable Product) sürümü tanımla
 - [ ] Takım ataması ve rol dağılımı (Frontend, Backend, UI/UX, DB, Test)
 
 ---
 
 **📆 2. Bilgi Mimarisi ve Veritabanı Tasarımı**
-- [ ] ER Diyagramı oluştur (Hastalar, Cihazlar, Randevular, Testler, Faturalar)
-- [ ] Veritabanı modeli tasarla (Relational DB: PostgreSQL/MySQL tercih)
-- [ ] Tabloları oluştur ve normalize et (1NF, 2NF, 3NF)
-- [ ] Foreign key ve index yapılarını kur
-- [ ] Test verisi oluştur ve veri doğrulama senaryolarını yap
+- [x] ER Diyagramı oluştur (Hastalar, Cihazlar, Randevular, Testler, Faturalar)
+- [x] Veritabanı modeli tasarla (Relational DB: PostgreSQL/MySQL tercih)
+- [x] Tabloları oluştur ve normalize et (1NF, 2NF, 3NF)
+- [x] Foreign key ve index yapılarını kur
+- [x] Test verisi oluştur ve veri doğrulama senaryolarını yap
 
 ---
 
 **🔖 3. Backend Geliştirme (API Katmanı)**
-- [ ] API mimarisi planla (RESTful veya GraphQL)
-- [ ] Kullanıcı doğrulama ve oturum yönetimi (JWT, OAuth2)
-- [ ] CRUD API'lerini geliştir:
-  - [ ] Hastalar
-  - [ ] Randevular
-  - [ ] Testler
-  - [ ] Cihazlar ve cihaz hareketleri
-  - [ ] Sarf stoklar
-  - [ ] Faturalar
+- [x] API mimarisi planla (RESTful veya GraphQL)
+- [x] Kullanıcı doğrulama ve oturum yönetimi (JWT, OAuth2)
+- [x] CRUD API'lerini geliştir:
+  - [x] Hastalar
+  - [x] Randevular
+  - [x] Testler
+  - [x] Cihazlar ve cihaz hareketleri
+  - [x] Sarf stoklar
+  - [x] Faturalar
 - [ ] Loglama (request-response logları)
-- [ ] Hata yönetimi ve geri dönüş mesajları
-- [ ] Unit testler (Postman / PyTest / JUnit vs.)
+- [x] Hata yönetimi ve geri dönüş mesajları
+- [x] Unit testler (Postman / PyTest / JUnit vs.)
 
 ---
 
@@ -73,7 +75,7 @@
 
 **📊 7. Test ve Kalite Kontrol**
 - [ ] Manuel test senaryoları yaz (hasta kaydı, randevu, test sonucu girme vb.)
-- [ ] Unit test (backend ve frontend)
+- [x] Unit test (backend ve frontend)
 - [ ] Entegrasyon testleri
 - [ ] Yük testi (JMeter, Locust)
 - [ ] Kullanılabilirlik testi (UX testleri)

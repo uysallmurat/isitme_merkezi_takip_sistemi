@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | İşitme Merkezi Takip Sistemi</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+    <style>
+        :root {
+            --main-orange: #FF9800;
+            --main-orange-light: #FFA726;
+            --main-orange-dark: #F57C00;
+        }
+        .dashboard-bg { background: #f9f9f9; min-height: 100vh; }
+        .topbar {
+            background: var(--main-orange-dark);
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar .logo { font-weight: bold; font-size: 1.2rem; letter-spacing: 1px; }
+        .topbar nav a {
+            color: #fff;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .topbar nav a:hover { color: var(--main-orange-light); }
+        .dashboard-container {
+            display: flex;
+            min-height: 90vh;
+        }
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            border-right: 1px solid #eee;
+            padding: 2rem 1rem 1rem 1rem;
+        }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { margin-bottom: 1.2rem; }
+        .sidebar a {
+            color: var(--main-orange-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .sidebar a:hover { color: var(--main-orange); }
+        .main-content {
+            flex: 1;
+            padding: 2rem 2rem 1rem 2rem;
+        }
+        .summary-cards {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .summary-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            flex: 1;
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+        .summary-card h2 { color: var(--main-orange-dark); font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .summary-card .count { font-size: 2.2rem; font-weight: bold; color: var(--main-orange); }
+        .dashboard-tables {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .dashboard-table {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            flex: 1 1 350px;
+            min-width: 320px;
+            margin-bottom: 2rem;
+            padding: 1rem;
+        }
+        .dashboard-table h3 { color: var(--main-orange-dark); font-size: 1rem; margin-bottom: 0.7rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #eee; font-size: 0.97rem; }
+        th { color: var(--main-orange); }
+        @media (max-width: 900px) {
+            .summary-cards, .dashboard-tables { flex-direction: column; gap: 1rem; }
+            .sidebar { display: none; }
+            .main-content { padding: 1rem; }
+        }
+    </style>
+</head>
+<body class="dashboard-bg">
+    <div class="topbar">
+        <div class="logo">HEARING-CENTER</div>
+        <nav>
+            <a href="/dashboard/">DASHBOARD</a>
+            <a href="#">PATIENTS</a>
+            <a href="#">APPOINTMENTS</a>
+            <a href="#">DEVICES</a>
+            <a href="/logout/">Çıkış</a>
+        </nav>
+    </div>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/dashboard/">Dashboard</a></li>
+                <li><a href="#">Patients</a></li>
+                <li><a href="#">Appointments</a></li>
+                <li><a href="#">Devices</a></li>
+                <li><a href="#">Test Reports</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h2>PATIENTS</h2>
+                    <div class="count">324</div>
+                </div>
+                <div class="summary-card">
+                    <h2>APPOINTMENTS</h2>
+                    <div class="count">42</div>
+                </div>
+                <div class="summary-card">
+                    <h2>TEST REPORTS</h2>
+                    <div class="count">18</div>
+                </div>
+            </div>
+            <div class="dashboard-tables">
+                <div class="dashboard-table">
+                    <h3>PATIENT LIST</h3>
+                    <input type="text" placeholder="Search patients..." style="width:100%;margin-bottom:0.7rem;">
+                    <table>
+                        <tr><th>Name</th><th>Date of Birth</th><th>Phone</th></tr>
+                        <tr><td>Ahmet Yılmaz</td><td>1980-05-12</td><td>5551234567</td></tr>
+                        <tr><td>Ayşe Demir</td><td>1975-09-23</td><td>5559876543</td></tr>
+                    </table>
+                </div>
+                <div class="dashboard-table">
+                    <h3>UPCOMING APPOINTMENTS</h3>
+                    <input type="text" placeholder="Search appointments..." style="width:100%;margin-bottom:0.7rem;">
+                    <table>
+                        <tr><th>Date</th><th>Patient</th><th>Time</th></tr>
+                        <tr><td>2024-08-10</td><td>Ahmet Yılmaz</td><td>10:00</td></tr>
+                        <tr><td>2024-08-11</td><td>Ayşe Demir</td><td>11:30</td></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="dashboard-tables">
+                <div class="dashboard-table">
+                    <h3>DEVICE INVENTORY</h3>
+                    <input type="text" placeholder="Search devices..." style="width:100%;margin-bottom:0.7rem;">
+                    <table>
+                        <tr><th>Device</th><th>Brand</th><th>Model</th><th>Stock</th></tr>
+                        <tr><td>Audeo</td><td>Phonak</td><td>P90</td><td>12</td></tr>
+                        <tr><td>Opn S1</td><td>Oticon</td><td>S1</td><td>7</td></tr>
+                    </table>
+                </div>
+                <div class="dashboard-table">
+                    <h3>TEST REPORTS</h3>
+                    <input type="text" placeholder="Search reports..." style="width:100%;margin-bottom:0.7rem;">
+                    <table>
+                        <tr><th>Date</th><th>Patient</th><th>Type</th></tr>
+                        <tr><td>2024-08-09</td><td>Ahmet Yılmaz</td><td>Odyometri</td></tr>
+                        <tr><td>2024-08-08</td><td>Ayşe Demir</td><td>Timpanometri</td></tr>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
