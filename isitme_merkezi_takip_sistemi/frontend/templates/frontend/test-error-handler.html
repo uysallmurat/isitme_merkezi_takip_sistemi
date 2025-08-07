@@ -1,0 +1,641 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hata Yönetimi Test Sayfası | İşitme Merkezi Takip Sistemi</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="{% static 'frontend/js/error-handler.js' %}"></script>
+    <style>
+        :root {
+            --main-orange: #FF6F00;
+            --main-orange-light: #F57C00;
+            --main-orange-dark: #BF360C;
+            --main-orange-gradient: linear-gradient(90deg, #FF6F00 0%, #F57C00 60%, #BF360C 100%);
+            --main-text: #23272e;
+        }
+        .page-bg { background: #f9f9f9; min-height: 100vh; }
+        .topbar {
+            background: var(--main-orange-gradient);
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar .logo { font-weight: bold; font-size: 1.2rem; letter-spacing: 1px; }
+        .topbar nav a {
+            color: #fff;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .topbar nav a:hover { color: var(--main-orange-light); }
+        .page-container {
+            display: flex;
+            min-height: 90vh;
+        }
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            border-right: 1px solid #eee;
+            padding: 2rem 1rem 1rem 1rem;
+        }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { margin-bottom: 1.2rem; }
+        .sidebar a {
+            color: var(--main-orange-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .sidebar a:hover { color: var(--main-orange); }
+        .main-content {
+            flex: 1;
+            padding: 2rem 2rem 1rem 2rem;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .page-title {
+            color: var(--main-text);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .content-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 2rem;
+        }
+        .content-card h2 {
+            color: var(--main-text);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--main-orange);
+            padding-bottom: 0.5rem;
+        }
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .test-button {
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .test-button.success {
+            background: #28a745;
+            color: #fff;
+        }
+        .test-button.error {
+            background: #dc3545;
+            color: #fff;
+        }
+        .test-button.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .test-button.info {
+            background: #17a2b8;
+            color: #fff;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .test-form {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--main-text);
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--main-orange);
+            box-shadow: 0 0 0 2px rgba(255,111,0,0.2);
+        }
+        .test-results {
+            background: #e9ecef;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .loading-demo {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 2px dashed #dee2e6;
+        }
+        .api-url {
+            background: #e9ecef;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-family: monospace;
+        }
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { padding: 1rem; }
+            .test-buttons { grid-template-columns: 1fr; }
+            .page-header { flex-direction: column; gap: 1rem; align-items: stretch; }
+        }
+    </style>
+</head>
+<body class="page-bg">
+    <div class="topbar">
+        <div class="logo">İŞİTME MERKEZİ</div>
+        <nav>
+            <a href="/dashboard/">ANASAYFA</a>
+            <a href="/patients/">HASTALAR</a>
+            <a href="/appointments/">RANDEVULAR</a>
+            <a href="/devices/">CİHAZLAR</a>
+            <a href="/test-reports/">TEST RAPORLARI</a>
+            <a href="/inventory/">STOK</a>
+            <a href="/invoices/">FATURA</a>
+            <a href="/logout/">ÇIKIŞ</a>
+        </nav>
+    </div>
+    <div class="page-container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/dashboard/">ANASAYFA</a></li>
+                <li><a href="/patients/">HASTALAR</a></li>
+                <li><a href="/appointments/">RANDEVULAR</a></li>
+                <li><a href="/devices/">CİHAZLAR</a></li>
+                <li><a href="/test-reports/">TEST RAPORLARI</a></li>
+                <li><a href="/inventory/">STOK YÖNETİMİ</a></li>
+                <li><a href="/invoices/">FATURA YÖNETİMİ</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fa-solid fa-bug"></i> Hata Yönetimi Test Sayfası</h1>
+            </div>
+
+            <!-- Bildirim Testleri -->
+            <div class="content-card">
+                <h2><i class="fa-solid fa-bell"></i> Bildirim Testleri</h2>
+                <div class="test-buttons">
+                    <button class="test-button success" onclick="testSuccessNotification()">
+                        <i class="fa-solid fa-check-circle"></i> Başarı Bildirimi
+                    </button>
+                    <button class="test-button error" onclick="testErrorNotification()">
+                        <i class="fa-solid fa-exclamation-circle"></i> Hata Bildirimi
+                    </button>
+                    <button class="test-button warning" onclick="testWarningNotification()">
+                        <i class="fa-solid fa-exclamation-triangle"></i> Uyarı Bildirimi
+                    </button>
+                    <button class="test-button info" onclick="testInfoNotification()">
+                        <i class="fa-solid fa-info-circle"></i> Bilgi Bildirimi
+                    </button>
+                    <button class="test-button" onclick="testMultipleNotifications()">
+                        <i class="fa-solid fa-layer-group"></i> Çoklu Bildirim
+                    </button>
+                    <button class="test-button" onclick="clearAllNotifications()">
+                        <i class="fa-solid fa-trash"></i> Tüm Bildirimleri Temizle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Testleri -->
+            <div class="content-card">
+                <h2><i class="fa-solid fa-file-alt"></i> Form Testleri</h2>
+                <div class="test-form">
+                    <div class="form-group">
+                        <label for="testName">Ad Soyad *</label>
+                        <input type="text" id="testName" placeholder="Adınızı girin">
+                    </div>
+                    <div class="form-group">
+                        <label for="testEmail">E-posta *</label>
+                        <input type="email" id="testEmail" placeholder="E-posta adresinizi girin">
+                    </div>
+                    <div class="form-group">
+                        <label for="testPhone">Telefon</label>
+                        <input type="tel" id="testPhone" placeholder="Telefon numaranızı girin">
+                    </div>
+                    <div class="form-group">
+                        <label for="testCategory">Kategori</label>
+                        <select id="testCategory">
+                            <option value="">Kategori seçin</option>
+                            <option value="patient">Hasta</option>
+                            <option value="appointment">Randevu</option>
+                            <option value="device">Cihaz</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="test-buttons">
+                    <button class="test-button" onclick="testFormSubmit()">
+                        <i class="fa-solid fa-paper-plane"></i> Form Gönder
+                    </button>
+                    <button class="test-button error" onclick="testFormErrors()">
+                        <i class="fa-solid fa-exclamation-circle"></i> Form Hatalarını Göster
+                    </button>
+                    <button class="test-button" onclick="clearFormErrors()">
+                        <i class="fa-solid fa-eraser"></i> Hataları Temizle
+                    </button>
+                    <button class="test-button" onclick="testFormValidation()">
+                        <i class="fa-solid fa-check-double"></i> Form Validasyonu
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Testleri -->
+            <div class="content-card">
+                <h2><i class="fa-solid fa-spinner"></i> Loading Durumu Testleri</h2>
+                <div class="loading-demo" id="loadingDemo">
+                    <p>Loading demo alanı - butonlara tıklayarak test edin</p>
+                </div>
+                <div class="test-buttons">
+                    <button class="test-button" onclick="testLoadingOverlay()">
+                        <i class="fa-solid fa-spinner"></i> Loading Overlay
+                    </button>
+                    <button class="test-button" onclick="testButtonLoading()">
+                        <i class="fa-solid fa-hourglass-half"></i> Button Loading
+                    </button>
+                    <button class="test-button" onclick="testFormLoading()">
+                        <i class="fa-solid fa-file-upload"></i> Form Loading
+                    </button>
+                    <button class="test-button" onclick="hideAllLoading()">
+                        <i class="fa-solid fa-stop"></i> Tüm Loading'leri Durdur
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Testleri -->
+            <div class="content-card">
+                <h2><i class="fa-solid fa-plug"></i> API Hata Testleri</h2>
+                <div class="api-test">
+                    <div class="api-url">API Base URL: <strong>/api</strong></div>
+                    <div class="test-buttons">
+                        <button class="test-button" onclick="testApiSuccess()">
+                            <i class="fa-solid fa-check-circle"></i> Başarılı API
+                        </button>
+                        <button class="test-button error" onclick="testApi401()">
+                            <i class="fa-solid fa-user-slash"></i> 401 Unauthorized
+                        </button>
+                        <button class="test-button error" onclick="testApi403()">
+                            <i class="fa-solid fa-ban"></i> 403 Forbidden
+                        </button>
+                        <button class="test-button error" onclick="testApi404()">
+                            <i class="fa-solid fa-question-circle"></i> 404 Not Found
+                        </button>
+                        <button class="test-button error" onclick="testApi500()">
+                            <i class="fa-solid fa-exclamation-triangle"></i> 500 Server Error
+                        </button>
+                        <button class="test-button error" onclick="testApiConnectionError()">
+                            <i class="fa-solid fa-wifi"></i> Bağlantı Hatası
+                        </button>
+                    </div>
+                    <div class="test-results" id="apiResults">
+                        API test sonuçları burada görünecek...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Hata Testleri -->
+            <div class="content-card">
+                <h2><i class="fa-solid fa-exclamation-triangle"></i> Global Hata Testleri</h2>
+                <div class="test-buttons">
+                    <button class="test-button error" onclick="testJavaScriptError()">
+                        <i class="fa-solid fa-code"></i> JavaScript Hatası
+                    </button>
+                    <button class="test-button error" onclick="testPromiseRejection()">
+                        <i class="fa-solid fa-hand-paper"></i> Promise Rejection
+                    </button>
+                    <button class="test-button" onclick="testTokenManagement()">
+                        <i class="fa-solid fa-key"></i> Token Yönetimi
+                    </button>
+                    <button class="test-button" onclick="testAuthCheck()">
+                        <i class="fa-solid fa-shield-alt"></i> Oturum Kontrolü
+                    </button>
+                </div>
+            </div>
+
+            <!-- Test Sonuçları -->
+            <div class="content-card">
+                <h2><i class="fa-solid fa-clipboard-list"></i> Test Sonuçları</h2>
+                <div class="test-results" id="testResults">
+                    Test sonuçları burada görünecek...
+                </div>
+                <div class="test-buttons">
+                    <button class="test-button" onclick="clearTestResults()">
+                        <i class="fa-solid fa-trash"></i> Sonuçları Temizle
+                    </button>
+                    <button class="test-button" onclick="exportTestResults()">
+                        <i class="fa-solid fa-download"></i> Sonuçları İndir
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Test sonuçları için global değişken
+        let testResults = [];
+
+        // Bildirim testleri
+        function testSuccessNotification() {
+            errorHandler.showSuccess('Bu bir başarı bildirimidir!');
+            addTestResult('Bildirim Testi', 'Başarı bildirimi gösterildi', 'success');
+        }
+
+        function testErrorNotification() {
+            errorHandler.showError('Bu bir hata bildirimidir!');
+            addTestResult('Bildirim Testi', 'Hata bildirimi gösterildi', 'error');
+        }
+
+        function testWarningNotification() {
+            errorHandler.showWarning('Bu bir uyarı bildirimidir!');
+            addTestResult('Bildirim Testi', 'Uyarı bildirimi gösterildi', 'warning');
+        }
+
+        function testInfoNotification() {
+            errorHandler.showInfo('Bu bir bilgi bildirimidir!');
+            addTestResult('Bildirim Testi', 'Bilgi bildirimi gösterildi', 'info');
+        }
+
+        function testMultipleNotifications() {
+            errorHandler.showSuccess('İlk bildirim');
+            setTimeout(() => errorHandler.showError('İkinci bildirim'), 500);
+            setTimeout(() => errorHandler.showWarning('Üçüncü bildirim'), 1000);
+            setTimeout(() => errorHandler.showInfo('Dördüncü bildirim'), 1500);
+            addTestResult('Bildirim Testi', 'Çoklu bildirimler gösterildi', 'info');
+        }
+
+        function clearAllNotifications() {
+            // errorHandler'da clearNotifications metodu varsa kullan
+            if (typeof errorHandler.clearNotifications === 'function') {
+                errorHandler.clearNotifications();
+            }
+            addTestResult('Bildirim Testi', 'Tüm bildirimler temizlendi', 'info');
+        }
+
+        // Form testleri
+        function testFormSubmit() {
+            const formData = {
+                name: document.getElementById('testName').value,
+                email: document.getElementById('testEmail').value,
+                phone: document.getElementById('testPhone').value,
+                category: document.getElementById('testCategory').value
+            };
+
+            if (!formData.name || !formData.email) {
+                errorHandler.showError('Ad Soyad ve E-posta alanları zorunludur!');
+                addTestResult('Form Testi', 'Form validasyon hatası', 'error');
+                return;
+            }
+
+            errorHandler.showSuccess('Form başarıyla gönderildi!');
+            addTestResult('Form Testi', 'Form başarıyla gönderildi', 'success');
+        }
+
+        function testFormErrors() {
+            const nameField = document.getElementById('testName');
+            const emailField = document.getElementById('testEmail');
+
+            errorHandler.markFieldError(nameField, 'Ad Soyad alanı zorunludur');
+            errorHandler.markFieldError(emailField, 'Geçerli bir e-posta adresi girin');
+
+            addTestResult('Form Testi', 'Form hataları gösterildi', 'error');
+        }
+
+        function clearFormErrors() {
+            const fields = ['testName', 'testEmail', 'testPhone', 'testCategory'];
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                errorHandler.clearFieldError(field);
+            });
+            addTestResult('Form Testi', 'Form hataları temizlendi', 'info');
+        }
+
+        function testFormValidation() {
+            const nameField = document.getElementById('testName');
+            const emailField = document.getElementById('testEmail');
+
+            // Validasyon testleri
+            if (!nameField.value.trim()) {
+                errorHandler.markFieldError(nameField, 'Ad Soyad alanı zorunludur');
+            }
+
+            if (!emailField.value.trim()) {
+                errorHandler.markFieldError(emailField, 'E-posta alanı zorunludur');
+            } else if (!isValidEmail(emailField.value)) {
+                errorHandler.markFieldError(emailField, 'Geçerli bir e-posta adresi girin');
+            }
+
+            addTestResult('Form Testi', 'Form validasyonu çalıştırıldı', 'info');
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Loading testleri
+        function testLoadingOverlay() {
+            errorHandler.showLoadingOverlay('Sayfa yükleniyor...');
+            setTimeout(() => {
+                errorHandler.hideLoadingOverlay();
+                addTestResult('Loading Testi', 'Loading overlay test edildi', 'success');
+            }, 3000);
+        }
+
+        function testButtonLoading() {
+            const button = document.querySelector('.test-button');
+            errorHandler.setButtonLoading(button, 'Yükleniyor...');
+            setTimeout(() => {
+                errorHandler.clearButtonLoading(button);
+                addTestResult('Loading Testi', 'Button loading test edildi', 'success');
+            }, 2000);
+        }
+
+        function testFormLoading() {
+            const form = document.querySelector('.test-form');
+            errorHandler.setFormLoading(form);
+            setTimeout(() => {
+                errorHandler.clearFormLoading(form);
+                addTestResult('Loading Testi', 'Form loading test edildi', 'success');
+            }, 2000);
+        }
+
+        function hideAllLoading() {
+            errorHandler.hideLoadingOverlay();
+            const buttons = document.querySelectorAll('.test-button');
+            buttons.forEach(button => errorHandler.clearButtonLoading(button));
+            const forms = document.querySelectorAll('.test-form');
+            forms.forEach(form => errorHandler.clearFormLoading(form));
+            addTestResult('Loading Testi', 'Tüm loading durumları durduruldu', 'info');
+        }
+
+        // API testleri
+        async function testApiSuccess() {
+            try {
+                const response = await errorHandler.apiRequest('/api/test/success/');
+                addTestResult('API Testi', 'Başarılı API çağrısı', 'success');
+            } catch (error) {
+                addTestResult('API Testi', 'API çağrısı başarısız', 'error');
+            }
+        }
+
+        async function testApi401() {
+            try {
+                await errorHandler.apiRequest('/api/test/401/');
+            } catch (error) {
+                addTestResult('API Testi', '401 Unauthorized hatası yakalandı', 'error');
+            }
+        }
+
+        async function testApi403() {
+            try {
+                await errorHandler.apiRequest('/api/test/403/');
+            } catch (error) {
+                addTestResult('API Testi', '403 Forbidden hatası yakalandı', 'error');
+            }
+        }
+
+        async function testApi404() {
+            try {
+                await errorHandler.apiRequest('/api/test/404/');
+            } catch (error) {
+                addTestResult('API Testi', '404 Not Found hatası yakalandı', 'error');
+            }
+        }
+
+        async function testApi500() {
+            try {
+                await errorHandler.apiRequest('/api/test/500/');
+            } catch (error) {
+                addTestResult('API Testi', '500 Server Error hatası yakalandı', 'error');
+            }
+        }
+
+        async function testApiConnectionError() {
+            try {
+                await errorHandler.apiRequest('https://invalid-url-that-does-not-exist.com/');
+            } catch (error) {
+                addTestResult('API Testi', 'Bağlantı hatası yakalandı', 'error');
+            }
+        }
+
+        // Global hata testleri
+        function testJavaScriptError() {
+            try {
+                // Kasıtlı JavaScript hatası
+                const undefinedVar = undefined;
+                undefinedVar.someMethod();
+            } catch (error) {
+                addTestResult('Global Hata Testi', 'JavaScript hatası yakalandı', 'error');
+            }
+        }
+
+        function testPromiseRejection() {
+            const promise = new Promise((resolve, reject) => {
+                setTimeout(() => reject(new Error('Test Promise Rejection')), 100);
+            });
+
+            promise.catch(error => {
+                addTestResult('Global Hata Testi', 'Promise rejection yakalandı', 'error');
+            });
+        }
+
+        function testTokenManagement() {
+            // Token testleri
+            localStorage.setItem('access_token', 'test-token');
+            const token = localStorage.getItem('access_token');
+            addTestResult('Token Testi', `Token yönetimi test edildi: ${token ? 'Token var' : 'Token yok'}`, 'info');
+        }
+
+        function testAuthCheck() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                errorHandler.showWarning('Oturum bulunamadı, giriş sayfasına yönlendiriliyorsunuz');
+                addTestResult('Auth Testi', 'Oturum kontrolü: Oturum yok', 'warning');
+            } else {
+                addTestResult('Auth Testi', 'Oturum kontrolü: Oturum var', 'success');
+            }
+        }
+
+        // Test sonuçları yönetimi
+        function addTestResult(category, message, type) {
+            const timestamp = new Date().toLocaleTimeString('tr-TR');
+            const result = `[${timestamp}] ${category}: ${message}`;
+            testResults.push(result);
+
+            const resultsElement = document.getElementById('testResults');
+            resultsElement.textContent = testResults.join('\n');
+            resultsElement.scrollTop = resultsElement.scrollHeight;
+
+            // API sonuçları için ayrı alan
+            if (category === 'API Testi') {
+                const apiResultsElement = document.getElementById('apiResults');
+                apiResultsElement.textContent = result;
+            }
+        }
+
+        function clearTestResults() {
+            testResults = [];
+            document.getElementById('testResults').textContent = 'Test sonuçları temizlendi...';
+            document.getElementById('apiResults').textContent = 'API test sonuçları burada görünecek...';
+        }
+
+        function exportTestResults() {
+            const resultsText = testResults.join('\n');
+            const blob = new Blob([resultsText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `test-results-${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            addTestResult('Export', 'Test sonuçları indirildi', 'success');
+        }
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            addTestResult('Sistem', 'Test sayfası yüklendi', 'info');
+        });
+    </script>
+</body>
+</html> 
+</html> 

@@ -1,0 +1,478 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasta Yönetimi | İşitme Merkezi Takip Sistemi</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="{% static 'frontend/js/error-handler.js' %}"></script>
+    <style>
+        :root {
+            --main-orange: #FF6F00;
+            --main-orange-light: #F57C00;
+            --main-orange-dark: #BF360C;
+            --main-orange-gradient: linear-gradient(90deg, #FF6F00 0%, #F57C00 60%, #BF360C 100%);
+            --main-text: #23272e;
+        }
+        .page-bg { background: #f9f9f9; min-height: 100vh; }
+        .topbar {
+            background: var(--main-orange-gradient);
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar .logo { font-weight: bold; font-size: 1.2rem; letter-spacing: 1px; }
+        .topbar nav a {
+            color: #fff;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .topbar nav a:hover { color: var(--main-orange-light); }
+        .page-container {
+            display: flex;
+            min-height: 90vh;
+        }
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            border-right: 1px solid #eee;
+            padding: 2rem 1rem 1rem 1rem;
+        }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { margin-bottom: 1.2rem; }
+        .sidebar a {
+            color: var(--main-orange-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .sidebar a:hover { color: var(--main-orange); }
+        .main-content {
+            flex: 1;
+            padding: 2rem 2rem 1rem 2rem;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .page-title {
+            color: var(--main-text);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .btn-primary {
+            background: var(--main-orange);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background: var(--main-orange-dark);
+        }
+        .content-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .filter-group label {
+            font-weight: 600;
+            color: var(--main-text);
+            font-size: 0.9rem;
+        }
+        .filter-group input,
+        .filter-group select {
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--main-orange);
+            box-shadow: 0 0 0 2px rgba(255,111,0,0.2);
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--main-text);
+        }
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-active { background: #e8f5e8; color: #388e3c; }
+        .status-inactive { background: #ffebee; color: #d32f2f; }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .btn-edit { background: #2196f3; color: white; }
+        .btn-delete { background: #f44336; color: white; }
+        .btn-view { background: #4caf50; color: white; }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .btn-secondary:hover { background: #5a6268; }
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            text-align: center;
+        }
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--main-orange);
+            margin-bottom: 0.5rem;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--main-text);
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { padding: 1rem; }
+            .filters { flex-direction: column; }
+            .page-header { flex-direction: column; gap: 1rem; align-items: stretch; }
+            .form-row { grid-template-columns: 1fr; }
+            .stats-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="page-bg">
+    <div class="topbar">
+        <div class="logo">İŞİTME MERKEZİ</div>
+        <nav>
+            <a href="/dashboard/">ANASAYFA</a>
+            <a href="/patients/">HASTALAR</a>
+            <a href="/appointments/">RANDEVULAR</a>
+            <a href="/devices/">CİHAZLAR</a>
+            <a href="/test-reports/">TEST RAPORLARI</a>
+            <a href="/inventory/">STOK</a>
+            <a href="/invoices/">FATURA</a>
+            <a href="/logout/">ÇIKIŞ</a>
+        </nav>
+    </div>
+    <div class="page-container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/dashboard/">ANASAYFA</a></li>
+                <li><a href="/patients/">HASTALAR</a></li>
+                <li><a href="/appointments/">RANDEVULAR</a></li>
+                <li><a href="/devices/">CİHAZLAR</a></li>
+                <li><a href="/test-reports/">TEST RAPORLARI</a></li>
+                <li><a href="/inventory/">STOK YÖNETİMİ</a></li>
+                <li><a href="/invoices/">FATURA YÖNETİMİ</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fa-solid fa-user-injured"></i> Hasta Yönetimi</h1>
+                <a href="#" class="btn-primary" onclick="openNewPatientModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Hasta
+                </a>
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="totalPatients">0</div>
+                    <div class="stat-label">Toplam Hasta</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <div class="stat-number" id="activePatients">0</div>
+                    <div class="stat-label">Aktif Hastalar</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <div class="stat-number" id="newPatients">0</div>
+                    <div class="stat-label">Bu Ay Yeni Hasta</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-number" id="appointmentsThisMonth">0</div>
+                    <div class="stat-label">Bu Ay Randevu</div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="search">Arama</label>
+                        <input type="text" id="search" placeholder="Hasta ara (ad, soyad, telefon...)">
+                    </div>
+                    <div class="filter-group">
+                        <label for="status">Durum</label>
+                        <select id="status">
+                            <option value="">Tümü</option>
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Pasif</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="ageGroup">Yaş Grubu</label>
+                        <select id="ageGroup">
+                            <option value="">Tümü</option>
+                            <option value="child">Çocuk (0-12)</option>
+                            <option value="teen">Genç (13-18)</option>
+                            <option value="adult">Yetişkin (19-64)</option>
+                            <option value="senior">Yaşlı (65+)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ad Soyad</th>
+                                <th>Doğum Tarihi</th>
+                                <th>Telefon</th>
+                                <th>E-posta</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientsTable">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem;">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ad Soyad</th>
+                        <th>Doğum Tarihi</th>
+                        <th>Telefon</th>
+                        <th>E-posta</th>
+                        <th>Son Randevu</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="patientsTableBody">
+                    <tr class="loading-row"><td colspan="7">Yükleniyor...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+    </div>
+    <script>
+        const API_BASE_URL = '/api';
+        let currentPage = 1;
+        let totalPages = 1;
+        let lastQuery = '';
+        let lastStatus = '';
+        let lastAge = '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchPatients();
+            fetchPatientStats();
+            document.getElementById('searchInput').addEventListener('input', debounce(onFilterChange, 500));
+            document.getElementById('statusFilter').addEventListener('change', onFilterChange);
+            document.getElementById('ageFilter').addEventListener('change', onFilterChange);
+        });
+
+        function onFilterChange() {
+            currentPage = 1;
+            fetchPatients();
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        async function fetchPatients() {
+            const tbody = document.getElementById('patientsTableBody');
+            tbody.innerHTML = '<tr class="loading-row"><td colspan="7">Yükleniyor...</td></tr>';
+            const search = document.getElementById('searchInput').value.trim();
+            const status = document.getElementById('statusFilter').value;
+            const age = document.getElementById('ageFilter').value;
+            lastQuery = search;
+            lastStatus = status;
+            lastAge = age;
+            let url = `${API_BASE_URL}/patients/?page=${currentPage}`;
+            if (search) url += `&search=${encodeURIComponent(search)}`;
+            if (status) url += `&status=${status}`;
+            if (age) url += `&age_group=${age}`;
+            
+            try {
+                const data = await errorHandler.apiRequest(url);
+                renderPatients(data.results || data);
+                renderPagination(data.count, data.page_size || 10);
+            } catch (error) {
+                tbody.innerHTML = '<tr><td colspan="7">Veri alınamadı.</td></tr>';
+            }
+        }
+
+        async function fetchPatientStats() {
+            try {
+                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
+                document.getElementById('totalPatients').textContent = data.total_patients || 0;
+                document.getElementById('activePatients').textContent = data.active_patients || 0;
+                document.getElementById('newPatients').textContent = data.new_patients_this_month || 0;
+                document.getElementById('appointmentsThisMonth').textContent = data.appointments_this_month || 0;
+            } catch (error) {
+                console.error('İstatistikler yüklenemedi:', error);
+            }
+        }
+
+        function renderPatients(patients) {
+            const tbody = document.getElementById('patientsTableBody');
+            if (!patients || patients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7">Kayıt bulunamadı.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = '';
+            patients.forEach(patient => {
+                const statusClass = patient.status === 'active' ? 'status-active' : 'status-inactive';
+                const statusLabel = patient.status === 'active' ? 'Aktif' : 'Pasif';
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${patient.first_name} ${patient.last_name}</td>
+                        <td>${patient.birth_date || '-'}</td>
+                        <td>${patient.phone || '-'}</td>
+                        <td>${patient.email || '-'}</td>
+                        <td>${patient.last_appointment || '-'}</td>
+                        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-edit" onclick="editPatient(${patient.id})">Düzenle</button>
+                                <button class="btn-delete" onclick="deletePatient(${patient.id})">Sil</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderPagination(count, pageSize) {
+            totalPages = Math.ceil(count / pageSize);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            if (totalPages <= 1) return;
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                if (i === currentPage) btn.classList.add('active');
+                btn.onclick = () => { currentPage = i; fetchPatients(); };
+                pagination.appendChild(btn);
+            }
+        }
+
+        function editPatient(id) {
+            window.location.href = `/patients/edit/${id}/`;
+        }
+
+        async function deletePatient(id) {
+            if (!confirm('Bu hastayı silmek istediğinize emin misiniz?')) return;
+            try {
+                await errorHandler.apiRequest(`${API_BASE_URL}/patients/${id}/`, {
+                    method: 'DELETE'
+                });
+                errorHandler.showSuccess('Hasta silindi');
+                fetchPatients();
+            } catch (error) {
+                // Hata zaten errorHandler tarafından gösterildi
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -19,6 +19,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from api.views import dashboard_statistics
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -34,6 +35,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('frontend.urls')),
+    path('api/dashboard/statistics/', dashboard_statistics, name='dashboard-statistics'),
     path('api/users/', include('users.urls')),
     path('api/patients/', include('patients.urls')),
     path('api/appointments/', include('appointments.urls')),

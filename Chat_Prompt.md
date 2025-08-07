@@ -12,8 +12,10 @@ Bir işitme merkezinde hasta, randevu, işitme testi, cihaz, stok ve finansal s�
 
 ## Sprint ve Süreç Yönetimi
 - Sprintler Project_Sprint.md dosyasında, ilerleme yüzdesi ve tamamlananlar ile takip edilir.
+- Her sprint %100 tamamlandığında, bir sonraki sprint oluşturulur. Yeni sprintler oluşturulurken proje_planı.md dosyası referans alınır ve gerekirse eklemeler yapılır.
 - Her sprint sonunda Project_Document.md dosyasına detaylı dokümantasyon eklenir.
 - Tüm önemli kararlar, süreçler ve mimari değişiklikler Project_Document.md ve Chat_Prompt.md dosyalarında özetlenir.
+- Her yeni chat veya geliştirici, bu promptu ve ilgili dokümanları okuyarak projeye hızlıca adapte olabilir.
 
 ## Yapılan Başlıca İşlemler
 1. **Proje kapsamı, hedef kitle ve kullanıcı profilleri çıkarıldı.**

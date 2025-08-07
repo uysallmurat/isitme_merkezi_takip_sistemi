@@ -1,0 +1,479 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randevu Yönetimi | İşitme Merkezi Takip Sistemi</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="{% static 'frontend/js/error-handler.js' %}"></script>
+    <style>
+        :root {
+            --main-orange: #FF6F00;
+            --main-orange-light: #F57C00;
+            --main-orange-dark: #BF360C;
+            --main-orange-gradient: linear-gradient(90deg, #FF6F00 0%, #F57C00 60%, #BF360C 100%);
+            --main-text: #23272e;
+        }
+        .page-bg { background: #f9f9f9; min-height: 100vh; }
+        .topbar {
+            background: var(--main-orange-gradient);
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar .logo { font-weight: bold; font-size: 1.2rem; letter-spacing: 1px; }
+        .topbar nav a {
+            color: #fff;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .topbar nav a:hover { color: var(--main-orange-light); }
+        .page-container {
+            display: flex;
+            min-height: 90vh;
+        }
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            border-right: 1px solid #eee;
+            padding: 2rem 1rem 1rem 1rem;
+        }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { margin-bottom: 1.2rem; }
+        .sidebar a {
+            color: var(--main-orange-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .sidebar a:hover { color: var(--main-orange); }
+        .main-content {
+            flex: 1;
+            padding: 2rem 2rem 1rem 2rem;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .page-title {
+            color: var(--main-text);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .btn-primary {
+            background: var(--main-orange);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background: var(--main-orange-dark);
+        }
+        .content-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .filter-group label {
+            font-weight: 600;
+            color: var(--main-text);
+            font-size: 0.9rem;
+        }
+        .filter-group input,
+        .filter-group select {
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--main-orange);
+            box-shadow: 0 0 0 2px rgba(255,111,0,0.2);
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--main-text);
+        }
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-scheduled { background: #e3f2fd; color: #1976d2; }
+        .status-completed { background: #e8f5e8; color: #388e3c; }
+        .status-cancelled { background: #ffebee; color: #d32f2f; }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .btn-edit { background: #2196f3; color: white; }
+        .btn-delete { background: #f44336; color: white; }
+        .btn-view { background: #4caf50; color: white; }
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            text-align: center;
+        }
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--main-orange);
+            margin-bottom: 0.5rem;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--main-text);
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { padding: 1rem; }
+            .filters { flex-direction: column; }
+            .page-header { flex-direction: column; gap: 1rem; align-items: stretch; }
+            .stats-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="page-bg">
+    <div class="topbar">
+        <div class="logo">İŞİTME MERKEZİ</div>
+        <nav>
+            <a href="/dashboard/">ANASAYFA</a>
+            <a href="/patients/">HASTALAR</a>
+            <a href="/appointments/">RANDEVULAR</a>
+            <a href="/devices/">CİHAZLAR</a>
+            <a href="/test-reports/">TEST RAPORLARI</a>
+            <a href="/inventory/">STOK</a>
+            <a href="/invoices/">FATURA</a>
+            <a href="/logout/">ÇIKIŞ</a>
+        </nav>
+    </div>
+    <div class="page-container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/dashboard/">ANASAYFA</a></li>
+                <li><a href="/patients/">HASTALAR</a></li>
+                <li><a href="/appointments/">RANDEVULAR</a></li>
+                <li><a href="/devices/">CİHAZLAR</a></li>
+                <li><a href="/test-reports/">TEST RAPORLARI</a></li>
+                <li><a href="/inventory/">STOK YÖNETİMİ</a></li>
+                <li><a href="/invoices/">FATURA YÖNETİMİ</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fa-solid fa-calendar-check"></i> Randevu Yönetimi</h1>
+                <a href="#" class="btn-primary" onclick="openNewAppointmentModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Randevu
+                </a>
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-calendar"></i>
+                    </div>
+                    <div class="stat-number" id="totalAppointments">0</div>
+                    <div class="stat-label">Toplam Randevu</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div class="stat-number" id="todayAppointments">0</div>
+                    <div class="stat-label">Bugünkü Randevular</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number" id="completedAppointments">0</div>
+                    <div class="stat-label">Tamamlanan Randevular</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-number" id="weeklyAppointments">0</div>
+                    <div class="stat-label">Bu Hafta Randevular</div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="search">Arama</label>
+                        <input type="text" id="search" placeholder="Hasta adı, telefon...">
+                    </div>
+                    <div class="filter-group">
+                        <label for="status">Durum</label>
+                        <select id="status">
+                            <option value="">Tümü</option>
+                            <option value="scheduled">Planlandı</option>
+                            <option value="completed">Tamamlandı</option>
+                            <option value="cancelled">İptal Edildi</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFrom">Başlangıç Tarihi</label>
+                        <input type="date" id="dateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateTo">Bitiş Tarihi</label>
+                        <input type="date" id="dateTo">
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Hasta</th>
+                                <th>Tarih</th>
+                                <th>Saat</th>
+                                <th>Tür</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointmentsTable">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem;">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/api';
+        
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAppointments();
+            loadAppointmentStats();
+            setupFilters();
+        });
+
+        // Randevuları yükle
+        async function loadAppointments() {
+            try {
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/`);
+                renderAppointments(response.results || response);
+            } catch (error) {
+                renderAppointments([]);
+            }
+        }
+
+        // Randevu istatistiklerini yükle
+        async function loadAppointmentStats() {
+            try {
+                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
+                document.getElementById('totalAppointments').textContent = data.total_appointments || 0;
+                document.getElementById('todayAppointments').textContent = data.today_appointments || 0;
+                document.getElementById('completedAppointments').textContent = data.completed_appointments || 0;
+                document.getElementById('weeklyAppointments').textContent = data.weekly_appointments || 0;
+            } catch (error) {
+                console.error('Randevu istatistikleri yüklenemedi:', error);
+            }
+        }
+
+        // Randevuları tabloya render et
+        function renderAppointments(appointments) {
+            const tbody = document.getElementById('appointmentsTable');
+            
+            if (appointments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Randevu bulunamadı</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = appointments.map(appointment => `
+                <tr>
+                    <td>${appointment.patient_name || 'Bilinmeyen Hasta'}</td>
+                    <td>${appointment.appointment_date || '-'}</td>
+                    <td>${appointment.appointment_time || '-'}</td>
+                    <td>${appointment.appointment_type || '-'}</td>
+                    <td>
+                        <span class="status-badge status-${appointment.status || 'scheduled'}">
+                            ${getStatusText(appointment.status)}
+                        </span>
+                    </td>
+                    <td class="action-buttons">
+                        <button class="btn-small btn-view" onclick="viewAppointment(${appointment.id})">
+                            <i class="fa-solid fa-eye"></i> Görüntüle
+                        </button>
+                        <button class="btn-small btn-edit" onclick="editAppointment(${appointment.id})">
+                            <i class="fa-solid fa-edit"></i> Düzenle
+                        </button>
+                        <button class="btn-small btn-delete" onclick="deleteAppointment(${appointment.id})">
+                            <i class="fa-solid fa-trash"></i> Sil
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Durum metnini getir
+        function getStatusText(status) {
+            switch(status) {
+                case 'scheduled': return 'Planlandı';
+                case 'completed': return 'Tamamlandı';
+                case 'cancelled': return 'İptal Edildi';
+                default: return 'Planlandı';
+            }
+        }
+
+        // Filtreleri kur
+        function setupFilters() {
+            const searchInput = document.getElementById('search');
+            const statusSelect = document.getElementById('status');
+            const dateFromInput = document.getElementById('dateFrom');
+            const dateToInput = document.getElementById('dateTo');
+
+            // Arama filtresi
+            searchInput.addEventListener('input', debounce(() => {
+                applyFilters();
+            }, 500));
+
+            // Diğer filtreler
+            statusSelect.addEventListener('change', applyFilters);
+            dateFromInput.addEventListener('change', applyFilters);
+            dateToInput.addEventListener('change', applyFilters);
+        }
+
+        // Filtreleri uygula
+        async function applyFilters() {
+            const search = document.getElementById('search').value;
+            const status = document.getElementById('status').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+
+            let url = `${API_BASE_URL}/appointments/?`;
+            
+            if (search) url += `search=${encodeURIComponent(search)}&`;
+            if (status) url += `status=${status}&`;
+            if (dateFrom) url += `date_from=${dateFrom}&`;
+            if (dateTo) url += `date_to=${dateTo}&`;
+
+            try {
+                const response = await errorHandler.apiRequest(url);
+                renderAppointments(response.results || response);
+            } catch (error) {
+                renderAppointments([]);
+            }
+        }
+
+        // Debounce fonksiyonu
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Randevu işlemleri
+        function openNewAppointmentModal() {
+            errorHandler.showInfo('Yeni randevu ekleme özelliği yakında eklenecek');
+        }
+
+        function viewAppointment(id) {
+            errorHandler.showInfo(`Randevu ${id} görüntüleniyor`);
+        }
+
+        function editAppointment(id) {
+            errorHandler.showInfo(`Randevu ${id} düzenleniyor`);
+        }
+
+        async function deleteAppointment(id) {
+            if (!confirm('Bu randevuyu silmek istediğinize emin misiniz?')) return;
+            
+            try {
+                await errorHandler.apiRequest(`${API_BASE_URL}/appointments/${id}/`, {
+                    method: 'DELETE'
+                });
+                errorHandler.showSuccess('Randevu silindi');
+                loadAppointments();
+            } catch (error) {
+                // Hata zaten errorHandler tarafından gösterildi
+            }
+        }
+    </script>
+</body>
+</html> 

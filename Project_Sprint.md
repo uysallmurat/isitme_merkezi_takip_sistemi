@@ -265,36 +265,89 @@ Aşağıdaki şablon, proje boyunca her önemli karar, toplantı, modül ve geli
 
 ## Sprint 4: Frontend Geliştirme ve Entegrasyon
 
-**İlerleme:** %0
+**İlerleme:** %75
 
 ### Hedefler
-- [ ] Wireframe ve temel arayüz tasarımlarının hazırlanması (Figma/AdobeXD/Mockflow)
-- [ ] React/Vue/Django Templates ile temel kullanıcı panellerinin oluşturulması (Admin, Odyolog, Sekreter)
-- [ ] API entegrasyonlarının yapılması (hasta, randevu, test, cihaz, stok, fatura)
-- [ ] Responsive tasarım ve temel UX iyileştirmelerinin uygulanması
-- [ ] Frontend için temel hata yönetimi ve kullanıcıya bildirimlerin eklenmesi
-- [ ] Frontend unit ve entegrasyon testlerinin yazılması
+- [x] Wireframe ve temel arayüz tasarımlarının hazırlanması (Figma/AdobeXD/Mockflow)
+- [x] React/Vue/Django Templates ile temel kullanıcı panellerinin oluşturulması (Admin, Odyolog, Sekreter)
+- [x] API entegrasyonlarının yapılması (hasta, randevu, test, cihaz, stok, fatura)
+- [x] Responsive tasarım ve temel UX iyileştirmelerinin uygulanması
+- [x] Frontend için temel hata yönetimi ve kullanıcıya bildirimlerin eklenmesi
+- [~] Frontend unit ve entegrasyon testlerinin yazılması (altyapı kuruldu, testler çalıştırılmadı)
 - [ ] Kullanıcı kılavuzu ve yardım sayfalarının hazırlanması
 - [ ] (Opsiyonel) Raporlama ve grafik ekranlarının eklenmesi
 
 ### Tamamlananlar
--
+- Dashboard ana panel tasarımı ve modern UI/UX iyileştirmeleri tamamlandı
+- Login sayfası tasarımı ve responsive yapı oluşturuldu
+- Hasta yönetimi modülü (patients.html) arayüzü hazırlandı
+- Randevu yönetimi modülü (appointments.html) arayüzü hazırlandı
+- Cihaz yönetimi modülü (devices.html) arayüzü hazırlandı
+- Test raporları modülü (test-reports.html) arayüzü hazırlandı
+- Fatura yönetimi modülü (invoices.html) arayüzü hazırlandı
+- Stok yönetimi modülü (inventory.html) arayüzü hazırlandı
+- Hasta kayıt formu (patient_form.html) arayüzü hazırlandı
+- Hata yönetimi test sayfası (test-error-handler.html) hazırlandı
+- Tüm modüller için modern, responsive tasarım uygulandı
+- CSS değişkenleri ile tema sistemi kuruldu
+- Font Awesome ikonları entegre edildi
+- Türkçe dil desteği tamamlandı
+
+#### API Entegrasyonu ve Form İşlevselliği
+- ErrorHandler sınıfı ile merkezi hata yönetimi sistemi geliştirildi (error-handler.js)
+- Tüm modüller için API entegrasyonu tamamlandı:
+  - Patient List (GET, DELETE) ve Patient Form (POST) entegrasyonu
+  - Appointment List (GET, PATCH, DELETE) entegrasyonu  
+  - Device Management (GET, DELETE) entegrasyonu
+  - Test Reports (GET, PDF, Print, DELETE) entegrasyonu
+  - Invoice Management (GET, PATCH, PDF, Email, DELETE) entegrasyonu
+  - Inventory Management (GET, DELETE) entegrasyonu
+  - Dashboard statistics ve data loading entegrasyonu
+- Form validasyonu ve hata gösterimi sistemi
+- Loading states (overlay, button, form) implementasyonu
+- Notification system (success, error, warning, info) implementasyonu
+- Session control ve automatic login redirection
+
+#### Tasarım Tutarlılığı ve İyileştirmeler
+- Tüm HTML dosyaları için tutarlı tasarım stili uygulandı:
+  - Topbar ve sidebar navigasyon yapısı
+  - Content-card yapısı
+  - Stats-cards (özet kartları) tüm modüllere eklendi
+  - Filter ve search input tasarımları standardize edildi
+  - Button ve form element tasarımları tutarlı hale getirildi
+  - Status badge'leri ve action button'ları tutarlı tasarımda
+- Responsive design tüm ekranlar için optimize edildi
+- Mobile-first approach ile tasarım uygulandı
+
+#### Testing Infrastructure
+- Jest unit testing framework kuruldu
+- ErrorHandler sınıfı için kapsamlı unit testler yazıldı (henüz çalıştırılmadı)
+- Manual test sayfası (test-error-handler.html) oluşturuldu
+- Test documentation (README-TEST.md) hazırlandı
+- Test setup ve configuration (package.json, setup.js) tamamlandı
+- **NOT: Testler henüz çalıştırılmadı, sadece altyapı hazırlandı**
 
 ### Notlar
-- Öncelik: Wireframe ve temel arayüz → API entegrasyonu → responsive/UX → hata yönetimi → testler → dokümantasyon
-- Geliştirme sırasında backend API dokümantasyonu ve testleri referans alınacaktır.
+- Sprint 4 %75 tamamlandı
+- Tüm temel modül arayüzleri ve API entegrasyonları hazırlandı
+- Merkezi hata yönetimi sistemi başarıyla implementé edildi
+- Tasarım tutarlılığı tüm sayfalar için sağlandı
+- Testing infrastructure kuruldu (testler henüz çalıştırılmadı)
+- Kalan görevler: Test execution, kullanıcı kılavuzu ve opsiyonel raporlama ekranları
 ---
 
 ### Wireframe ve Sayfa Akışı (Detay)
 
 #### Hedefler (İşaretlenebilir Adımlar)
-- [ ] Giriş ve Dashboard temel iskeletinin oluşturulması
-- [ ] Patients modülü (liste, detay, ekle/güncelle) arayüzü
-- [ ] Appointments modülü arayüzü
-- [ ] Devices modülü arayüzü
-- [ ] Test Reports modülü arayüzü
-- [ ] Bildirimler ve hata yönetimi bileşenleri
-- [ ] Responsive/UX iyileştirmeleri
+- [x] Giriş ve Dashboard temel iskeletinin oluşturulması
+- [x] Patients modülü (liste, detay, ekle/güncelle) arayüzü
+- [x] Appointments modülü arayüzü
+- [x] Devices modülü arayüzü
+- [x] Test Reports modülü arayüzü
+- [x] Invoices modülü arayüzü
+- [x] Inventory modülü arayüzü
+- [x] Bildirimler ve hata yönetimi bileşenleri
+- [x] Responsive/UX iyileştirmeleri
 - [ ] Profil/Çıkış ve yardım sayfaları
 - [ ] (Opsiyonel) Raporlama/grafik ekranları
 
@@ -311,4 +364,33 @@ Aşağıdaki şablon, proje boyunca her önemli karar, toplantı, modül ve geli
 - Tüm sayfalarda arama ve filtreleme olacak.
 - Dashboard ve modül sayfaları wireframe.png ile uyumlu olacak.
 - Geliştirme sırasında backend API endpointleri ve Swagger/OpenAPI dokümantasyonu referans alınacak.
+
+---
+
+## Sprint 5: Finalizasyon ve Dokümantasyon
+
+**İlerleme:** %0
+
+### Hedefler
+- [ ] Frontend testlerinin çalıştırılması (Jest unit testler)
+- [ ] Manual test senaryolarının çalıştırılması
+- [ ] Kullanıcı kılavuzu ve yardım sayfalarının hazırlanması
+- [ ] API dokümantasyonu (Swagger/OpenAPI) finalizasyonu
+- [ ] Sistem test senaryolarının hazırlanması ve çalıştırılması
+- [ ] Performance testleri ve optimizasyonu
+- [ ] Security audit ve KVKK uyumluluk kontrolü
+- [ ] Deployment hazırlıkları (production environment)
+- [ ] Backup ve recovery prosedürlerinin oluşturulması
+- [ ] (Opsiyonel) Raporlama ve grafik ekranlarının eklenmesi
+- [ ] (Opsiyonel) Mobil responsive iyileştirmeler
+
+### Tamamlananlar
+- Henüz başlanmadı
+
+### Notlar
+- Sprint 4'ün %75'i tamamlandı, kalan %25'lik kısım Sprint 5'e taşındı
+- Ana sistem fonksiyonları çalışır durumda
+- Test altyapısı hazır, testlerin çalıştırılması gerekiyor
+- Sıradaki adım: Öncelikle testlerin çalıştırılması, sonra kullanıcı dokümantasyonu
+
 ---

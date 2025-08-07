@@ -26,3 +26,33 @@ def dashboard_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+# Hasta Yönetimi
+@login_required
+def patients_view(request):
+    return render(request, 'frontend/patients.html')
+
+# Randevu Yönetimi
+@login_required
+def appointments_view(request):
+    return render(request, 'frontend/appointments.html')
+
+# Cihaz Yönetimi
+@login_required
+def devices_view(request):
+    return render(request, 'frontend/devices.html')
+
+# Test Raporları
+@login_required
+def test_reports_view(request):
+    return render(request, 'frontend/test-reports.html')
+
+# Stok Yönetimi
+@login_required
+def inventory_view(request):
+    return render(request, 'frontend/inventory.html')
+
+# Fatura Yönetimi
+@login_required
+def invoices_view(request):
+    return render(request, 'frontend/invoices.html')

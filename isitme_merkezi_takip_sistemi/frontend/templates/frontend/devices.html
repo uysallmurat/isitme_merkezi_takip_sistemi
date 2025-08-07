@@ -1,0 +1,509 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cihaz Yönetimi | İşitme Merkezi Takip Sistemi</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="{% static 'frontend/js/error-handler.js' %}"></script>
+    <style>
+        :root {
+            --main-orange: #FF6F00;
+            --main-orange-light: #F57C00;
+            --main-orange-dark: #BF360C;
+            --main-orange-gradient: linear-gradient(90deg, #FF6F00 0%, #F57C00 60%, #BF360C 100%);
+            --main-text: #23272e;
+        }
+        .page-bg { background: #f9f9f9; min-height: 100vh; }
+        .topbar {
+            background: var(--main-orange-gradient);
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar .logo { font-weight: bold; font-size: 1.2rem; letter-spacing: 1px; }
+        .topbar nav a {
+            color: #fff;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .topbar nav a:hover { color: var(--main-orange-light); }
+        .page-container {
+            display: flex;
+            min-height: 90vh;
+        }
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            border-right: 1px solid #eee;
+            padding: 2rem 1rem 1rem 1rem;
+        }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { margin-bottom: 1.2rem; }
+        .sidebar a {
+            color: var(--main-orange-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .sidebar a:hover { color: var(--main-orange); }
+        .main-content {
+            flex: 1;
+            padding: 2rem 2rem 1rem 2rem;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .page-title {
+            color: var(--main-text);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .btn-primary {
+            background: var(--main-orange);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background: var(--main-orange-dark);
+        }
+        .content-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .filter-group label {
+            font-weight: 600;
+            color: var(--main-text);
+            font-size: 0.9rem;
+        }
+        .filter-group input,
+        .filter-group select {
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--main-orange);
+            box-shadow: 0 0 0 2px rgba(255,111,0,0.2);
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--main-text);
+        }
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-active { background: #e8f5e8; color: #388e3c; }
+        .status-inactive { background: #ffebee; color: #d32f2f; }
+        .status-maintenance { background: #fff3e0; color: #f57c00; }
+        .stock-warning {
+            color: #f57c00;
+            font-weight: 600;
+        }
+        .stock-critical {
+            color: #d32f2f;
+            font-weight: 600;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .btn-edit { background: #2196f3; color: white; }
+        .btn-delete { background: #f44336; color: white; }
+        .btn-view { background: #4caf50; color: white; }
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            text-align: center;
+        }
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--main-orange);
+            margin-bottom: 0.5rem;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--main-text);
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { padding: 1rem; }
+            .filters { flex-direction: column; }
+            .page-header { flex-direction: column; gap: 1rem; align-items: stretch; }
+            .stats-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="page-bg">
+    <div class="topbar">
+        <div class="logo">İŞİTME MERKEZİ</div>
+        <nav>
+            <a href="/dashboard/">ANASAYFA</a>
+            <a href="/patients/">HASTALAR</a>
+            <a href="/appointments/">RANDEVULAR</a>
+            <a href="/devices/">CİHAZLAR</a>
+            <a href="/test-reports/">TEST RAPORLARI</a>
+            <a href="/inventory/">STOK</a>
+            <a href="/invoices/">FATURA</a>
+            <a href="/logout/">ÇIKIŞ</a>
+        </nav>
+    </div>
+    <div class="page-container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/dashboard/">ANASAYFA</a></li>
+                <li><a href="/patients/">HASTALAR</a></li>
+                <li><a href="/appointments/">RANDEVULAR</a></li>
+                <li><a href="/devices/">CİHAZLAR</a></li>
+                <li><a href="/test-reports/">TEST RAPORLARI</a></li>
+                <li><a href="/inventory/">STOK YÖNETİMİ</a></li>
+                <li><a href="/invoices/">FATURA YÖNETİMİ</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fa-solid fa-headset"></i> Cihaz Yönetimi</h1>
+                <a href="#" class="btn-primary" onclick="openNewDeviceModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Cihaz
+                </a>
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div class="stat-number" id="totalDevices">0</div>
+                    <div class="stat-label">Toplam Cihaz</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number" id="activeDevices">0</div>
+                    <div class="stat-label">Aktif Cihazlar</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-tools"></i>
+                    </div>
+                    <div class="stat-number" id="maintenanceDevices">0</div>
+                    <div class="stat-label">Bakımdaki Cihazlar</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-number" id="lowStockDevices">0</div>
+                    <div class="stat-label">Az Stoklu Cihazlar</div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="search">Arama</label>
+                        <input type="text" id="search" placeholder="Cihaz adı, marka, model...">
+                    </div>
+                    <div class="filter-group">
+                        <label for="status">Durum</label>
+                        <select id="status">
+                            <option value="">Tümü</option>
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Pasif</option>
+                            <option value="maintenance">Bakımda</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="brand">Marka</label>
+                        <select id="brand">
+                            <option value="">Tümü</option>
+                            <option value="phonak">Phonak</option>
+                            <option value="oticon">Oticon</option>
+                            <option value="resound">ReSound</option>
+                            <option value="starkey">Starkey</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="stockFilter">Stok Durumu</label>
+                        <select id="stockFilter">
+                            <option value="">Tümü</option>
+                            <option value="in_stock">Stokta</option>
+                            <option value="low_stock">Az Stok</option>
+                            <option value="out_of_stock">Stok Yok</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cihaz Adı</th>
+                                <th>Marka</th>
+                                <th>Model</th>
+                                <th>Stok</th>
+                                <th>Durum</th>
+                                <th>Son Güncelleme</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="devicesTable">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 2rem;">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/api';
+        
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDevices();
+            loadDeviceStats();
+            setupFilters();
+        });
+
+        // Cihazları yükle
+        async function loadDevices() {
+            try {
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/devices/`);
+                renderDevices(response.results || response);
+            } catch (error) {
+                renderDevices([]);
+            }
+        }
+
+        // Cihaz istatistiklerini yükle
+        async function loadDeviceStats() {
+            try {
+                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
+                document.getElementById('totalDevices').textContent = data.total_devices || 0;
+                document.getElementById('activeDevices').textContent = data.active_devices || 0;
+                document.getElementById('maintenanceDevices').textContent = data.maintenance_devices || 0;
+                document.getElementById('lowStockDevices').textContent = data.low_stock_devices || 0;
+            } catch (error) {
+                console.error('Cihaz istatistikleri yüklenemedi:', error);
+            }
+        }
+
+        // Cihazları tabloya render et
+        function renderDevices(devices) {
+            const tbody = document.getElementById('devicesTable');
+            
+            if (devices.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Cihaz bulunamadı</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = devices.map(device => `
+                <tr>
+                    <td>${device.device_name || '-'}</td>
+                    <td>${device.brand || '-'}</td>
+                    <td>${device.model || '-'}</td>
+                    <td class="${getStockClass(device.stock_quantity)}">
+                        ${device.stock_quantity || 0}
+                    </td>
+                    <td>
+                        <span class="status-badge status-${device.status || 'active'}">
+                            ${getStatusText(device.status)}
+                        </span>
+                    </td>
+                    <td>${device.updated_at ? new Date(device.updated_at).toLocaleDateString('tr-TR') : '-'}</td>
+                    <td class="action-buttons">
+                        <button class="btn-small btn-view" onclick="viewDevice(${device.id})">
+                            <i class="fa-solid fa-eye"></i> Görüntüle
+                        </button>
+                        <button class="btn-small btn-edit" onclick="editDevice(${device.id})">
+                            <i class="fa-solid fa-edit"></i> Düzenle
+                        </button>
+                        <button class="btn-small btn-delete" onclick="deleteDevice(${device.id})">
+                            <i class="fa-solid fa-trash"></i> Sil
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Stok durumuna göre CSS class'ı getir
+        function getStockClass(quantity) {
+            if (!quantity || quantity === 0) return 'stock-critical';
+            if (quantity <= 5) return 'stock-warning';
+            return '';
+        }
+
+        // Durum metnini getir
+        function getStatusText(status) {
+            switch(status) {
+                case 'active': return 'Aktif';
+                case 'inactive': return 'Pasif';
+                case 'maintenance': return 'Bakımda';
+                default: return 'Aktif';
+            }
+        }
+
+        // Filtreleri kur
+        function setupFilters() {
+            const searchInput = document.getElementById('search');
+            const statusSelect = document.getElementById('status');
+            const brandSelect = document.getElementById('brand');
+            const stockFilterSelect = document.getElementById('stockFilter');
+
+            // Arama filtresi
+            searchInput.addEventListener('input', debounce(() => {
+                applyFilters();
+            }, 500));
+
+            // Diğer filtreler
+            statusSelect.addEventListener('change', applyFilters);
+            brandSelect.addEventListener('change', applyFilters);
+            stockFilterSelect.addEventListener('change', applyFilters);
+        }
+
+        // Filtreleri uygula
+        async function applyFilters() {
+            const search = document.getElementById('search').value;
+            const status = document.getElementById('status').value;
+            const brand = document.getElementById('brand').value;
+            const stockFilter = document.getElementById('stockFilter').value;
+
+            let url = `${API_BASE_URL}/devices/?`;
+            
+            if (search) url += `search=${encodeURIComponent(search)}&`;
+            if (status) url += `status=${status}&`;
+            if (brand) url += `brand=${brand}&`;
+            if (stockFilter) url += `stock_filter=${stockFilter}&`;
+
+            try {
+                const response = await errorHandler.apiRequest(url);
+                renderDevices(response.results || response);
+            } catch (error) {
+                renderDevices([]);
+            }
+        }
+
+        // Debounce fonksiyonu
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Cihaz işlemleri
+        function openNewDeviceModal() {
+            errorHandler.showInfo('Yeni cihaz ekleme özelliği yakında eklenecek');
+        }
+
+        function viewDevice(id) {
+            errorHandler.showInfo(`Cihaz ${id} görüntüleniyor`);
+        }
+
+        function editDevice(id) {
+            errorHandler.showInfo(`Cihaz ${id} düzenleniyor`);
+        }
+
+        async function deleteDevice(id) {
+            if (!confirm('Bu cihazı silmek istediğinize emin misiniz?')) return;
+            
+            try {
+                await errorHandler.apiRequest(`${API_BASE_URL}/devices/${id}/`, {
+                    method: 'DELETE'
+                });
+                errorHandler.showSuccess('Cihaz silindi');
+                loadDevices();
+            } catch (error) {
+                // Hata zaten errorHandler tarafından gösterildi
+            }
+        }
+    </script>
+</body>
+</html> 
