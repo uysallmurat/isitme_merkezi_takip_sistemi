@@ -3,11 +3,15 @@
  * Jest framework kullanarak unit testler
  */
 
+// Import ErrorHandler
+const ErrorHandler = require('../error-handler.js');
+
 // Mock DOM environment
 document.body.innerHTML = '<div id="test-container"></div>';
 
 // Mock fetch
-global.fetch = jest.fn();
+const fetchMock = jest.fn();
+global.fetch = fetchMock;
 
 // Mock localStorage
 const localStorageMock = {
@@ -44,7 +48,14 @@ describe('ErrorHandler Sınıfı', () => {
         
         // Mock'ları sıfırla
         jest.clearAllMocks();
-        fetch.mockClear();
+        
+        // Fetch mock'unu default değerle ayarla
+        fetchMock.mockResolvedValue({
+            ok: true,
+            status: 200,
+            json: () => Promise.resolve({}),
+            text: () => Promise.resolve('')
+        });
         
         // ErrorHandler instance'ı oluştur
         errorHandler = new ErrorHandler();
@@ -90,13 +101,16 @@ describe('ErrorHandler Sınıfı', () => {
             expect(notification.querySelector('.notification-message').textContent).toBe('Test bilgisi');
         });
 
-        test('Bildirim otomatik kaldırılmalı', (done) => {
+        test('Bildirim otomatik kaldırılmalı', async () => {
             const notification = errorHandler.showNotification('Test', 'info', 100);
             
-            setTimeout(() => {
-                expect(document.querySelector('.notification')).toBeNull();
-                done();
-            }, 200);
+            expect(notification).toBeTruthy();
+            expect(document.body.contains(notification)).toBe(true);
+            
+            // 200ms bekle (100ms timeout + buffer)
+            await new Promise(resolve => setTimeout(resolve, 200));
+            
+            expect(document.body.contains(notification)).toBe(false);
         });
 
         test('Bildirim manuel kaldırılabilmeli', () => {
@@ -112,18 +126,18 @@ describe('ErrorHandler Sınıfı', () => {
 
     describe('API Hata Yönetimi', () => {
         test('401 hatası oturum yönlendirmesi yapmalı', async () => {
-            fetch.mockRejectedValueOnce(new Error('401 Unauthorized'));
+            fetchMock.mockRejectedValueOnce(new Error('401 Unauthorized'));
             
             try {
                 await errorHandler.apiRequest('/test');
             } catch (error) {
-                expect(sessionStorage.setItem).toHaveBeenCalledWith('redirectAfterLogin', '/test/');
+                expect(sessionStorageMock.setItem).toHaveBeenCalledWith('redirectAfterLogin', '/test/');
                 expect(window.location.href).toBe('/login/');
             }
         });
 
         test('403 hatası yetki mesajı göstermeli', async () => {
-            fetch.mockRejectedValueOnce(new Error('403 Forbidden'));
+            fetchMock.mockRejectedValueOnce(new Error('403 Forbidden'));
             
             try {
                 await errorHandler.apiRequest('/test');
@@ -135,7 +149,7 @@ describe('ErrorHandler Sınıfı', () => {
         });
 
         test('404 hatası kaynak bulunamadı mesajı göstermeli', async () => {
-            fetch.mockRejectedValueOnce(new Error('404 Not Found'));
+            fetchMock.mockRejectedValueOnce(new Error('404 Not Found'));
             
             try {
                 await errorHandler.apiRequest('/test');
@@ -146,7 +160,7 @@ describe('ErrorHandler Sınıfı', () => {
         });
 
         test('500 hatası sunucu hatası mesajı göstermeli', async () => {
-            fetch.mockRejectedValueOnce(new Error('500 Internal Server Error'));
+            fetchMock.mockRejectedValueOnce(new Error('500 Internal Server Error'));
             
             try {
                 await errorHandler.apiRequest('/test');
@@ -157,7 +171,7 @@ describe('ErrorHandler Sınıfı', () => {
         });
 
         test('Bağlantı hatası internet bağlantısı mesajı göstermeli', async () => {
-            fetch.mockRejectedValueOnce(new TypeError('fetch failed'));
+            fetchMock.mockRejectedValueOnce(new TypeError('fetch failed'));
             
             try {
                 await errorHandler.apiRequest('/test');
@@ -220,8 +234,10 @@ describe('ErrorHandler Sınıfı', () => {
         test('String hata mesajını bildirim olarak göstermeli', () => {
             errorHandler.showFormErrors('Genel hata mesajı');
 
-            const notifications = document.querySelectorAll('.notification-error');
+            // String hata mesajları bildirim olarak gösterilir
+            const notifications = document.querySelectorAll('.notification');
             expect(notifications.length).toBeGreaterThan(0);
+            expect(notifications[0].classList.contains('notification-error')).toBe(true);
         });
     });
 
@@ -281,7 +297,7 @@ describe('ErrorHandler Sınıfı', () => {
             const token = errorHandler.getToken();
             
             expect(token).toBe('test-token');
-            expect(localStorage.getItem).toHaveBeenCalledWith('access_token');
+            expect(localStorageMock.getItem).toHaveBeenCalledWith('access_token');
         });
 
         test('Session storage\'dan token almalı', () => {
@@ -291,7 +307,7 @@ describe('ErrorHandler Sınıfı', () => {
             const token = errorHandler.getToken();
             
             expect(token).toBe('session-token');
-            expect(sessionStorage.getItem).toHaveBeenCalledWith('access_token');
+            expect(sessionStorageMock.getItem).toHaveBeenCalledWith('access_token');
         });
 
         test('Token yoksa false dönmeli', () => {
@@ -315,7 +331,7 @@ describe('ErrorHandler Sınıfı', () => {
     describe('API İstekleri', () => {
         test('Başarılı API isteği yapmalı', async () => {
             const mockResponse = { data: 'test' };
-            fetch.mockResolvedValueOnce({
+            fetchMock.mockResolvedValueOnce({
                 ok: true,
                 json: async () => mockResponse,
                 headers: { get: () => 'application/json' }
@@ -324,7 +340,7 @@ describe('ErrorHandler Sınıfı', () => {
             const result = await errorHandler.apiRequest('/test');
 
             expect(result).toEqual(mockResponse);
-            expect(fetch).toHaveBeenCalledWith('/test', expect.objectContaining({
+            expect(fetchMock).toHaveBeenCalledWith('/test', expect.objectContaining({
                 headers: expect.objectContaining({
                     'Content-Type': 'application/json'
                 })
@@ -334,7 +350,7 @@ describe('ErrorHandler Sınıfı', () => {
         test('Token ile API isteği yapmalı', async () => {
             localStorageMock.getItem.mockReturnValue('test-token');
             
-            fetch.mockResolvedValueOnce({
+            fetchMock.mockResolvedValueOnce({
                 ok: true,
                 json: async () => ({}),
                 headers: { get: () => 'application/json' }
@@ -342,7 +358,7 @@ describe('ErrorHandler Sınıfı', () => {
 
             await errorHandler.apiRequest('/test');
 
-            expect(fetch).toHaveBeenCalledWith('/test', expect.objectContaining({
+            expect(fetchMock).toHaveBeenCalledWith('/test', expect.objectContaining({
                 headers: expect.objectContaining({
                     'Authorization': 'Bearer test-token'
                 })
@@ -352,7 +368,7 @@ describe('ErrorHandler Sınıfı', () => {
         test('POST isteği body ile yapmalı', async () => {
             const postData = { name: 'test' };
             
-            fetch.mockResolvedValueOnce({
+            fetchMock.mockResolvedValueOnce({
                 ok: true,
                 json: async () => ({}),
                 headers: { get: () => 'application/json' }
@@ -363,7 +379,7 @@ describe('ErrorHandler Sınıfı', () => {
                 body: postData
             });
 
-            expect(fetch).toHaveBeenCalledWith('/test', expect.objectContaining({
+            expect(fetchMock).toHaveBeenCalledWith('/test', expect.objectContaining({
                 method: 'POST',
                 body: JSON.stringify(postData)
             }));
@@ -383,9 +399,9 @@ describe('ErrorHandler Sınıfı', () => {
         });
 
         test('Promise rejection\'ları yakalamalı', () => {
-            const rejectionEvent = new PromiseRejectionEvent('unhandledrejection', {
-                reason: new Error('Test rejection')
-            });
+            // JSDOM'da PromiseRejectionEvent yok, manuel event oluşturalım
+            const rejectionEvent = new Event('unhandledrejection');
+            rejectionEvent.reason = new Error('Test rejection');
 
             window.dispatchEvent(rejectionEvent);
 
@@ -395,7 +411,4 @@ describe('ErrorHandler Sınıfı', () => {
     });
 });
 
-// Test runner için export
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { ErrorHandler };
-} 
+ 

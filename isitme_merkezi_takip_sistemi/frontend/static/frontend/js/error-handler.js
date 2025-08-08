@@ -329,4 +329,9 @@ window.showSuccess = (message, duration) => errorHandler.showSuccess(message, du
 window.showError = (message, duration) => errorHandler.showError(message, duration);
 window.showWarning = (message, duration) => errorHandler.showWarning(message, duration);
 window.showInfo = (message, duration) => errorHandler.showInfo(message, duration);
-window.getToken = () => errorHandler.getToken(); 
+window.getToken = () => errorHandler.getToken();
+
+// Node.js/Jest ortamı için export
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ErrorHandler;
+} 
