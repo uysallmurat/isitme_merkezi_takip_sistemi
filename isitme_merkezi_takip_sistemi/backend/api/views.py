@@ -4,7 +4,10 @@ from rest_framework.response import Response
 from django.db.models import Count
 from datetime import datetime, timedelta
 
-from .models import Patient, Appointment, HearingTest, Device
+from patients.models import Patient
+from appointments.models import Appointment
+from hearing_tests.models import HearingTest
+from devices.models import Device
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -52,12 +55,14 @@ def dashboard_statistics(request):
         ).count()
         
         # Aktif cihaz sayısı
-        active_devices = Device.objects.filter(status='active').count()
+        active_devices = Device.objects.filter(status='Available').count()
         
-        # Stok durumu kritik olan cihazlar
-        low_stock_devices = Device.objects.filter(
-            stock_quantity__lte=5
-        ).count()
+        # Stok durumu kritik olan cihazlar (eğer stock_quantity alanı yoksa 0 döner)
+        low_stock_devices = getattr(Device, 'objects', None)
+        if low_stock_devices is not None and hasattr(Device, 'stock_quantity'):
+            low_stock_count = Device.objects.filter(stock_quantity__lte=5).count()
+        else:
+            low_stock_count = 0
         
         statistics = {
             'total_patients': total_patients,
@@ -68,7 +73,7 @@ def dashboard_statistics(request):
             'monthly_appointments': monthly_appointments,
             'recent_patients': recent_patients,
             'active_devices': active_devices,
-            'low_stock_devices': low_stock_devices,
+            'low_stock_devices': low_stock_count,
             'last_updated': datetime.now().isoformat()
         }
         

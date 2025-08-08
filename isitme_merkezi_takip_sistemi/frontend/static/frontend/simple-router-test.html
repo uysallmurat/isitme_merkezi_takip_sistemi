@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Router Test</title>
+    <style>
+        body { 
+            font-family: system-ui, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .menu { 
+            display: flex; 
+            gap: 10px; 
+            margin: 20px 0; 
+            flex-wrap: wrap;
+        }
+        .menu a { 
+            padding: 12px 20px; 
+            background: #FF6F00; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 6px; 
+            transition: all 0.3s;
+        }
+        .menu a:hover { 
+            background: #E65100; 
+            transform: translateY(-2px);
+        }
+        .menu a.active { 
+            background: #2196F3; 
+        }
+        .content { 
+            min-height: 300px; 
+            border: 2px dashed #ddd; 
+            padding: 40px; 
+            margin: 20px 0; 
+            border-radius: 8px;
+            text-align: center;
+        }
+        .debug { 
+            background: #f0f0f0; 
+            padding: 15px; 
+            border-radius: 6px; 
+            font-family: monospace; 
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧭 Simple Router Test</h1>
+        <p>Router sistemini basit test</p>
+        
+        <div class="menu">
+            <a href="#" data-route="/dashboard">📊 Dashboard</a>
+            <a href="#" data-route="/patients">👥 Hastalar</a>
+            <a href="#" data-route="/appointments">📅 Randevular</a>
+            <a href="#" data-route="/devices">🎧 Cihazlar</a>
+        </div>
+        
+        <div class="content" id="content">
+            <h2>Router Test Alanı</h2>
+            <p>Yukarıdaki menü linklerine tıklayın</p>
+            <p><strong>Mevcut Route:</strong> <span id="currentRoute">-</span></p>
+        </div>
+        
+        <div class="debug" id="debug">
+            <strong>Debug Bilgileri:</strong><br>
+            Router Status: Yükleniyor...
+        </div>
+    </div>
+    
+    <!-- Router Script -->
+    <script src="js/router.js"></script>
+    
+    <script>
+        console.log('🧪 Simple test sayfası başlatılıyor...');
+        
+        // Debug panel güncelleme
+        function updateDebug() {
+            const debug = document.getElementById('debug');
+            const currentRoute = document.getElementById('currentRoute');
+            
+            if (window.router) {
+                const route = window.router.getCurrentRoute() || 'Bilinmiyor';
+                currentRoute.textContent = route;
+                
+                debug.innerHTML = `
+                    <strong>Debug Bilgileri:</strong><br>
+                    ✅ Router Status: Aktif<br>
+                    📍 Current Route: ${route}<br>
+                    🔄 Is Navigating: ${window.router.isNavigating ? 'Evet' : 'Hayır'}<br>
+                    📚 Routes Count: ${window.router.routes ? window.router.routes.size : 0}<br>
+                    🕒 Son Güncelleme: ${new Date().toLocaleTimeString()}
+                `;
+            } else {
+                debug.innerHTML = `
+                    <strong>Debug Bilgileri:</strong><br>
+                    ❌ Router Status: Yüklenmedi<br>
+                    ⚠️ window.router bulunamadı
+                `;
+            }
+        }
+        
+        // Link tıklama yönetimi
+        document.addEventListener('click', function(event) {
+            const link = event.target.closest('[data-route]');
+            if (link) {
+                event.preventDefault();
+                console.log('🖱️ Link tıklandı:', link.getAttribute('data-route'));
+                
+                // Active class
+                document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Router ile navigate
+                const route = link.getAttribute('data-route');
+                if (window.router) {
+                    window.router.navigate(route);
+                } else {
+                    console.warn('⚠️ Router henüz yüklenmedi');
+                    // Manual content update
+                    document.getElementById('content').innerHTML = `
+                        <h2>⚠️ Router Yüklenmedi</h2>
+                        <p>Route: ${route}</p>
+                        <p>Router henüz aktif değil, sayfa yenileyin</p>
+                    `;
+                }
+            }
+        });
+        
+        // Route change listener
+        document.addEventListener('routeChange', function(event) {
+            console.log('🔄 Route değişti:', event.detail);
+            updateDebug();
+        });
+        
+        // Page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 DOM yüklendi');
+            
+            // İlk debug güncelleme
+            setTimeout(updateDebug, 500);
+            
+            // Periyodik güncelleme
+            setInterval(updateDebug, 3000);
+        });
+        
+        console.log('🚀 Simple test sayfası hazır!');
+    </script>
+</body>
+</html>

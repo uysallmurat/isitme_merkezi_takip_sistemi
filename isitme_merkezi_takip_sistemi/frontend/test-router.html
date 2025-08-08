@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Router Test - İşitme Merkezi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .test-menu a {
+            display: block;
+            padding: 15px 20px;
+            background: #FF6F00;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .test-menu a:hover {
+            background: #E65100;
+            transform: translateY(-2px);
+        }
+        
+        .test-menu a.active {
+            background: #2196F3;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        
+        .test-content {
+            min-height: 400px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .test-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 24px;
+        }
+        
+        .breadcrumb-item {
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .breadcrumb-current {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .debug-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .debug-panel h4 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+        }
+        
+        .page-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.95) 0%, 
+                rgba(248, 250, 252, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            text-align: center;
+            color: #666;
+        }
+        
+        .loading-spinner .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #eee;
+            border-top: 3px solid #FF6F00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🧭 Router Test Sayfası</h1>
+            <p>JavaScript Router sistemini test etmek için kullanın</p>
+        </div>
+        
+        <div class="test-info">
+            <strong>🔍 Test Adımları:</strong><br>
+            1. Aşağıdaki menü linklerine tıklayın<br>
+            2. Console'u açın (F12) ve log mesajlarını izleyin<br>
+            3. URL değişimlerini gözlemleyin<br>
+            4. Breadcrumb güncellemelerini kontrol edin
+        </div>
+        
+        <!-- Breadcrumb Navigation -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-current">Test Sayfası</span>
+        </div>
+        
+        <!-- Test Menu -->
+        <div class="test-menu">
+            <a href="/dashboard/" data-route="/dashboard">
+                📊 Dashboard
+            </a>
+            <a href="/patients/" data-route="/patients">
+                👥 Hastalar
+            </a>
+            <a href="/appointments/" data-route="/appointments">
+                📅 Randevular
+            </a>
+            <a href="/devices/" data-route="/devices">
+                🎧 Cihazlar
+            </a>
+            <a href="/tests/" data-route="/tests">
+                📋 Test Raporları
+            </a>
+            <a href="/inventory/" data-route="/inventory">
+                📦 Stok Yönetimi
+            </a>
+        </div>
+        
+        <!-- Test Content Area -->
+        <div class="test-content" id="testContent">
+            <h2>Router Test Alanı</h2>
+            <p>Bir menü öğesine tıklayın ve router'ın nasıl çalıştığını gözlemleyin</p>
+            <p><strong>Mevcut Route:</strong> <span id="currentRoute">/test</span></p>
+        </div>
+        
+        <!-- Debug Panel -->
+        <div class="debug-panel" id="debugPanel">
+            <h4>🐛 Debug Bilgileri</h4>
+            <div id="debugInfo">Router yükleniyor...</div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="page-loading" id="pageLoading">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Sayfa yükleniyor...</p>
+        </div>
+    </div>
+    
+    <!-- Router Script -->
+    <script src="static/frontend/js/router.js"></script>
+    
+    <script>
+        // Test için özel router konfigürasyonu
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Router Test sayfası yüklendi');
+            
+            // Debug panel güncellemesi
+            function updateDebugPanel() {
+                const debugInfo = document.getElementById('debugInfo');
+                const currentRouteSpan = document.getElementById('currentRoute');
+                
+                if (window.router) {
+                    const currentRoute = window.router.getCurrentRoute() || 'Bilinmiyor';
+                    currentRouteSpan.textContent = currentRoute;
+                    
+                    debugInfo.innerHTML = `
+                        <strong>Router Status:</strong> ✅ Aktif<br>
+                        <strong>Current Route:</strong> ${currentRoute}<br>
+                        <strong>Is Navigating:</strong> ${window.router.isNavigating ? 'Evet' : 'Hayır'}<br>
+                        <strong>Routes Count:</strong> ${window.router.routes ? window.router.routes.size : 0}
+                    `;
+                } else {
+                    debugInfo.innerHTML = `
+                        <strong>Router Status:</strong> ❌ Yüklenmedi<br>
+                        <strong>Error:</strong> window.router bulunamadı
+                    `;
+                }
+            }
+            
+            // İlk güncelleme
+            setTimeout(updateDebugPanel, 1000);
+            
+            // Periyodik güncelleme
+            setInterval(updateDebugPanel, 2000);
+            
+            // Route değişikliklerini dinle
+            document.addEventListener('routeChange', function(event) {
+                console.log('🔄 Route değişti:', event.detail);
+                updateDebugPanel();
+            });
+            
+            // Link tıklamalarını test et
+            document.addEventListener('click', function(event) {
+                const link = event.target.closest('[data-route]');
+                if (link) {
+                    console.log('🖱️ Link tıklandı:', link.getAttribute('data-route'));
+                    
+                    // Active class yönetimi
+                    document.querySelectorAll('.test-menu a').forEach(a => a.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Test content güncelle
+                    const route = link.getAttribute('data-route');
+                    const testContent = document.getElementById('testContent');
+                    
+                    setTimeout(() => {
+                        testContent.innerHTML = `
+                            <h2>📍 Route: ${route}</h2>
+                            <p>Bu sayfa <strong>${route}</strong> route'u için test alanıdır.</p>
+                            <p><strong>Zaman:</strong> ${new Date().toLocaleString()}</p>
+                            <p><strong>Status:</strong> Router ile yüklendi ✅</p>
+                        `;
+                    }, 200);
+                }
+            });
+            
+            // Keyboard shortcuts test
+            document.addEventListener('keydown', function(event) {
+                if (event.altKey) {
+                    console.log(`⌨️ Keyboard shortcut: Alt + ${event.key}`);
+                }
+            });
+            
+            // Router error handling
+            window.addEventListener('error', function(event) {
+                console.error('❌ JavaScript Error:', event.error);
+                const debugInfo = document.getElementById('debugInfo');
+                debugInfo.innerHTML += `<br><strong style="color: #f44336;">Error:</strong> ${event.error.message}`;
+            });
+            
+            console.log('🚀 Test sayfası hazır!');
+        });
+        
+        // Mock functions for testing
+        function initDashboard() {
+            console.log('🏠 Dashboard init çağrıldı');
+        }
+        
+        function initPatients() {
+            console.log('👥 Patients init çağrıldı');
+        }
+        
+        function initAppointments() {
+            console.log('📅 Appointments init çağrıldı');
+        }
+    </script>
+</body>
+</html>

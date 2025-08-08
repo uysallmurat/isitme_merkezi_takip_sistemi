@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from api.views import dashboard_statistics
+from backend.api.views import dashboard_statistics
 
 schema_view = get_schema_view(
    openapi.Info(

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'frontend/css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="{% static 'frontend/js/error-handler.js' %}"></script>
+    <!-- <script src="{% static 'frontend/js/router.js' %}"></script> -->
     <style>
         :root {
             --primary-orange: #FF6F00;
@@ -1266,7 +1268,7 @@
     <div class="topbar">
         <div class="logo">MAVİ İŞİTME MERKEZİ</div>
         <nav>
-            <a href="/dashboard/" class="home-link nav-link" onclick="navigateWithTransition(event, '/dashboard/')">
+            <a href="/dashboard/" class="home-link nav-link" data-route="/dashboard">
                 <i class="fa-solid fa-house home-icon"></i>
                 Ana Sayfa
             </a>
@@ -1283,33 +1285,38 @@
                 <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
             </div>
             <ul>
-                <li><a href="/dashboard/" class="nav-link" onclick="navigateWithTransition(event, '/dashboard/')"><i class="fa-solid fa-chart-line"></i> ANASAYFA</a></li>
-                <li><a href="/patients/" class="nav-link" onclick="navigateWithTransition(event, '/patients/')"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
-                <li><a href="/appointments/" class="nav-link" onclick="navigateWithTransition(event, '/appointments/')"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
-                <li><a href="/devices/" class="nav-link" onclick="navigateWithTransition(event, '/devices/')"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
-                <li><a href="/test-reports/" class="nav-link" onclick="navigateWithTransition(event, '/test-reports/')"><i class="fa-solid fa-file-medical"></i> TEST RAPORLARI</a></li>
-                <li><a href="/inventory/" class="nav-link" onclick="navigateWithTransition(event, '/inventory/')"><i class="fa-solid fa-boxes-stacked"></i> STOK YÖNETİMİ</a></li>
-                <li><a href="/invoices/" class="nav-link" onclick="navigateWithTransition(event, '/invoices/')"><i class="fa-solid fa-file-invoice-dollar"></i> FATURA YÖNETİMİ</a></li>
+                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-chart-line"></i> ANASAYFA</a></li>
+                <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
+                <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
+                <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
+                <li><a href="/test-reports/" class="nav-link nav-item" data-route="/tests"><i class="fa-solid fa-file-medical"></i> TEST RAPORLARI</a></li>
+                <li><a href="/inventory/" class="nav-link nav-item" data-route="/inventory"><i class="fa-solid fa-boxes-stacked"></i> STOK YÖNETİMİ</a></li>
+                <li><a href="/invoices/" class="nav-link nav-item" data-route="/invoices"><i class="fa-solid fa-file-invoice-dollar"></i> FATURA YÖNETİMİ</a></li>
             </ul>
         </aside>
         <main class="main-content">
+            <!-- Breadcrumb Navigation -->
+            <div class="breadcrumb">
+                <span class="breadcrumb-current">Ana Sayfa</span>
+                </div>
+            
             <div class="page-header">
                 <h1 class="page-title">Kontrol Paneli</h1>
                 <button onclick="refreshDashboard()" class="btn-primary ripple" id="refreshBtn">
                     <i class="fa-solid fa-refresh"></i>
                     Yenile
                 </button>
-            </div>
+                </div>
             
                         <div class="stats-cards">
                 <div class="stat-card interactive-element fade-in">
                     <div class="stat-icon patients">
                         <i class="fa-solid fa-user-injured"></i>
-                    </div>
+                </div>
                     <div class="stat-content">
                         <div class="stat-number" id="totalPatients">
                             <span class="loading-spinner primary"></span>
-                        </div>
+            </div>
                         <div class="stat-label">Toplam Hasta</div>
                     </div>
                 </div>
@@ -1599,21 +1606,44 @@
             transition.classList.remove('active');
         }
         
-        // Navigation with Transition
+        // Navigation with Transition (Router entegre)
         function navigateWithTransition(event, url) {
             event.preventDefault();
             
-            showPageTransition('Sayfa yükleniyor...');
-            updateProgressBar(30);
+            // Router varsa onu kullan
+            if (window.router) {
+                window.router.navigate(url);
+            } else {
+                // Fallback: Mevcut transition sistemi
+                showPageTransition('Sayfa yükleniyor...');
+                updateProgressBar(30);
+                
+                setTimeout(() => {
+                    updateProgressBar(60);
+                }, 200);
+                
+                setTimeout(() => {
+                    updateProgressBar(100);
+                    window.location.href = url;
+                }, 500);
+            }
+        }
+        
+        // Dashboard initialization (Router için)
+        function initDashboard() {
+            console.log('🏠 Dashboard initialized');
             
-            setTimeout(() => {
-                updateProgressBar(60);
-            }, 200);
+            // Dashboard-specific initialization
+            if (typeof refreshDashboard === 'function') {
+                refreshDashboard();
+            }
             
-            setTimeout(() => {
-                updateProgressBar(100);
-                window.location.href = url;
-            }, 500);
+            // Auto-refresh every 5 minutes
+            setInterval(() => {
+                if (window.router && window.router.getCurrentRoute() === '/dashboard') {
+                    refreshDashboard();
+                }
+            }, 300000);
         }
         
         // Progress Bar

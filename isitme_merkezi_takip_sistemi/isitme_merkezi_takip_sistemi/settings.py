@@ -141,3 +141,8 @@ REST_FRAMEWORK = {
 
 # İleride Custom User modeli için (ör: users.User)
 # AUTH_USER_MODEL = 'users.User'
+
+# Login URL ayarları
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'

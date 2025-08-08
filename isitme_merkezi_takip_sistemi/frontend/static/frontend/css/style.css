@@ -873,3 +873,139 @@ button:hover {
     max-width: 98vw;
   }
 }
+
+/* ===== NAVIGATION ROUTER STYLES ===== */
+
+/* Page Loading Overlay */
+.page-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.95) 0%, 
+        rgba(248, 250, 252, 0.98) 100%);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: var(--transition-normal);
+}
+
+.loading-spinner {
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.loading-spinner .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--neutral-200);
+    border-top: 3px solid var(--main-orange);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+.loading-spinner p {
+    font-size: var(--font-sm);
+    font-weight: var(--font-weight-medium);
+    margin: 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Page Transitions */
+.main-content {
+    transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--neutral-200);
+    margin-bottom: 24px;
+}
+
+.breadcrumb-item {
+    color: var(--text-muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.breadcrumb-item:hover {
+    color: var(--main-orange);
+}
+
+.breadcrumb-current {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+.breadcrumb i {
+    font-size: 10px;
+    color: var(--neutral-400);
+}
+
+/* Active Menu Items */
+.sidebar-menu a.active,
+.topbar-menu a.active {
+    background: var(--main-orange-gradient) !important;
+    color: white !important;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.sidebar-menu a.active i,
+.topbar-menu a.active i {
+    color: white !important;
+}
+
+/* Navigation Animation */
+.nav-item {
+    transition: var(--transition-normal);
+}
+
+.nav-item:hover {
+    transform: translateX(4px);
+}
+
+/* Router Error States */
+.router-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.router-error i {
+    font-size: 48px;
+    color: var(--neutral-400);
+    margin-bottom: 16px;
+}
+
+.router-error h3 {
+    font-size: var(--font-xl);
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.router-error p {
+    font-size: var(--font-sm);
+    margin-bottom: 24px;
+}
