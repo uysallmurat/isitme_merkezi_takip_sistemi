@@ -10,7 +10,7 @@ from hearing_tests.models import HearingTest
 from devices.models import Device
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])  # Geçici olarak kaldırıldı
 def dashboard_statistics(request):
     """
     Dashboard için istatistikleri döndür

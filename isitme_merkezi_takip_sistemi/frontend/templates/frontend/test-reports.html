@@ -194,12 +194,257 @@
             color: #666;
             font-size: 0.9rem;
         }
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 1% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 1000px;
+            max-height: 95vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: modalSlideIn 0.3s ease;
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            background: var(--main-orange-gradient);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .close {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .close:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        .modal-body {
+            padding: 2rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-row.three-cols {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: var(--main-text);
+            font-size: 0.9rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--main-orange);
+            box-shadow: 0 0 0 3px rgba(255,111,0,0.1);
+        }
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--main-orange);
+        }
+        .form-section h3 {
+            margin: 0 0 1rem 0;
+            color: var(--main-text);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
         @media (max-width: 900px) {
             .sidebar { display: none; }
             .main-content { padding: 1rem; }
             .filters { flex-direction: column; }
             .page-header { flex-direction: column; gap: 1rem; align-items: stretch; }
             .stats-cards { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; gap: 1rem; }
+            .form-row.three-cols { grid-template-columns: 1fr; }
+            .modal-content { width: 98%; margin: 1% auto; }
+            .modal-body { padding: 1.5rem; }
+        }
+
+        /* Test Raporu Görüntüleme Stilleri */
+        .report-details {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .detail-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .detail-section h3 {
+            margin: 0 0 1rem 0;
+            color: var(--main-orange-dark);
+            font-size: 1.1rem;
+            border-bottom: 2px solid var(--main-orange);
+            padding-bottom: 0.5rem;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 0.8rem;
+            align-items: flex-start;
+        }
+        .detail-row label {
+            font-weight: 600;
+            min-width: 120px;
+            color: var(--main-text);
+        }
+        .detail-row span, .detail-row div {
+            flex: 1;
+            color: #555;
+        }
+        .hearing-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .ear-results {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .ear-results h4 {
+            margin: 0 0 0.8rem 0;
+            color: var(--main-orange-dark);
+            font-size: 1rem;
+        }
+        .frequency-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        .freq-item {
+            padding: 0.4rem;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .hearing-results {
+                grid-template-columns: 1fr;
+            }
+            .frequency-results {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* File Input Stilleri */
+        .file-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .file-input:hover {
+            border-color: var(--main-orange);
+            background: #fff5f0;
+        }
+        .help-text {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: block;
+        }
+        .current-file-info {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #e8f5e8;
+            border-radius: 4px;
+            color: #2d5a2d;
+            font-size: 0.9rem;
+        }
+        .current-file-info i {
+            margin-right: 0.5rem;
+            color: #d32f2f;
+        }
+
+        /* Disabled Button Stilleri */
+        .btn-disabled {
+            background: #f5f5f5 !important;
+            color: #999 !important;
+            cursor: not-allowed !important;
+            border: 1px solid #ddd !important;
+        }
+        .btn-disabled:hover {
+            background: #f5f5f5 !important;
+            color: #999 !important;
+            transform: none !important;
         }
     </style>
 </head>
@@ -327,9 +572,434 @@
                     </table>
                 </div>
             </div>
-        </main>
+            </main>
     </div>
 
+    <!-- Yeni Test Modal -->
+    <div id="newTestModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Yeni Test Raporu</h2>
+                <span class="close" onclick="closeNewTestModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="newTestForm">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testPatient">Hasta *</label>
+                            <select id="testPatient" name="patient" required>
+                                <option value="">Hasta seçin...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="testType">Test Türü *</label>
+                            <select id="testType" name="test_type" required>
+                                <option value="">Test türü seçin...</option>
+                                <option value="Pure_Tone">Saf Ses Odyometrisi</option>
+                                <option value="Speech">Konuşma Odyometrisi</option>
+                                <option value="Impedance">Empedans Odyometrisi</option>
+                                <option value="ABR">İşitsel Beyin Sapı Yanıtı</option>
+                                <option value="OAE">Otoakustik Emisyon</option>
+                                <option value="Other">Diğer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testDate">Test Tarihi *</label>
+                            <input type="datetime-local" id="testDate" name="test_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="testStatus">Durum *</label>
+                            <select id="testStatus" name="status" required>
+                                <option value="Completed">Tamamlandı</option>
+                                <option value="Incomplete">Tamamlanmadı</option>
+                                <option value="Cancelled">İptal Edildi</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Sağ Kulak Sonuçları -->
+                    <div class="form-section">
+                        <h3>Sağ Kulak Sonuçları (dB HL)</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightEar250">250 Hz</label>
+                                <input type="number" id="rightEar250" name="right_ear_250" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rightEar500">500 Hz</label>
+                                <input type="number" id="rightEar500" name="right_ear_500" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rightEar1000">1000 Hz</label>
+                                <input type="number" id="rightEar1000" name="right_ear_1000" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightEar2000">2000 Hz</label>
+                                <input type="number" id="rightEar2000" name="right_ear_2000" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rightEar4000">4000 Hz</label>
+                                <input type="number" id="rightEar4000" name="right_ear_4000" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rightEar8000">8000 Hz</label>
+                                <input type="number" id="rightEar8000" name="right_ear_8000" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sol Kulak Sonuçları -->
+                    <div class="form-section">
+                        <h3>Sol Kulak Sonuçları (dB HL)</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="leftEar250">250 Hz</label>
+                                <input type="number" id="leftEar250" name="left_ear_250" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEar500">500 Hz</label>
+                                <input type="number" id="leftEar500" name="left_ear_500" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEar1000">1000 Hz</label>
+                                <input type="number" id="leftEar1000" name="left_ear_1000" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="leftEar2000">2000 Hz</label>
+                                <input type="number" id="leftEar2000" name="left_ear_2000" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEar4000">4000 Hz</label>
+                                <input type="number" id="leftEar4000" name="left_ear_4000" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEar8000">8000 Hz</label>
+                                <input type="number" id="leftEar8000" name="left_ear_8000" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konuşma Testi -->
+                    <div class="form-section">
+                        <h3>Konuşma Testi Sonuçları</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightEarSrt">Sağ Kulak SRT</label>
+                                <input type="number" id="rightEarSrt" name="right_ear_srt" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEarSrt">Sol Kulak SRT</label>
+                                <input type="number" id="leftEarSrt" name="left_ear_srt" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightEarSds">Sağ Kulak SDS (%)</label>
+                                <input type="number" id="rightEarSds" name="right_ear_sds" min="0" max="100" placeholder="%">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEarSds">Sol Kulak SDS (%)</label>
+                                <input type="number" id="leftEarSds" name="left_ear_sds" min="0" max="100" placeholder="%">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notlar ve Değerlendirme -->
+                    <div class="form-group">
+                        <label for="testNotes">Test Notları</label>
+                        <textarea id="testNotes" name="notes" rows="3" placeholder="Test ile ilgili notlar"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="testDiagnosis">Tanı</label>
+                        <textarea id="testDiagnosis" name="diagnosis" rows="3" placeholder="Tanı ve değerlendirme"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="testRecommendations">Öneriler</label>
+                        <textarea id="testRecommendations" name="recommendations" rows="3" placeholder="Tedavi önerileri"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportPdf">Test Raporu PDF Dosyası</label>
+                        <input type="file" id="reportPdf" name="report_pdf" accept=".pdf" class="file-input">
+                        <small class="help-text">Test raporunun PDF dosyasını yükleyin (opsiyonel)</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="closeNewTestModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Test Raporu Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Raporu Görüntüleme Modal -->
+    <div id="viewTestReportModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-eye"></i> Test Raporu Detayları</h2>
+                <span class="close" onclick="closeViewTestReportModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="report-details">
+                    <div class="detail-section">
+                        <h3>Hasta Bilgileri</h3>
+                        <div class="detail-row">
+                            <label>Hasta Adı:</label>
+                            <span id="viewPatientName">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Test Tarihi:</label>
+                            <span id="viewTestDate">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Test Türü:</label>
+                            <span id="viewTestType">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Doktor:</label>
+                            <span id="viewDoctorName">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Durum:</label>
+                            <span id="viewStatus">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Test Sonuçları</h3>
+                        <div class="hearing-results">
+                            <div class="ear-results">
+                                <h4>Sağ Kulak (dB HL)</h4>
+                                <div class="frequency-results">
+                                    <div class="freq-item">250 Hz: <span id="viewRightEar250">-</span></div>
+                                    <div class="freq-item">500 Hz: <span id="viewRightEar500">-</span></div>
+                                    <div class="freq-item">1000 Hz: <span id="viewRightEar1000">-</span></div>
+                                    <div class="freq-item">2000 Hz: <span id="viewRightEar2000">-</span></div>
+                                </div>
+                            </div>
+                            <div class="ear-results">
+                                <h4>Sol Kulak (dB HL)</h4>
+                                <div class="frequency-results">
+                                    <div class="freq-item">250 Hz: <span id="viewLeftEar250">-</span></div>
+                                    <div class="freq-item">500 Hz: <span id="viewLeftEar500">-</span></div>
+                                    <div class="freq-item">1000 Hz: <span id="viewLeftEar1000">-</span></div>
+                                    <div class="freq-item">2000 Hz: <span id="viewLeftEar2000">-</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Değerlendirme</h3>
+                        <div class="detail-row">
+                            <label>Tanı:</label>
+                            <div id="viewDiagnosis">-</div>
+                        </div>
+                        <div class="detail-row">
+                            <label>Notlar:</label>
+                            <div id="viewNotes">-</div>
+                        </div>
+                        <div class="detail-row">
+                            <label>Öneriler:</label>
+                            <div id="viewRecommendations">-</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" onclick="closeViewTestReportModal()" class="btn-secondary">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Raporu Düzenleme Modal -->
+    <div id="editTestReportModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-edit"></i> Test Raporu Düzenle</h2>
+                <span class="close" onclick="closeEditTestReportModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editTestReportForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="editTestId" name="test_id">
+                    
+                    <!-- Temel Bilgiler -->
+                    <div class="form-section">
+                        <h3>Temel Bilgiler</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editPatientSelect">Hasta *</label>
+                                <select id="editPatientSelect" name="patient" required>
+                                    <option value="">Hasta seçin...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editTestType">Test Türü *</label>
+                                <select id="editTestType" name="test_type" required>
+                                    <option value="">Seçin...</option>
+                                    <option value="Pure_Tone">Saf Ses Odyometrisi</option>
+                                    <option value="Speech">Konuşma Odyometrisi</option>
+                                    <option value="Impedance">Empedans Odyometrisi</option>
+                                    <option value="ABR">İşitsel Beyin Sapı Yanıtı</option>
+                                    <option value="OAE">Otoakustik Emisyon</option>
+                                    <option value="Other">Diğer</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editTestDate">Test Tarihi *</label>
+                                <input type="datetime-local" id="editTestDate" name="test_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editTestStatus">Durum</label>
+                                <select id="editTestStatus" name="status">
+                                    <option value="Completed">Tamamlandı</option>
+                                    <option value="Incomplete">Tamamlanmadı</option>
+                                    <option value="Cancelled">İptal Edildi</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Saf Ses Odyometrisi Sonuçları -->
+                    <div class="form-section">
+                        <h3>Saf Ses Odyometrisi Sonuçları (dB HL)</h3>
+                        <div class="hearing-test-grid">
+                            <div class="ear-section">
+                                <h4>Sağ Kulak</h4>
+                                <div class="frequency-grid">
+                                    <div class="freq-input">
+                                        <label>250 Hz</label>
+                                        <input type="number" id="editRightEar250" name="right_ear_250" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>500 Hz</label>
+                                        <input type="number" id="editRightEar500" name="right_ear_500" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>1000 Hz</label>
+                                        <input type="number" id="editRightEar1000" name="right_ear_1000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>2000 Hz</label>
+                                        <input type="number" id="editRightEar2000" name="right_ear_2000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>4000 Hz</label>
+                                        <input type="number" id="editRightEar4000" name="right_ear_4000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>8000 Hz</label>
+                                        <input type="number" id="editRightEar8000" name="right_ear_8000" min="0" max="120" step="5">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="ear-section">
+                                <h4>Sol Kulak</h4>
+                                <div class="frequency-grid">
+                                    <div class="freq-input">
+                                        <label>250 Hz</label>
+                                        <input type="number" id="editLeftEar250" name="left_ear_250" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>500 Hz</label>
+                                        <input type="number" id="editLeftEar500" name="left_ear_500" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>1000 Hz</label>
+                                        <input type="number" id="editLeftEar1000" name="left_ear_1000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>2000 Hz</label>
+                                        <input type="number" id="editLeftEar2000" name="left_ear_2000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>4000 Hz</label>
+                                        <input type="number" id="editLeftEar4000" name="left_ear_4000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>8000 Hz</label>
+                                        <input type="number" id="editLeftEar8000" name="left_ear_8000" min="0" max="120" step="5">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konuşma Odyometrisi Sonuçları -->
+                    <div class="form-section">
+                        <h3>Konuşma Odyometrisi Sonuçları</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editRightEarSrt">Sağ Kulak SRT (dB HL)</label>
+                                <input type="number" id="editRightEarSrt" name="right_ear_srt" min="0" max="120" step="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="editLeftEarSrt">Sol Kulak SRT (dB HL)</label>
+                                <input type="number" id="editLeftEarSrt" name="left_ear_srt" min="0" max="120" step="5">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editRightEarSds">Sağ Kulak SDS (%)</label>
+                                <input type="number" id="editRightEarSds" name="right_ear_sds" min="0" max="100" step="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="editLeftEarSds">Sol Kulak SDS (%)</label>
+                                <input type="number" id="editLeftEarSds" name="left_ear_sds" min="0" max="100" step="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Değerlendirme -->
+                    <div class="form-section">
+                        <h3>Değerlendirme</h3>
+                        <div class="form-group">
+                            <label for="editTestDiagnosis">Tanı</label>
+                            <textarea id="editTestDiagnosis" name="diagnosis" rows="3" placeholder="Test sonucuna göre tanı"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTestNotes">Notlar</label>
+                            <textarea id="editTestNotes" name="notes" rows="3" placeholder="Test ile ilgili notlar"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTestRecommendations">Öneriler</label>
+                            <textarea id="editTestRecommendations" name="recommendations" rows="3" placeholder="Tedavi önerileri"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editReportPdf">Test Raporu PDF Dosyası</label>
+                            <input type="file" id="editReportPdf" name="report_pdf" accept=".pdf" class="file-input">
+                            <small class="help-text">Yeni PDF dosyası yüklemek için seçin (opsiyonel)</small>
+                            <div id="currentPdfInfo" class="current-file-info" style="display: none;">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                <span id="currentPdfName">Mevcut PDF dosyası</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="closeEditTestReportModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Güncelle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     <script>
         const API_BASE_URL = '/api';
         
@@ -338,14 +1008,111 @@
             loadTestReports();
             loadTestStats();
             setupFilters();
+            
+            // Yeni test form submit
+            document.getElementById('newTestForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                
+                // User ID'yi ekle (şimdilik 1 olarak sabit)
+                formData.append('user', '1');
+                
+                console.log('Yeni test verisi (FormData):', Object.fromEntries(formData.entries()));
+                
+                // CSRF token'ı modal içindeki formdan al
+                const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+                
+                try {
+                    // FormData için fetch direkt kullanıyoruz (Content-Type otomatik ayarlanır)
+                    const response = await fetch(`${API_BASE_URL}/hearing_tests/hearing_tests/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken,
+                        },
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    errorHandler.showSuccess('Test raporu başarıyla eklendi');
+                    closeNewTestModal();
+                    loadTestReports(); // Test listesini yenile
+                    loadTestStats(); // İstatistikleri yenile
+                } catch (error) {
+                    console.error('Test raporu ekleme hatası:', error);
+                    
+                    // Detaylı hata mesajını al
+                    if (error.response) {
+                        try {
+                            const errorData = await error.response.json();
+                            console.error('Backend hata detayı:', errorData);
+                            if (errorData.details) {
+                                console.error('Validation errors:', errorData.details);
+                            }
+                            if (errorData.received_data) {
+                                console.error('Backend received data:', errorData.received_data);
+                            }
+                        } catch (parseError) {
+                            console.error('Hata response parse edilemedi:', parseError);
+                        }
+                    }
+                }
+            });
+
+            // Edit Test Form Submit Handler
+            document.getElementById('editTestReportForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const testId = document.getElementById('editTestId').value;
+                const formData = new FormData(this);
+                
+                // User ID'yi ekle (şimdilik 1 olarak sabit)
+                formData.append('user', '1');
+                
+                console.log('Test raporu güncelleme verisi (FormData):', Object.fromEntries(formData.entries()));
+                
+                try {
+                    // FormData için fetch direkt kullanıyoruz (Content-Type otomatik ayarlanır)
+                    const response = await fetch(`${API_BASE_URL}/hearing_tests/hearing_tests/${testId}/`, {
+                        method: 'PATCH',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    errorHandler.showSuccess('Test raporu başarıyla güncellendi');
+                    closeEditTestReportModal();
+                    loadTestReports(); // Test listesini yenile
+                    loadTestStats(); // İstatistikleri yenile
+                } catch (error) {
+                    console.error('Test raporu güncelleme hatası:', error);
+                    errorHandler.showError('Test raporu güncellenirken bir hata oluştu');
+                }
+            });
         });
 
         // Test raporlarını yükle
         async function loadTestReports() {
             try {
-                const response = await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/`);
+                console.log('Test raporları yükleniyor...');
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/hearing_tests/`);
+                console.log('Test raporu API Response:', response);
+                console.log('Test raporu sayısı:', response?.length || response?.results?.length || 0);
                 renderTestReports(response.results || response);
             } catch (error) {
+                console.error('Test raporu yükleme hatası:', error);
                 renderTestReports([]);
             }
         }
@@ -376,24 +1143,33 @@
                 <tr>
                     <td>${report.patient_name || 'Bilinmeyen Hasta'}</td>
                     <td>${getTestTypeText(report.test_type)}</td>
-                    <td>${report.test_date || '-'}</td>
+                    <td>${report.test_date_display || '-'}</td>
                     <td>${report.doctor_name || '-'}</td>
                     <td>
                         <span class="status-badge status-${report.status || 'completed'}">
                             ${getStatusText(report.status)}
                         </span>
                     </td>
-                    <td>${getResultText(report.result)}</td>
+                    <td>${report.diagnosis || 'Henüz tanı girilmemiş'}</td>
                     <td class="action-buttons">
                         <button class="btn-small btn-view" onclick="viewTestReport(${report.id})">
                             <i class="fa-solid fa-eye"></i> Görüntüle
                         </button>
-                        <button class="btn-small btn-download" onclick="downloadReport(${report.id})">
-                            <i class="fa-solid fa-download"></i> İndir
-                        </button>
-                        <button class="btn-small btn-print" onclick="printReport(${report.id})">
-                            <i class="fa-solid fa-print"></i> Yazdır
-                        </button>
+                        ${report.has_pdf ? `
+                            <button class="btn-small btn-download" onclick="downloadReport(${report.id})">
+                                <i class="fa-solid fa-download"></i> İndir
+                            </button>
+                            <button class="btn-small btn-print" onclick="printReport(${report.id})">
+                                <i class="fa-solid fa-print"></i> Yazdır
+                            </button>
+                        ` : `
+                            <button class="btn-small btn-disabled" disabled title="PDF dosyası yüklenmemiş">
+                                <i class="fa-solid fa-download"></i> İndir
+                            </button>
+                            <button class="btn-small btn-disabled" disabled title="PDF dosyası yüklenmemiş">
+                                <i class="fa-solid fa-print"></i> Yazdır
+                            </button>
+                        `}
                         <button class="btn-small btn-edit" onclick="editTestReport(${report.id})">
                             <i class="fa-solid fa-edit"></i> Düzenle
                         </button>
@@ -467,7 +1243,7 @@
             const dateFrom = document.getElementById('dateFrom').value;
             const dateTo = document.getElementById('dateTo').value;
 
-            let url = `${API_BASE_URL}/hearing_tests/?`;
+            let url = `${API_BASE_URL}/hearing_tests/hearing_tests/?`;
             
             if (search) url += `search=${encodeURIComponent(search)}&`;
             if (testType) url += `test_type=${testType}&`;
@@ -498,30 +1274,216 @@
 
         // Test raporu işlemleri
         function openNewTestModal() {
-            errorHandler.showInfo('Yeni test raporu ekleme özelliği yakında eklenecek');
+            document.getElementById('newTestModal').style.display = 'block';
+            loadPatientsForTest();
+            // Bugünün tarih ve saatini set et
+            const now = new Date();
+            const localDateTime = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+            document.getElementById('testDate').value = localDateTime;
         }
 
-        function viewTestReport(id) {
-            errorHandler.showInfo(`Test raporu ${id} görüntüleniyor`);
+        function closeNewTestModal() {
+            document.getElementById('newTestModal').style.display = 'none';
+            document.getElementById('newTestForm').reset();
         }
 
-        function editTestReport(id) {
-            errorHandler.showInfo(`Test raporu ${id} düzenleniyor`);
+        function closeViewTestReportModal() {
+            document.getElementById('viewTestReportModal').style.display = 'none';
+        }
+
+        function closeEditTestReportModal() {
+            document.getElementById('editTestReportModal').style.display = 'none';
+            document.getElementById('editTestReportForm').reset();
+        }
+
+        async function loadPatientsForTest() {
+            try {
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/patients/`);
+                const patients = response.results || response;
+                const patientSelect = document.getElementById('testPatient');
+                
+                patientSelect.innerHTML = '<option value="">Hasta seçin...</option>';
+                
+                patients.forEach(patient => {
+                    const option = document.createElement('option');
+                    option.value = patient.id;
+                    option.textContent = `${patient.first_name} ${patient.last_name}`;
+                    patientSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Hasta listesi yükleme hatası:', error);
+            }
+        }
+
+        async function loadPatientsForEditTest() {
+            try {
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/patients/`);
+                const patients = response.results || response;
+                
+                const editSelect = document.getElementById('editPatientSelect');
+                editSelect.innerHTML = '<option value="">Hasta seçin...</option>';
+                
+                patients.forEach(patient => {
+                    const option = document.createElement('option');
+                    option.value = patient.id;
+                    option.textContent = `${patient.first_name} ${patient.last_name}`;
+                    editSelect.appendChild(option);
+                });
+                
+                console.log('Edit modal için hasta listesi yüklendi:', patients.length, 'hasta');
+            } catch (error) {
+                console.error('Edit modal hasta listesi yükleme hatası:', error);
+            }
+        }
+
+        async function viewTestReport(id) {
+            try {
+                console.log('Test raporu görüntüleme ID:', id);
+                const report = await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/hearing_tests/${id}/`);
+                console.log('Test raporu verileri:', report);
+                
+                // Modal alanlarını doldur
+                document.getElementById('viewPatientName').textContent = report.patient_name || 'Bilinmeyen Hasta';
+                document.getElementById('viewTestDate').textContent = report.test_date_display || '-';
+                document.getElementById('viewTestType').textContent = getTestTypeText(report.test_type);
+                document.getElementById('viewDoctorName').textContent = report.user ? `${report.user.first_name || ''} ${report.user.last_name || ''}`.trim() : '-';
+                document.getElementById('viewStatus').textContent = getStatusText(report.status);
+                document.getElementById('viewDiagnosis').textContent = report.diagnosis || 'Henüz tanı girilmemiş';
+                document.getElementById('viewNotes').textContent = report.notes || 'Not yok';
+                document.getElementById('viewRecommendations').textContent = report.recommendations || 'Öneri yok';
+                
+                // Test sonuçlarını göster
+                if (report.test_type === 'Pure_Tone') {
+                    document.getElementById('viewRightEar250').textContent = report.right_ear_250 || '-';
+                    document.getElementById('viewRightEar500').textContent = report.right_ear_500 || '-';
+                    document.getElementById('viewRightEar1000').textContent = report.right_ear_1000 || '-';
+                    document.getElementById('viewRightEar2000').textContent = report.right_ear_2000 || '-';
+                    document.getElementById('viewLeftEar250').textContent = report.left_ear_250 || '-';
+                    document.getElementById('viewLeftEar500').textContent = report.left_ear_500 || '-';
+                    document.getElementById('viewLeftEar1000').textContent = report.left_ear_1000 || '-';
+                    document.getElementById('viewLeftEar2000').textContent = report.left_ear_2000 || '-';
+                }
+                
+                // Modal'ı göster
+                document.getElementById('viewTestReportModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Test raporu bilgileri yüklenemedi:', error);
+                errorHandler.showError('Test raporu bilgileri yüklenemedi');
+            }
+        }
+
+        async function editTestReport(id) {
+            try {
+                console.log('Test raporu düzenleme ID:', id);
+                const report = await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/hearing_tests/${id}/`);
+                console.log('Düzenlenecek test raporu:', report);
+                
+                // Modal alanlarını doldur
+                document.getElementById('editTestId').value = id;
+                document.getElementById('editPatientSelect').value = report.patient || '';
+                document.getElementById('editTestType').value = report.test_type || '';
+                document.getElementById('editTestDate').value = report.test_date ? report.test_date.slice(0, 16) : '';
+                document.getElementById('editTestStatus').value = report.status || 'Completed';
+                
+                // Test sonuçlarını doldur
+                document.getElementById('editRightEar250').value = report.right_ear_250 || '';
+                document.getElementById('editRightEar500').value = report.right_ear_500 || '';
+                document.getElementById('editRightEar1000').value = report.right_ear_1000 || '';
+                document.getElementById('editRightEar2000').value = report.right_ear_2000 || '';
+                document.getElementById('editRightEar4000').value = report.right_ear_4000 || '';
+                document.getElementById('editRightEar8000').value = report.right_ear_8000 || '';
+                
+                document.getElementById('editLeftEar250').value = report.left_ear_250 || '';
+                document.getElementById('editLeftEar500').value = report.left_ear_500 || '';
+                document.getElementById('editLeftEar1000').value = report.left_ear_1000 || '';
+                document.getElementById('editLeftEar2000').value = report.left_ear_2000 || '';
+                document.getElementById('editLeftEar4000').value = report.left_ear_4000 || '';
+                document.getElementById('editLeftEar8000').value = report.left_ear_8000 || '';
+                
+                // Konuşma testi sonuçları
+                document.getElementById('editRightEarSrt').value = report.right_ear_srt || '';
+                document.getElementById('editLeftEarSrt').value = report.left_ear_srt || '';
+                document.getElementById('editRightEarSds').value = report.right_ear_sds || '';
+                document.getElementById('editLeftEarSds').value = report.left_ear_sds || '';
+                
+                // Değerlendirme alanları
+                document.getElementById('editTestDiagnosis').value = report.diagnosis || '';
+                document.getElementById('editTestNotes').value = report.notes || '';
+                document.getElementById('editTestRecommendations').value = report.recommendations || '';
+                
+                // Mevcut PDF bilgisini göster
+                const currentPdfInfo = document.getElementById('currentPdfInfo');
+                const currentPdfName = document.getElementById('currentPdfName');
+                if (report.report_pdf) {
+                    const fileName = report.report_pdf.split('/').pop();
+                    currentPdfName.textContent = fileName;
+                    currentPdfInfo.style.display = 'block';
+                } else {
+                    currentPdfInfo.style.display = 'none';
+                }
+                
+                // Hasta listesini yükle
+                await loadPatientsForEditTest();
+                document.getElementById('editPatientSelect').value = report.patient || '';
+                
+                // Modal'ı göster
+                document.getElementById('editTestReportModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Test raporu düzenleme verileri yüklenemedi:', error);
+                errorHandler.showError('Test raporu bilgileri yüklenemedi');
+            }
         }
 
         async function downloadReport(id) {
             try {
-                const response = await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/${id}/download/`);
-                errorHandler.showSuccess('Rapor indiriliyor...');
-                // PDF indirme işlemi burada yapılacak
+                console.log('PDF indirme başlıyor, ID:', id);
+                
+                // Fetch ile dosyayı al
+                const response = await fetch(`${API_BASE_URL}/hearing_tests/hearing_tests/${id}/download/`);
+                
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        const errorData = await response.json();
+                        errorHandler.showError(errorData.error || 'PDF dosyası bulunamadı');
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                // Dosya adını response header'ından al
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'test_raporu.pdf';
+                if (contentDisposition) {
+                    const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                    if (filenameMatch) {
+                        filename = filenameMatch[1];
+                    }
+                }
+                
+                // Blob oluştur ve indir
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                errorHandler.showSuccess('PDF başarıyla indirildi');
+                
             } catch (error) {
-                // Hata zaten errorHandler tarafından gösterildi
+                console.error('PDF indirme hatası:', error);
+                errorHandler.showError('PDF indirilemedi: ' + error.message);
             }
         }
 
         async function printReport(id) {
             try {
-                const response = await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/${id}/print/`);
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/hearing_tests/${id}/print/`);
                 errorHandler.showSuccess('Rapor yazdırılıyor...');
                 // Yazdırma işlemi burada yapılacak
             } catch (error) {
@@ -533,13 +1495,30 @@
             if (!confirm('Bu test raporunu silmek istediğinize emin misiniz?')) return;
             
             try {
-                await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/${id}/`, {
+                await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/hearing_tests/${id}/`, {
                     method: 'DELETE'
                 });
                 errorHandler.showSuccess('Test raporu silindi');
                 loadTestReports();
             } catch (error) {
                 // Hata zaten errorHandler tarafından gösterildi
+            }
+        }
+
+        // Modal dışına tıklayınca kapat
+        window.onclick = function(event) {
+            const newTestModal = document.getElementById('newTestModal');
+            const viewTestModal = document.getElementById('viewTestReportModal');
+            const editTestModal = document.getElementById('editTestReportModal');
+            
+            if (event.target === newTestModal) {
+                closeNewTestModal();
+            }
+            if (event.target === viewTestModal) {
+                closeViewTestReportModal();
+            }
+            if (event.target === editTestModal) {
+                closeEditTestReportModal();
             }
         }
     </script>

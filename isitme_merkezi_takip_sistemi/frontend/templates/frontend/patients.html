@@ -213,6 +213,154 @@
             .form-row { grid-template-columns: 1fr; }
             .stats-cards { grid-template-columns: 1fr; }
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border: none;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #1f2937;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close {
+            color: #6b7280;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #374151;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        /* Pagination Styles */
+        .pagination {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover {
+            background: #f5f5f5;
+            border-color: var(--main-orange);
+        }
+
+        .pagination button.active {
+            background: var(--main-orange);
+            color: #fff;
+            border-color: var(--main-orange);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Status Toggle Buttons */
+        .btn-status {
+            padding: 0.3rem 0.6rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin: 0 2px;
+        }
+        .btn-activate {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+        .btn-activate:hover {
+            background: #c8e6c9;
+        }
+        .btn-deactivate {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        .btn-deactivate:hover {
+            background: #ffcdd2;
+        }
     </style>
 </head>
 <body class="page-bg">
@@ -244,10 +392,10 @@
         <main class="main-content">
             <div class="page-header">
                 <h1 class="page-title"><i class="fa-solid fa-user-injured"></i> Hasta Yönetimi</h1>
-                <a href="#" class="btn-primary" onclick="openNewPatientModal()">
+                <button type="button" class="btn-primary" onclick="openNewPatientModal()">
                     <i class="fa-solid fa-plus"></i>
                     Yeni Hasta
-                </a>
+                </button>
             </div>
             
             <div class="stats-cards">
@@ -328,28 +476,143 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container" style="margin-top: 1rem; display: flex; justify-content: center;">
+                    <div id="pagination" class="pagination"></div>
+                </div>
+                         </div>
+         </main>
+     </div>
+
+    <!-- Yeni Hasta Ekleme Modal -->
+    <div id="newPatientModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Yeni Hasta Ekle</h2>
+                <span class="close" onclick="closeNewPatientModal()">&times;</span>
             </div>
-        </main>
-    </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ad Soyad</th>
-                        <th>Doğum Tarihi</th>
-                        <th>Telefon</th>
-                        <th>E-posta</th>
-                        <th>Son Randevu</th>
-                        <th>Durum</th>
-                        <th>İşlemler</th>
-                    </tr>
-                </thead>
-                <tbody id="patientsTableBody">
-                    <tr class="loading-row"><td colspan="7">Yükleniyor...</td></tr>
-                </tbody>
-            </table>
+            <div class="modal-body">
+                <form id="newPatientForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="firstName">Ad *</label>
+                        <input type="text" id="firstName" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Soyad *</label>
+                        <input type="text" id="lastName" name="last_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">Doğum Tarihi *</label>
+                        <input type="date" id="birthDate" name="birth_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Cinsiyet *</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Seçin...</option>
+                            <option value="M">Erkek</option>
+                            <option value="F">Kadın</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefon *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-posta</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Adres</label>
+                        <textarea id="address" name="address" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Durum *</label>
+                        <select id="status" name="status" required>
+                            <option value="">Seçin...</option>
+                            <option value="active" selected>Aktif</option>
+                            <option value="inactive">Pasif</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeNewPatientModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="pagination" id="pagination"></div>
     </div>
+
+    <!-- Hasta Düzenleme Modal -->
+    <div id="editPatientModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-edit"></i> Hasta Düzenle</h2>
+                <span class="close" onclick="closeEditPatientModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editPatientForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="editPatientId" name="patient_id">
+                    
+                    <div class="form-group">
+                        <label for="editFirstName">Ad *</label>
+                        <input type="text" id="editFirstName" name="first_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editLastName">Soyad *</label>
+                        <input type="text" id="editLastName" name="last_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editBirthDate">Doğum Tarihi *</label>
+                        <input type="date" id="editBirthDate" name="birth_date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editGender">Cinsiyet *</label>
+                        <select id="editGender" name="gender" required>
+                            <option value="">Seçin...</option>
+                            <option value="Male">Erkek</option>
+                            <option value="Female">Kadın</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editPhone">Telefon *</label>
+                        <input type="tel" id="editPhone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editEmail">E-posta</label>
+                        <input type="email" id="editEmail" name="email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editAddress">Adres</label>
+                        <textarea id="editAddress" name="address" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editStatus">Durum *</label>
+                        <select id="editStatus" name="status" required>
+                            <option value="">Seçin...</option>
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Pasif</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" onclick="closeEditPatientModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Güncelle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_BASE_URL = '/api';
         let currentPage = 1;
@@ -359,11 +622,18 @@
         let lastAge = '';
 
         document.addEventListener('DOMContentLoaded', function() {
+            // ErrorHandler zaten error-handler.js'de initialize edildi
+            // Sadece global errorHandler'ı kullan
+            const errorHandler = window.errorHandler;
+            
+            console.log('Hasta sayfası yüklendi');
+            console.log('ErrorHandler mevcut mu:', !!errorHandler);
+            
             fetchPatients();
             fetchPatientStats();
-            document.getElementById('searchInput').addEventListener('input', debounce(onFilterChange, 500));
-            document.getElementById('statusFilter').addEventListener('change', onFilterChange);
-            document.getElementById('ageFilter').addEventListener('change', onFilterChange);
+            document.getElementById('search').addEventListener('input', debounce(onFilterChange, 500));
+            document.getElementById('status').addEventListener('change', onFilterChange);
+            document.getElementById('ageGroup').addEventListener('change', onFilterChange);
         });
 
         function onFilterChange() {
@@ -379,12 +649,12 @@
             };
         }
 
-        async function fetchPatients() {
-            const tbody = document.getElementById('patientsTableBody');
-            tbody.innerHTML = '<tr class="loading-row"><td colspan="7">Yükleniyor...</td></tr>';
-            const search = document.getElementById('searchInput').value.trim();
-            const status = document.getElementById('statusFilter').value;
-            const age = document.getElementById('ageFilter').value;
+                 async function fetchPatients() {
+             const tbody = document.getElementById('patientsTable');
+             tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...</td></tr>';
+             const search = document.getElementById('search').value.trim();
+             const status = document.getElementById('status').value;
+             const age = document.getElementById('ageGroup').value;
             lastQuery = search;
             lastStatus = status;
             lastAge = age;
@@ -394,12 +664,16 @@
             if (age) url += `&age_group=${age}`;
             
             try {
+                console.log('Hasta API URL:', url);
                 const data = await errorHandler.apiRequest(url);
+                console.log('Hasta API Response:', data);
+                console.log('Patients data:', data.results || data);
                 renderPatients(data.results || data);
                 renderPagination(data.count, data.page_size || 10);
-            } catch (error) {
-                tbody.innerHTML = '<tr><td colspan="7">Veri alınamadı.</td></tr>';
-            }
+                         } catch (error) {
+                console.error('Hasta yükleme hatası:', error);
+                 tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Veri alınamadı.</td></tr>';
+             }
         }
 
         async function fetchPatientStats() {
@@ -414,12 +688,12 @@
             }
         }
 
-        function renderPatients(patients) {
-            const tbody = document.getElementById('patientsTableBody');
-            if (!patients || patients.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7">Kayıt bulunamadı.</td></tr>';
-                return;
-            }
+                 function renderPatients(patients) {
+             const tbody = document.getElementById('patientsTable');
+             if (!patients || patients.length === 0) {
+                 tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Kayıt bulunamadı.</td></tr>';
+                 return;
+             }
             tbody.innerHTML = '';
             patients.forEach(patient => {
                 const statusClass = patient.status === 'active' ? 'status-active' : 'status-inactive';
@@ -435,6 +709,10 @@
                         <td>
                             <div class="action-buttons">
                                 <button class="btn-edit" onclick="editPatient(${patient.id})">Düzenle</button>
+                                <button class="btn-status ${patient.status === 'active' ? 'btn-deactivate' : 'btn-activate'}" 
+                                        onclick="togglePatientStatus(${patient.id}, '${patient.status}')">
+                                    ${patient.status === 'active' ? 'Pasifleştir' : 'Aktifleştir'}
+                                </button>
                                 <button class="btn-delete" onclick="deletePatient(${patient.id})">Sil</button>
                             </div>
                         </td>
@@ -446,6 +724,10 @@
         function renderPagination(count, pageSize) {
             totalPages = Math.ceil(count / pageSize);
             const pagination = document.getElementById('pagination');
+            if (!pagination) {
+                console.error('Pagination elementi bulunamadı!');
+                return;
+            }
             pagination.innerHTML = '';
             if (totalPages <= 1) return;
             for (let i = 1; i <= totalPages; i++) {
@@ -457,8 +739,73 @@
             }
         }
 
-        function editPatient(id) {
-            window.location.href = `/patients/edit/${id}/`;
+        async function editPatient(id) {
+            try {
+                console.log('Hasta düzenleme ID:', id);
+                const patient = await errorHandler.apiRequest(`${API_BASE_URL}/patients/${id}/`);
+                console.log('Hasta verileri:', patient);
+                
+                // Form alanlarını doldur
+                document.getElementById('editPatientId').value = patient.id;
+                document.getElementById('editFirstName').value = patient.first_name || '';
+                document.getElementById('editLastName').value = patient.last_name || '';
+                document.getElementById('editBirthDate').value = patient.birth_date || '';
+                document.getElementById('editGender').value = patient.gender || '';
+                document.getElementById('editPhone').value = patient.phone || '';
+                document.getElementById('editEmail').value = patient.email || '';
+                document.getElementById('editAddress').value = patient.address || '';
+                document.getElementById('editStatus').value = patient.status || 'active';
+                
+                // Modal'ı göster
+                document.getElementById('editPatientModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Hasta bilgileri yüklenemedi:', error);
+                errorHandler.showError('Hasta bilgileri yüklenemedi');
+            }
+        }
+
+        async function togglePatientStatus(id, currentStatus) {
+            const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+            const actionText = newStatus === 'active' ? 'aktifleştirmek' : 'pasifleştirmek';
+            
+            if (!confirm(`Bu hastayı ${actionText} istediğinize emin misiniz?`)) return;
+            
+            try {
+                // Önce hasta verilerini al
+                const patient = await errorHandler.apiRequest(`${API_BASE_URL}/patients/${id}/`);
+                
+                // Status'unu güncelle
+                const updateData = {
+                    first_name: patient.first_name,
+                    last_name: patient.last_name,
+                    birth_date: patient.birth_date,
+                    gender: patient.gender,
+                    phone: patient.phone,
+                    email: patient.email || '',
+                    address: patient.address || '',
+                    status: newStatus
+                };
+                
+                console.log(`Hasta ${id} status güncelleniyor: ${currentStatus} -> ${newStatus}`);
+                
+                await errorHandler.apiRequest(`${API_BASE_URL}/patients/${id}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    body: JSON.stringify(updateData)
+                });
+                
+                const statusText = newStatus === 'active' ? 'aktifleştirildi' : 'pasifleştirildi';
+                errorHandler.showSuccess(`Hasta ${statusText}`);
+                fetchPatients();
+                fetchPatientStats();
+            } catch (error) {
+                console.error('Status güncelleme hatası:', error);
+                // Hata zaten errorHandler tarafından gösterildi
+            }
         }
 
         async function deletePatient(id) {
@@ -471,6 +818,107 @@
                 fetchPatients();
             } catch (error) {
                 // Hata zaten errorHandler tarafından gösterildi
+            }
+        }
+
+        // Modal fonksiyonları - Global scope'a taşındı
+        window.openNewPatientModal = function() {
+            document.getElementById('newPatientModal').style.display = 'block';
+            document.getElementById('newPatientForm').reset();
+        }
+
+        window.closeNewPatientModal = function() {
+            document.getElementById('newPatientModal').style.display = 'none';
+        }
+
+        // Düzenleme modal fonksiyonları
+        window.closeEditPatientModal = function() {
+            document.getElementById('editPatientModal').style.display = 'none';
+        }
+
+        // Form submit
+        document.getElementById('newPatientForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const patientData = Object.fromEntries(formData.entries());
+            
+            // CSRF token al
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                await errorHandler.apiRequest(`${API_BASE_URL}/patients/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken,
+                    },
+                    body: JSON.stringify(patientData)
+                });
+                
+                errorHandler.showSuccess('Hasta başarıyla eklendi');
+                closeNewPatientModal();
+                fetchPatients();
+                fetchPatientStats();
+            } catch (error) {
+                // Hata zaten errorHandler tarafından gösterildi
+            }
+        });
+
+        // Düzenleme form submit
+        document.getElementById('editPatientForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const patientId = formData.get('patient_id');
+            
+            const patientData = {
+                first_name: formData.get('first_name'),
+                last_name: formData.get('last_name'),
+                birth_date: formData.get('birth_date'),
+                gender: formData.get('gender'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                address: formData.get('address'),
+                status: formData.get('status')
+            };
+            
+            console.log('Güncellenen hasta verisi:', patientData);
+            console.log('Hasta ID:', patientId);
+            
+            const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/patients/${patientId}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken,
+                    },
+                    body: JSON.stringify(patientData)
+                });
+                
+                console.log('Güncelleme başarılı:', response);
+                errorHandler.showSuccess('Hasta başarıyla güncellendi');
+                closeEditPatientModal();
+                fetchPatients();
+                fetchPatientStats();
+            } catch (error) {
+                console.error('Hasta güncelleme hatası:', error);
+                // Hata zaten errorHandler tarafından gösterildi
+            }
+        });
+
+        // Modal dışına tıklayınca kapat
+        window.onclick = function(event) {
+            const newModal = document.getElementById('newPatientModal');
+            const editModal = document.getElementById('editPatientModal');
+            
+            if (event.target === newModal) {
+                closeNewPatientModal();
+            }
+            if (event.target === editModal) {
+                closeEditPatientModal();
             }
         }
     </script>

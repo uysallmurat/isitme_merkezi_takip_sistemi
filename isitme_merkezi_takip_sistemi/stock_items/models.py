@@ -31,8 +31,8 @@ class StockItem(models.Model):
         ('Other', 'Diğer')
     ]
     
-    name = models.CharField(max_length=200)
-    item_type = models.CharField(max_length=20, choices=ITEM_TYPES)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    item_type = models.CharField(max_length=20, choices=ITEM_TYPES, blank=True, null=True)
     brand = models.CharField(max_length=100, blank=True, null=True)
     model = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -67,7 +67,7 @@ class StockTransaction(models.Model):
     quantity = models.IntegerField()
     unit_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stock_transactions')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stock_transactions', null=True, blank=True)
     transaction_date = models.DateTimeField()
     reference_number = models.CharField(max_length=100, blank=True, null=True)  # Fatura/İrsaliye no
     notes = models.TextField(blank=True, null=True)

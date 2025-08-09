@@ -1307,6 +1307,7 @@
                     Yenile
                 </button>
                 </div>
+
             
                         <div class="stats-cards">
                 <div class="stat-card interactive-element fade-in">
@@ -1475,6 +1476,10 @@
         
         // Sayfa yüklendiğinde
         document.addEventListener('DOMContentLoaded', function() {
+            // ErrorHandler zaten error-handler.js'de initialize edildi
+            // Sadece global errorHandler'ı kullan
+            const errorHandler = window.errorHandler;
+            
             loadDashboardData();
             
             // Welcome toast
@@ -1812,7 +1817,7 @@
         // Son test raporlarını yükle
         async function loadRecentTests() {
             try {
-                const response = await errorHandler.apiRequest(`${API_BASE_URL}/test-reports/?limit=5`);
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/hearing_tests/?limit=5`);
                 renderRecentTests(response.results || response);
             } catch (error) {
                 renderRecentTests([]);

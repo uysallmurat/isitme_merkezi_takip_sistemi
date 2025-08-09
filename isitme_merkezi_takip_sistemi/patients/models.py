@@ -3,6 +3,11 @@ from django.db import models
 # Create your models here.
 
 class Patient(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Aktif'),
+        ('inactive', 'Pasif'),
+    ]
+    
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField()
@@ -10,6 +15,7 @@ class Patient(models.Model):
     phone = models.CharField(max_length=20)
     email = models.EmailField(max_length=100, blank=True)
     address = models.TextField(blank=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

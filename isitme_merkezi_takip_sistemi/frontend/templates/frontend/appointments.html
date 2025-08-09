@@ -199,6 +199,115 @@
             .page-header { flex-direction: column; gap: 1rem; align-items: stretch; }
             .stats-cards { grid-template-columns: 1fr; }
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border: none;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #1f2937;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close {
+            color: #6b7280;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #374151;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover { 
+            background: #5a6268; 
+        }
     </style>
 </head>
 <body class="page-bg">
@@ -230,10 +339,10 @@
         <main class="main-content">
             <div class="page-header">
                 <h1 class="page-title"><i class="fa-solid fa-calendar-check"></i> Randevu Yönetimi</h1>
-                <a href="#" class="btn-primary" onclick="openNewAppointmentModal()">
+                <button type="button" class="btn-primary" onclick="openNewAppointmentModal()">
                     <i class="fa-solid fa-plus"></i>
                     Yeni Randevu
-                </a>
+                </button>
             </div>
             
             <div class="stats-cards">
@@ -317,6 +426,54 @@
         </main>
     </div>
 
+    <!-- Yeni Randevu Ekleme Modal -->
+    <div id="newAppointmentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Yeni Randevu Ekle</h2>
+                <span class="close" onclick="closeNewAppointmentModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="newAppointmentForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="patientSelect">Hasta *</label>
+                        <select id="patientSelect" name="patient" required>
+                            <option value="">Hasta seçin...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentDate">Tarih *</label>
+                        <input type="date" id="appointmentDate" name="appointment_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentTime">Saat *</label>
+                        <input type="time" id="appointmentTime" name="appointment_time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentType">Randevu Türü *</label>
+                        <select id="appointmentType" name="appointment_type" required>
+                            <option value="">Tür seçin...</option>
+                            <option value="consultation">Konsültasyon</option>
+                            <option value="hearing_test">İşitme Testi</option>
+                            <option value="device_fitting">Cihaz Uygulaması</option>
+                            <option value="follow_up">Kontrol</option>
+                            <option value="maintenance">Bakım</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notlar</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Randevu ile ilgili notlar..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeNewAppointmentModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_BASE_URL = '/api';
         
@@ -324,15 +481,20 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadAppointments();
             loadAppointmentStats();
+            loadPatients();
             setupFilters();
         });
 
         // Randevuları yükle
         async function loadAppointments() {
             try {
+                console.log('Randevular yükleniyor...');
                 const response = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/`);
+                console.log('Randevu API Response:', response);
+                console.log('Randevu sayısı:', response?.length || response?.results?.length || 0);
                 renderAppointments(response.results || response);
             } catch (error) {
+                console.error('Randevu yükleme hatası:', error);
                 renderAppointments([]);
             }
         }
@@ -350,6 +512,28 @@
             }
         }
 
+        // Hasta listesini yükle
+        async function loadPatients() {
+            try {
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/patients/`);
+                const patients = response.results || response;
+                const patientSelect = document.getElementById('patientSelect');
+                
+                // Mevcut seçenekleri temizle (ilk seçenek hariç)
+                patientSelect.innerHTML = '<option value="">Hasta seçin...</option>';
+                
+                // Hasta seçeneklerini ekle
+                patients.forEach(patient => {
+                    const option = document.createElement('option');
+                    option.value = patient.id;
+                    option.textContent = `${patient.first_name} ${patient.last_name}`;
+                    patientSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Hasta listesi yüklenemedi:', error);
+            }
+        }
+
         // Randevuları tabloya render et
         function renderAppointments(appointments) {
             const tbody = document.getElementById('appointmentsTable');
@@ -362,8 +546,8 @@
             tbody.innerHTML = appointments.map(appointment => `
                 <tr>
                     <td>${appointment.patient_name || 'Bilinmeyen Hasta'}</td>
-                    <td>${appointment.appointment_date || '-'}</td>
-                    <td>${appointment.appointment_time || '-'}</td>
+                    <td>${appointment.appointment_date_display || '-'}</td>
+                    <td>${appointment.appointment_time_display || '-'}</td>
                     <td>${appointment.appointment_type || '-'}</td>
                     <td>
                         <span class="status-badge status-${appointment.status || 'scheduled'}">
@@ -450,15 +634,146 @@
 
         // Randevu işlemleri
         function openNewAppointmentModal() {
-            errorHandler.showInfo('Yeni randevu ekleme özelliği yakında eklenecek');
+            document.getElementById('newAppointmentModal').style.display = 'block';
+            document.getElementById('newAppointmentForm').reset();
+            
+            // Bugünün tarihini varsayılan olarak ayarla
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').value = today;
         }
 
-        function viewAppointment(id) {
-            errorHandler.showInfo(`Randevu ${id} görüntüleniyor`);
+        function closeNewAppointmentModal() {
+            document.getElementById('newAppointmentModal').style.display = 'none';
         }
 
-        function editAppointment(id) {
-            errorHandler.showInfo(`Randevu ${id} düzenleniyor`);
+        async function viewAppointment(id) {
+            try {
+                const appointment = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/${id}/`);
+                
+                // Modal içeriğini doldur
+                document.getElementById('viewAppointmentId').textContent = appointment.id;
+                document.getElementById('viewAppointmentPatient').textContent = appointment.patient_name || `Hasta ID: ${appointment.patient}`;
+                document.getElementById('viewAppointmentDate').textContent = appointment.appointment_date_display || appointment.appointment_date;
+                document.getElementById('viewAppointmentTime').textContent = appointment.appointment_time_display;
+                // Appointment type'ı Türkçe'ye çevir
+                const appointmentTypes = {
+                    'consultation': 'Konsültasyon',
+                    'hearing_test': 'İşitme Testi', 
+                    'device_fitting': 'Cihaz Uygulaması',
+                    'follow_up': 'Kontrol',
+                    'maintenance': 'Bakım'
+                };
+                document.getElementById('viewAppointmentType').textContent = appointmentTypes[appointment.appointment_type] || appointment.appointment_type;
+                // Status'u Türkçe'ye çevir
+                const statusTypes = {
+                    'scheduled': 'Planlandı',
+                    'completed': 'Tamamlandı',
+                    'cancelled': 'İptal Edildi'
+                };
+                document.getElementById('viewAppointmentStatus').textContent = statusTypes[appointment.status] || appointment.status;
+                document.getElementById('viewAppointmentNotes').textContent = appointment.notes || 'Not yok';
+                
+                // Status badge rengini ayarla
+                const statusBadge = document.getElementById('viewAppointmentStatus');
+                statusBadge.className = `status-badge ${appointment.status.toLowerCase()}`;
+                
+                // Modal'ı göster
+                document.getElementById('viewAppointmentModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Randevu detayları yüklenemedi:', error);
+            }
+        }
+
+        async function editAppointment(id) {
+            try {
+                // Randevu verilerini yükle
+                const appointment = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/${id}/`);
+                
+                // Hastaları yükle
+                const patients = await errorHandler.apiRequest(`${API_BASE_URL}/patients/`);
+                const patientSelect = document.getElementById('editAppointmentPatient');
+                patientSelect.innerHTML = '<option value="">Hasta Seçin</option>';
+                patients.forEach(patient => {
+                    const selected = patient.id === appointment.patient ? 'selected' : '';
+                    patientSelect.innerHTML += `<option value="${patient.id}" ${selected}>${patient.first_name} ${patient.last_name}</option>`;
+                });
+                
+                // Form alanlarını doldur
+                document.getElementById('editAppointmentId').value = appointment.id;
+                document.getElementById('editAppointmentDate').value = appointment.appointment_date_display || appointment.appointment_date.split('T')[0];
+                document.getElementById('editAppointmentTime').value = appointment.appointment_time_display;
+                document.getElementById('editAppointmentType').value = appointment.appointment_type;
+                document.getElementById('editAppointmentStatus').value = appointment.status;
+                document.getElementById('editAppointmentNotes').value = appointment.notes || '';
+                
+                // Modal'ı göster
+                document.getElementById('editAppointmentModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Randevu düzenleme verisi yüklenemedi:', error);
+            }
+        }
+        
+        function closeViewAppointmentModal() {
+            document.getElementById('viewAppointmentModal').style.display = 'none';
+        }
+        
+        function closeEditAppointmentModal() {
+            document.getElementById('editAppointmentModal').style.display = 'none';
+        }
+        
+        async function submitEditAppointment() {
+            const form = document.getElementById('editAppointmentForm');
+            const formData = new FormData(form);
+            
+            const appointmentData = {
+                patient: formData.get('patient'),
+                appointment_date_input: formData.get('appointment_date'),
+                appointment_time_input: formData.get('appointment_time'),
+                appointment_type: formData.get('appointment_type'),
+                status: formData.get('status'),
+                notes: formData.get('notes')
+            };
+            
+            // Validasyon
+            if (!appointmentData.patient || !appointmentData.appointment_date_input || !appointmentData.appointment_time_input) {
+                errorHandler.showError('Lütfen tüm zorunlu alanları doldurun');
+                return;
+            }
+            
+            try {
+                const appointmentId = formData.get('appointment_id');
+                
+                // Debug: Gönderilen veriyi console'da göster
+                console.log('Gönderilen randevu verisi:', appointmentData);
+                console.log('Randevu ID:', appointmentId);
+                
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/${appointmentId}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify(appointmentData)
+                });
+                
+                console.log('API Response:', response);
+                errorHandler.showSuccess('Randevu başarıyla güncellendi');
+                closeEditAppointmentModal();
+                loadAppointments();
+                
+            } catch (error) {
+                console.error('Randevu güncellenirken hata:', error);
+                console.error('Hata detayları:', error.message);
+                
+                // Daha detaylı hata mesajı göster
+                if (error.message.includes('400')) {
+                    errorHandler.showError('Form verilerinde hata var. Lütfen tüm alanları kontrol edin.');
+                } else {
+                    errorHandler.showError('Randevu güncellenirken bir hata oluştu: ' + error.message);
+                }
+            }
         }
 
         async function deleteAppointment(id) {
@@ -474,6 +789,376 @@
                 // Hata zaten errorHandler tarafından gösterildi
             }
         }
+
+        // Form submit event listener
+        document.getElementById('newAppointmentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const appointmentData = Object.fromEntries(formData.entries());
+            
+            // Debug için veriyi yazdır
+            console.log('Gönderilen veri:', appointmentData);
+            
+            // CSRF token al
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken,
+                    },
+                    body: JSON.stringify(appointmentData)
+                });
+                
+                console.log('Başarılı yanıt:', response);
+                errorHandler.showSuccess('Randevu başarıyla eklendi');
+                closeNewAppointmentModal();
+                loadAppointments();
+                loadAppointmentStats();
+            } catch (error) {
+                console.error('Hata detayı:', error);
+                // Hata zaten errorHandler tarafından gösterildi
+            }
+        });
+
+        // Modal dışına tıklayınca kapat
+        window.onclick = function(event) {
+            const modal = document.getElementById('newAppointmentModal');
+            if (event.target === modal) {
+                closeNewAppointmentModal();
+            }
+        }
     </script>
+
+    <!-- Randevu Görüntüleme Modal -->
+    <div id="viewAppointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-eye"></i> Randevu Detayları</h2>
+                <button type="button" class="close" onclick="closeViewAppointmentModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <label>Randevu ID:</label>
+                        <span id="viewAppointmentId">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Hasta:</label>
+                        <span id="viewAppointmentPatient">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Tarih:</label>
+                        <span id="viewAppointmentDate">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Saat:</label>
+                        <span id="viewAppointmentTime">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Randevu Türü:</label>
+                        <span id="viewAppointmentType">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Durum:</label>
+                        <span id="viewAppointmentStatus" class="status-badge">-</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>Notlar:</label>
+                        <span id="viewAppointmentNotes">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeViewAppointmentModal()">
+                    <i class="fa-solid fa-times"></i> Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Randevu Düzenleme Modal -->
+    <div id="editAppointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-edit"></i> Randevu Düzenle</h2>
+                <button type="button" class="close" onclick="closeEditAppointmentModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <form id="editAppointmentForm" onsubmit="event.preventDefault(); submitEditAppointment();">
+                {% csrf_token %}
+                <input type="hidden" name="appointment_id" id="editAppointmentId">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editAppointmentPatient">Hasta *</label>
+                            <select name="patient" id="editAppointmentPatient" required>
+                                <option value="">Hasta Seçin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAppointmentDate">Randevu Tarihi *</label>
+                            <input type="date" name="appointment_date" id="editAppointmentDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editAppointmentTime">Randevu Saati *</label>
+                            <input type="time" name="appointment_time" id="editAppointmentTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAppointmentType">Randevu Türü</label>
+                            <select name="appointment_type" id="editAppointmentType">
+                                <option value="consultation">Konsültasyon</option>
+                                <option value="hearing_test">İşitme Testi</option>
+                                <option value="device_fitting">Cihaz Uygulaması</option>
+                                <option value="follow_up">Kontrol</option>
+                                <option value="maintenance">Bakım</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editAppointmentStatus">Durum</label>
+                            <select name="status" id="editAppointmentStatus">
+                                <option value="scheduled">Planlandı</option>
+                                <option value="completed">Tamamlandı</option>
+                                <option value="cancelled">İptal Edildi</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editAppointmentNotes">Notlar</label>
+                        <textarea name="notes" id="editAppointmentNotes" rows="3" placeholder="Randevu notları..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeEditAppointmentModal()">
+                        <i class="fa-solid fa-times"></i> İptal
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-save"></i> Güncelle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 3% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--main-orange) 0%, var(--main-orange-light) 100%);
+            color: white;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .modal-header .close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        
+        .modal-header .close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .detail-item.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .detail-item label {
+            font-weight: 600;
+            color: var(--main-text);
+            font-size: 0.9rem;
+        }
+        
+        .detail-item span {
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--main-text);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--main-orange);
+            box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.1);
+        }
+        
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            background: #f8f9fa;
+            border-radius: 0 0 12px 12px;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-badge.scheduled {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status-badge.completed {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .status-badge.cancelled {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .status-badge.no-show {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .form-row, .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 2% auto;
+            }
+        }
+    </style>
 </body>
 </html> 

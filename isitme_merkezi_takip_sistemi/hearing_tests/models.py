@@ -49,6 +49,9 @@ class HearingTest(models.Model):
     diagnosis = models.TextField(blank=True, null=True)
     recommendations = models.TextField(blank=True, null=True)
     
+    # Test raporu PDF dosyası
+    report_pdf = models.FileField(upload_to='test_reports/', blank=True, null=True, help_text='Test raporu PDF dosyası')
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

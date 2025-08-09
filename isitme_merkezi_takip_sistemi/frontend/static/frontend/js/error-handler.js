@@ -27,10 +27,25 @@ class ErrorHandler {
             return;
         }
 
-        this.notificationContainer = document.createElement('div');
-        this.notificationContainer.id = 'globalNotification';
-        this.notificationContainer.className = 'global-notification-container';
-        document.body.appendChild(this.notificationContainer);
+        // document.body hazır değilse bekle
+        if (!document.body) {
+            setTimeout(() => this.createNotificationContainer(), 100);
+            return;
+        }
+
+        try {
+            this.notificationContainer = document.createElement('div');
+            this.notificationContainer.id = 'globalNotification';
+            this.notificationContainer.className = 'global-notification-container';
+            document.body.appendChild(this.notificationContainer);
+        } catch (error) {
+            console.warn('Notification container oluşturulamadı:', error);
+            // Fallback: basit bir div oluştur
+            this.notificationContainer = document.createElement('div');
+            this.notificationContainer.id = 'globalNotification';
+            this.notificationContainer.className = 'global-notification-container';
+            this.notificationContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        }
     }
 
     setupGlobalErrorHandlers() {
@@ -104,6 +119,17 @@ class ErrorHandler {
     }
 
     showNotification(message, type = 'info', duration = 5000) {
+        // Notification container hazır mı kontrol et
+        if (!this.notificationContainer) {
+            this.createNotificationContainer();
+        }
+        
+        // Hala hazır değilse console'a yaz
+        if (!this.notificationContainer) {
+            console.warn('Notification container hazır değil, mesaj gösterilemedi:', message);
+            return null;
+        }
+
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.innerHTML = `
@@ -116,21 +142,26 @@ class ErrorHandler {
             </div>
         `;
 
-        this.notificationContainer.appendChild(notification);
+        try {
+            this.notificationContainer.appendChild(notification);
 
-        // Animasyon ekle
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 100);
-
-        // Otomatik kaldır
-        if (duration > 0) {
+            // Animasyon ekle
             setTimeout(() => {
-                this.removeNotification(notification);
-            }, duration);
-        }
+                notification.classList.add('show');
+            }, 100);
 
-        return notification;
+            // Otomatik kaldır
+            if (duration > 0) {
+                setTimeout(() => {
+                    this.removeNotification(notification);
+                }, duration);
+            }
+
+            return notification;
+        } catch (error) {
+            console.warn('Notification gösterilemedi:', error);
+            return null;
+        }
     }
 
     removeNotification(notification) {
@@ -320,16 +351,38 @@ class ErrorHandler {
     }
 }
 
-// Global instance oluştur
-const errorHandler = new ErrorHandler();
+// Global instance - DOM hazır olduktan sonra oluştur
+let errorHandler = null;
 
-// Global fonksiyonlar (eski kodlarla uyumluluk için)
-window.showNotification = (message, type, duration) => errorHandler.showNotification(message, type, duration);
-window.showSuccess = (message, duration) => errorHandler.showSuccess(message, duration);
-window.showError = (message, duration) => errorHandler.showError(message, duration);
-window.showWarning = (message, duration) => errorHandler.showWarning(message, duration);
-window.showInfo = (message, duration) => errorHandler.showInfo(message, duration);
-window.getToken = () => errorHandler.getToken();
+// DOM hazır olduğunda ErrorHandler'ı initialize et
+function initializeErrorHandler() {
+    // document.body hazır mı kontrol et
+    if (!document.body) {
+        setTimeout(initializeErrorHandler, 100);
+        return;
+    }
+    
+    errorHandler = new ErrorHandler();
+    
+    // Global errorHandler'ı window objesine ekle
+    window.errorHandler = errorHandler;
+    
+    // Global fonksiyonları tanımla
+    window.showNotification = (message, type, duration) => errorHandler.showNotification(message, type, duration);
+    window.showSuccess = (message, duration) => errorHandler.showSuccess(message, duration);
+    window.showError = (message, duration) => errorHandler.showError(message, duration);
+    window.showWarning = (message, duration) => errorHandler.showWarning(message, duration);
+    window.showInfo = (message, duration) => errorHandler.showInfo(message, duration);
+    window.getToken = () => errorHandler.getToken();
+}
+
+// DOM hazır olduğunda başlat
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeErrorHandler);
+} else {
+    // DOM zaten hazırsa hemen başlat
+    initializeErrorHandler();
+}
 
 // Node.js/Jest ortamı için export
 if (typeof module !== 'undefined' && module.exports) {

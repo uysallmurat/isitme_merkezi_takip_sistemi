@@ -26,6 +26,7 @@
 **🔖 3. Backend Geliştirme (API Katmanı)**
 - [x] API mimarisi planla (RESTful veya GraphQL)
 - [x] Kullanıcı doğrulama ve oturum yönetimi (JWT, OAuth2)
+- [ ] **User field tutarlılığı kontrolü** - Tüm modellerde user field'larının tutarlı hale getirilmesi
 - [x] CRUD API'lerini geliştir:
   - [x] Hastalar
   - [x] Randevular
