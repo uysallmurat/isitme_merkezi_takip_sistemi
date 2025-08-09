@@ -52,8 +52,8 @@ class DeviceTransaction(models.Model):
         ('Other', 'Diğer')
     ]
     
-    device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='transactions')
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='device_transactions')
+    device = models.ForeignKey(Device, on_delete=models.PROTECT, related_name='transactions')
+    patient = models.ForeignKey(Patient, on_delete=models.PROTECT, related_name='device_transactions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_transactions')  # Tekniker/Odyolog
     transaction_type = models.CharField(max_length=20, choices=TRANSACTION_TYPES)
     transaction_date = models.DateTimeField()

@@ -1,5 +1,6 @@
 from django.db import models
 from patients.models import Patient
+from django.contrib.auth.models import User
 
 class Invoice(models.Model):
     STATUS_CHOICES = [
@@ -8,7 +9,8 @@ class Invoice(models.Model):
         ('Paid', 'Ödendi'),
         ('Cancelled', 'İptal Edildi'),
     ]
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='invoices')
+    patient = models.ForeignKey(Patient, on_delete=models.PROTECT, related_name='invoices')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invoices', null=True, blank=True, help_text='Kim oluşturdu')
     invoice_date = models.DateField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)

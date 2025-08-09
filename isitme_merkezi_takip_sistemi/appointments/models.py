@@ -3,7 +3,7 @@ from patients.models import Patient
 from django.contrib.auth.models import User
 
 class Appointment(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     appointment_date = models.DateTimeField()
     appointment_type = models.CharField(max_length=50, choices=[

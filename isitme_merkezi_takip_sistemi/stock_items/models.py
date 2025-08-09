@@ -62,7 +62,7 @@ class StockTransaction(models.Model):
         ('Transfer', 'Transfer')
     ]
     
-    stock_item = models.ForeignKey(StockItem, on_delete=models.CASCADE, related_name='transactions')
+    stock_item = models.ForeignKey(StockItem, on_delete=models.PROTECT, related_name='transactions')
     transaction_type = models.CharField(max_length=20, choices=TRANSACTION_TYPES)
     quantity = models.IntegerField()
     unit_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)

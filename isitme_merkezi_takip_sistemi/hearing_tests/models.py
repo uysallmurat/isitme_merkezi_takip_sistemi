@@ -3,7 +3,7 @@ from patients.models import Patient
 from django.contrib.auth.models import User
 
 class HearingTest(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='hearing_tests')
+    patient = models.ForeignKey(Patient, on_delete=models.PROTECT, related_name='hearing_tests')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hearing_tests')  # Odyolog
     test_date = models.DateTimeField()
     test_type = models.CharField(max_length=50, choices=[

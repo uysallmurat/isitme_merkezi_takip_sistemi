@@ -36,6 +36,7 @@
 - **Modern UI Elementleri:** Buttons, cards, forms, tables için kapsamlı modernizasyon ve design system oluşturuldu.
 - **Renk ve Tipografi Sistemi:** Sofistike renk paleti, modern font hierarchy ve CSS variables sistemi implement edildi.
 - **Frontend Unit ve Entegrasyon Testleri:** Jest framework ile 27 test case'i yazıldı ve çalıştırıldı (%74.1 başarı oranı).
+- **PROTECT Mekanizması Uygulandı:** Tüm kritik ilişkiler CASCADE'dan PROTECT'e çevrildi. Hasta, Cihaz, StockItem silinirken bağlı kayıtlar varsa güvenli hata mesajı verilir ve silme işlemi engellenir.
 
 ---
 
