@@ -716,14 +716,63 @@
         // Stok istatistiklerini yükle
         async function loadInventoryStats() {
             try {
-                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
-                document.getElementById('totalProducts').textContent = data.total_products || 0;
-                document.getElementById('stockValue').textContent = `₺${data.total_stock_value || 0}`;
-                document.getElementById('lowStock').textContent = data.low_stock_products || 0;
-                document.getElementById('outOfStock').textContent = data.out_of_stock_products || 0;
+                // Tüm stok ürünlerini al
+                const response = await fetch(`${API_BASE_URL}/stock_items/stock_items/`);
+                if (!response.ok) {
+                    throw new Error('Stok verileri alınamadı');
+                }
+                
+                const stockItems = await response.json();
+                console.log('İstatistik için stok ürünleri:', stockItems);
+                
+                // İstatistikleri hesapla
+                const stats = calculateStockStats(stockItems);
+                
+                // Kartları güncelle
+                document.getElementById('totalProducts').textContent = stats.totalProducts;
+                document.getElementById('stockValue').textContent = `₺${stats.stockValue.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+                document.getElementById('lowStock').textContent = stats.lowStock;
+                document.getElementById('outOfStock').textContent = stats.outOfStock;
+                
             } catch (error) {
                 console.error('Stok istatistikleri yüklenemedi:', error);
+                // Hata durumunda sıfır göster
+                document.getElementById('totalProducts').textContent = '0';
+                document.getElementById('stockValue').textContent = '₺0,00';
+                document.getElementById('lowStock').textContent = '0';
+                document.getElementById('outOfStock').textContent = '0';
             }
+        }
+
+        // Stok istatistiklerini hesapla
+        function calculateStockStats(stockItems) {
+            let totalProducts = stockItems.length;
+            let stockValue = 0;
+            let lowStock = 0;
+            let outOfStock = 0;
+            
+            stockItems.forEach(item => {
+                const quantity = parseInt(item.current_stock || 0);
+                const unitPrice = parseFloat(item.unit_price || 0);
+                const criticalLevel = parseInt(item.minimum_stock || 5);
+                
+                // Stok değeri hesapla
+                stockValue += quantity * unitPrice;
+                
+                // Stok durumlarını kontrol et
+                if (quantity === 0) {
+                    outOfStock++;
+                } else if (quantity <= criticalLevel) {
+                    lowStock++;
+                }
+            });
+            
+            return {
+                totalProducts,
+                stockValue,
+                lowStock,
+                outOfStock
+            };
         }
 
         // Stok verilerini tabloya render et

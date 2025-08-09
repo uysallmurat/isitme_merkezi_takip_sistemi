@@ -384,7 +384,7 @@
                         <i class="fa-solid fa-exclamation-triangle"></i>
                     </div>
                     <div class="stat-number" id="lowStockDevices">0</div>
-                    <div class="stat-label">Az Stoklu Cihazlar</div>
+                    <div class="stat-label">Az Stoklu Türler</div>
                 </div>
             </div>
             
@@ -598,14 +598,75 @@
         // Cihaz istatistiklerini yükle
         async function loadDeviceStats() {
             try {
-                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
-                document.getElementById('totalDevices').textContent = data.total_devices || 0;
-                document.getElementById('activeDevices').textContent = data.active_devices || 0;
-                document.getElementById('maintenanceDevices').textContent = data.maintenance_devices || 0;
-                document.getElementById('lowStockDevices').textContent = data.low_stock_devices || 0;
+                // Tüm cihazları al
+                const response = await fetch(`${API_BASE_URL}/devices/devices/`);
+                if (!response.ok) {
+                    throw new Error('Cihaz verileri alınamadı');
+                }
+                
+                const devices = await response.json();
+                console.log('İstatistik için cihazlar:', devices);
+                
+                // İstatistikleri hesapla
+                const stats = calculateDeviceStats(devices);
+                
+                // Kartları güncelle
+                document.getElementById('totalDevices').textContent = stats.totalDevices;
+                document.getElementById('activeDevices').textContent = stats.activeDevices;
+                document.getElementById('maintenanceDevices').textContent = stats.maintenanceDevices;
+                document.getElementById('lowStockDevices').textContent = stats.lowStockDevices;
+                
             } catch (error) {
                 console.error('Cihaz istatistikleri yüklenemedi:', error);
+                // Hata durumunda sıfır göster
+                document.getElementById('totalDevices').textContent = '0';
+                document.getElementById('activeDevices').textContent = '0';
+                document.getElementById('maintenanceDevices').textContent = '0';
+                document.getElementById('lowStockDevices').textContent = '0';
             }
+        }
+
+        // Cihaz istatistiklerini hesapla
+        function calculateDeviceStats(devices) {
+            let totalDevices = devices.length;
+            let activeDevices = 0;
+            let maintenanceDevices = 0;
+            let lowStockDevices = 0;
+            
+            // Cihaz türlerine göre stok sayısını hesapla
+            const deviceTypeCount = {};
+            
+            devices.forEach(device => {
+                // Aktif cihazlar (Available veya In_Use)
+                if (device.status === 'Available' || device.status === 'In_Use') {
+                    activeDevices++;
+                }
+                
+                // Bakımdaki cihazlar
+                if (device.status === 'Maintenance') {
+                    maintenanceDevices++;
+                }
+                
+                // Cihaz türü sayısını hesapla
+                if (!deviceTypeCount[device.device_type]) {
+                    deviceTypeCount[device.device_type] = 0;
+                }
+                deviceTypeCount[device.device_type]++;
+            });
+            
+            // Az stoklu cihaz türleri (her türden 3'ten az olan türlerin sayısı)
+            Object.values(deviceTypeCount).forEach(count => {
+                if (count < 3) {
+                    lowStockDevices++;
+                }
+            });
+            
+            return {
+                totalDevices,
+                activeDevices,
+                maintenanceDevices,
+                lowStockDevices
+            };
         }
 
         // Cihazları tabloya render et

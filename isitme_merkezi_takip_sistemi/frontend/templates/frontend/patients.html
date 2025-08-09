@@ -678,14 +678,89 @@
 
         async function fetchPatientStats() {
             try {
-                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
-                document.getElementById('totalPatients').textContent = data.total_patients || 0;
-                document.getElementById('activePatients').textContent = data.active_patients || 0;
-                document.getElementById('newPatients').textContent = data.new_patients_this_month || 0;
-                document.getElementById('appointmentsThisMonth').textContent = data.appointments_this_month || 0;
+                // Hasta ve randevu verilerini paralel olarak al
+                const [patientsResponse, appointmentsResponse] = await Promise.all([
+                    fetch(`${API_BASE_URL}/patients/`),
+                    fetch(`${API_BASE_URL}/appointments/`)
+                ]);
+                
+                if (!patientsResponse.ok || !appointmentsResponse.ok) {
+                    throw new Error('Veri alınamadı');
+                }
+                
+                const patients = await patientsResponse.json();
+                const appointments = await appointmentsResponse.json();
+                
+                console.log('İstatistik için hastalar:', patients);
+                console.log('İstatistik için randevular:', appointments);
+                
+                // İstatistikleri hesapla
+                const stats = calculatePatientStats(patients, appointments);
+                
+                // Kartları güncelle
+                document.getElementById('totalPatients').textContent = stats.totalPatients;
+                document.getElementById('activePatients').textContent = stats.activePatients;
+                document.getElementById('newPatients').textContent = stats.newPatients;
+                document.getElementById('appointmentsThisMonth').textContent = stats.appointmentsThisMonth;
+                
             } catch (error) {
                 console.error('İstatistikler yüklenemedi:', error);
+                // Hata durumunda sıfır göster
+                document.getElementById('totalPatients').textContent = '0';
+                document.getElementById('activePatients').textContent = '0';
+                document.getElementById('newPatients').textContent = '0';
+                document.getElementById('appointmentsThisMonth').textContent = '0';
             }
+        }
+
+        // Hasta istatistiklerini hesapla
+        function calculatePatientStats(patients, appointments) {
+            let totalPatients = patients.length;
+            let activePatients = 0;
+            let newPatients = 0;
+            let appointmentsThisMonth = 0;
+            
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            // Hasta istatistikleri
+            patients.forEach(patient => {
+                // Aktif hastalar
+                if (patient.status === 'active') {
+                    activePatients++;
+                }
+                
+                // Bu ay yeni hastalar
+                const createdDate = new Date(patient.created_at);
+                if (createdDate.getMonth() === currentMonth && createdDate.getFullYear() === currentYear) {
+                    newPatients++;
+                }
+            });
+            
+            // Bu ay randevu sayısı
+            appointments.forEach(appointment => {
+                const appointmentDate = new Date(appointment.appointment_date);
+                if (appointmentDate.getMonth() === currentMonth && appointmentDate.getFullYear() === currentYear) {
+                    appointmentsThisMonth++;
+                }
+            });
+            
+            console.log('Hasta istatistik sonuçları:', {
+                totalPatients,
+                activePatients,
+                newPatients,
+                appointmentsThisMonth,
+                currentMonth: currentMonth + 1,
+                currentYear
+            });
+            
+            return {
+                totalPatients,
+                activePatients,
+                newPatients,
+                appointmentsThisMonth
+            };
         }
 
                  function renderPatients(patients) {

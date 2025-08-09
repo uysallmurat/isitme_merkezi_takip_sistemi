@@ -340,6 +340,101 @@
                 margin: 1rem;
             }
         }
+
+        /* Invoice Details Modal Styles */
+        .invoice-details {
+            padding: 2rem;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .invoice-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--main-text);
+            font-size: 1.5rem;
+        }
+
+        .invoice-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .invoice-amount {
+            text-align: right;
+        }
+
+        .amount-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .amount-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--main-orange);
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h4 {
+            margin: 0 0 1rem 0;
+            color: var(--main-text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .info-item label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .info-item span {
+            color: var(--main-text);
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .invoice-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .invoice-amount {
+                text-align: left;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body class="page-bg">
@@ -489,14 +584,70 @@
         // Fatura istatistiklerini yükle
         async function loadInvoiceStats() {
             try {
-                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
-                document.getElementById('totalRevenue').textContent = `₺${data.total_revenue || 0}`;
-                document.getElementById('pendingPayments').textContent = `₺${data.pending_payments || 0}`;
-                document.getElementById('overduePayments').textContent = `₺${data.overdue_payments || 0}`;
-                document.getElementById('totalInvoices').textContent = data.total_invoices || 0;
+                // Tüm faturaları al
+                const response = await fetch(`${API_BASE_URL}/invoices/invoices/`);
+                if (!response.ok) {
+                    throw new Error('Fatura verileri alınamadı');
+                }
+                
+                const invoices = await response.json();
+                console.log('İstatistik için faturalar:', invoices);
+                
+                // İstatistikleri hesapla
+                const stats = calculateInvoiceStats(invoices);
+                
+                // Kartları güncelle
+                document.getElementById('totalRevenue').textContent = `₺${stats.totalRevenue.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+                document.getElementById('pendingPayments').textContent = `₺${stats.pendingPayments.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+                document.getElementById('overduePayments').textContent = `₺${stats.overduePayments.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+                document.getElementById('totalInvoices').textContent = stats.totalInvoices;
+                
             } catch (error) {
                 console.error('Fatura istatistikleri yüklenemedi:', error);
+                // Hata durumunda sıfır göster
+                document.getElementById('totalRevenue').textContent = '₺0,00';
+                document.getElementById('pendingPayments').textContent = '₺0,00';
+                document.getElementById('overduePayments').textContent = '₺0,00';
+                document.getElementById('totalInvoices').textContent = '0';
             }
+        }
+
+        // Fatura istatistiklerini hesapla
+        function calculateInvoiceStats(invoices) {
+            let totalRevenue = 0;
+            let pendingPayments = 0;
+            let overduePayments = 0;
+            let totalInvoices = invoices.length;
+            
+            const today = new Date();
+            
+            invoices.forEach(invoice => {
+                const amount = parseFloat(invoice.amount || 0);
+                const invoiceDate = new Date(invoice.invoice_date);
+                
+                // Toplam gelir (ödenen faturalar)
+                if (invoice.status === 'Paid') {
+                    totalRevenue += amount;
+                }
+                
+                // Bekleyen ödemeler (düzenlendi ama ödenmedi)
+                if (invoice.status === 'Issued') {
+                    pendingPayments += amount;
+                }
+                
+                // Gecikmiş ödemeler (30 günden eski ve ödenmemiş)
+                const daysDiff = Math.floor((today - invoiceDate) / (1000 * 60 * 60 * 24));
+                if (invoice.status === 'Issued' && daysDiff > 30) {
+                    overduePayments += amount;
+                }
+            });
+            
+            return {
+                totalRevenue,
+                pendingPayments,
+                overduePayments,
+                totalInvoices
+            };
         }
 
         // Fatura verilerini tabloya render et
@@ -527,14 +678,11 @@
                         <button class="btn-small btn-view" onclick="viewInvoice(${invoice.id})">
                             <i class="fa-solid fa-eye"></i> Görüntüle
                         </button>
-                        <button class="btn-small btn-pdf" onclick="downloadPDF(${invoice.id})">
+                        <button class="btn-small btn-pdf" onclick="downloadPDF(${invoice.id})" disabled title="Yakında eklenecek">
                             <i class="fa-solid fa-file-pdf"></i> PDF
                         </button>
-                        <button class="btn-small btn-email" onclick="sendEmail(${invoice.id})">
+                        <button class="btn-small btn-email" onclick="sendEmail(${invoice.id})" disabled title="Yakında eklenecek">
                             <i class="fa-solid fa-envelope"></i> E-posta
-                        </button>
-                        <button class="btn-small btn-edit" onclick="editInvoice(${invoice.id})">
-                            <i class="fa-solid fa-edit"></i> Düzenle
                         </button>
                         <button class="btn-small btn-delete" onclick="deleteInvoice(${invoice.id})">
                             <i class="fa-solid fa-trash"></i> Sil
@@ -571,6 +719,19 @@
             if (!dateString) return '-';
             const date = new Date(dateString);
             return date.toLocaleDateString('tr-TR');
+        }
+
+        // Tarih ve saat formatla
+        function formatDateTime(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleString('tr-TR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
 
         // Filtreleri kur
@@ -674,8 +835,154 @@
             }
         }
 
-        function viewInvoice(id) {
-            errorHandler.showInfo(`Fatura ${id} görüntüleniyor`);
+        async function viewInvoice(id) {
+            try {
+                console.log('Fatura görüntüleniyor:', id);
+                errorHandler.showLoading();
+                
+                // Fatura detaylarını API'den al
+                const response = await fetch(`/api/invoices/invoices/${id}/`);
+                if (!response.ok) {
+                    throw new Error('Fatura detayları alınamadı');
+                }
+                
+                const invoice = await response.json();
+                console.log('Fatura detayları:', invoice);
+                
+                // Modal'daki alanları doldur
+                populateInvoiceModal(invoice);
+                
+                // Modal'ı aç
+                document.getElementById('viewInvoiceModal').style.display = 'flex';
+                
+            } catch (error) {
+                console.error('Fatura görüntüleme hatası:', error);
+                errorHandler.showError('Fatura detayları yüklenemedi: ' + error.message);
+            } finally {
+                errorHandler.hideLoading();
+            }
+        }
+
+        function closeViewInvoiceModal() {
+            document.getElementById('viewInvoiceModal').style.display = 'none';
+        }
+
+        function populateInvoiceModal(invoice) {
+            // Temel bilgiler
+            document.getElementById('invoiceTitle').textContent = `Fatura #${invoice.id}`;
+            document.getElementById('invoiceDate').textContent = `Tarih: ${formatDate(invoice.invoice_date)}`;
+            document.getElementById('invoiceAmount').textContent = `₺${parseFloat(invoice.amount || 0).toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+            
+            // Status badge
+            const statusElement = document.getElementById('invoiceStatus');
+            statusElement.textContent = getStatusText(invoice.status);
+            statusElement.className = `status-badge status-${invoice.status.toLowerCase()}`;
+            
+            // Hasta bilgileri
+            document.getElementById('patientName').textContent = invoice.patient_name || 'Bilinmeyen Hasta';
+            
+            // Fatura detayları
+            document.getElementById('invoiceDescription').textContent = invoice.description || 'Açıklama yok';
+            document.getElementById('invoiceCreated').textContent = formatDateTime(invoice.created_at);
+            document.getElementById('invoiceUpdated').textContent = formatDateTime(invoice.updated_at);
+        }
+
+        async function editInvoiceFromView() {
+            try {
+                // Mevcut fatura verilerini al
+                const invoiceId = document.getElementById('invoiceTitle').textContent.replace('Fatura #', '');
+                console.log('Düzenleme için fatura ID:', invoiceId);
+                
+                // Görüntüle modal'ını kapat
+                closeViewInvoiceModal();
+                
+                // Düzenleme modal'ını aç
+                await openEditInvoiceModal(invoiceId);
+                
+            } catch (error) {
+                console.error('Düzenleme modal açma hatası:', error);
+                errorHandler.showError('Düzenleme modal\'ı açılamadı');
+            }
+        }
+
+        async function openEditInvoiceModal(invoiceId) {
+            try {
+                errorHandler.showLoading();
+                
+                // Fatura detaylarını ve hasta listesini paralel olarak yükle
+                const [invoiceResponse, patientsResponse] = await Promise.all([
+                    fetch(`/api/invoices/invoices/${invoiceId}/`),
+                    fetch('/api/patients/')
+                ]);
+                
+                if (!invoiceResponse.ok || !patientsResponse.ok) {
+                    throw new Error('Veriler yüklenemedi');
+                }
+                
+                const invoice = await invoiceResponse.json();
+                const patients = await patientsResponse.json();
+                
+                console.log('Düzenlenecek fatura:', invoice);
+                
+                // Hasta listesini doldur
+                const patientSelect = document.getElementById('edit_patient_id');
+                patientSelect.innerHTML = '<option value="">Hasta Seçin</option>';
+                patients.forEach(patient => {
+                    const option = document.createElement('option');
+                    option.value = patient.id;
+                    option.textContent = `${patient.first_name} ${patient.last_name}`;
+                    patientSelect.appendChild(option);
+                });
+                
+                // Header bilgilerini doldur
+                document.getElementById('editInvoiceTitle').textContent = `Fatura #${invoice.id}`;
+                document.getElementById('editInvoiceDate').textContent = `Düzenleme Tarihi: ${formatDate(invoice.invoice_date)}`;
+                document.getElementById('editInvoiceAmount').textContent = `₺${parseFloat(invoice.amount || 0).toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+                
+                // Status badge
+                const editStatusElement = document.getElementById('editInvoiceStatus');
+                editStatusElement.textContent = getStatusText(invoice.status);
+                editStatusElement.className = `status-badge status-${invoice.status.toLowerCase()}`;
+                
+                // Form alanlarını doldur
+                document.getElementById('edit_invoice_id').value = invoice.id;
+                document.getElementById('edit_patient_id').value = invoice.patient;
+                document.getElementById('edit_invoice_date').value = invoice.invoice_date;
+                document.getElementById('edit_amount').value = invoice.amount;
+                document.getElementById('edit_status').value = invoice.status;
+                document.getElementById('edit_description').value = invoice.description || '';
+                
+                // Modal'ı aç
+                document.getElementById('editInvoiceModal').style.display = 'flex';
+                
+            } catch (error) {
+                console.error('Düzenleme modal yükleme hatası:', error);
+                errorHandler.showError('Düzenleme verileri yüklenemedi: ' + error.message);
+            } finally {
+                errorHandler.hideLoading();
+            }
+        }
+
+        function closeEditInvoiceModal() {
+            document.getElementById('editInvoiceModal').style.display = 'none';
+            document.getElementById('editInvoiceForm').reset();
+        }
+
+        // Real-time güncelleme fonksiyonları
+        function updateEditAmount(input) {
+            const amount = parseFloat(input.value.replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
+            document.getElementById('editInvoiceAmount').textContent = `₺${amount.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+        }
+
+        function updateEditStatus(select) {
+            const statusElement = document.getElementById('editInvoiceStatus');
+            statusElement.textContent = getStatusText(select.value);
+            statusElement.className = `status-badge status-${select.value.toLowerCase()}`;
+        }
+
+        function downloadPDFFromView() {
+            const invoiceId = document.getElementById('invoiceTitle').textContent.replace('Fatura #', '');
+            downloadPDF(invoiceId);
         }
 
         // Tutar formatı düzenleme
@@ -684,13 +991,21 @@
             input.value = value;
         }
 
-        // Form submit işleyicisi
+        // Form submit işleyicileri
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('newInvoiceForm');
-            if (form) {
-                form.addEventListener('submit', async function(e) {
+            const newForm = document.getElementById('newInvoiceForm');
+            if (newForm) {
+                newForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
                     await createInvoice();
+                });
+            }
+            
+            const editForm = document.getElementById('editInvoiceForm');
+            if (editForm) {
+                editForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    await updateInvoice();
                 });
             }
         });
@@ -736,12 +1051,67 @@
                 errorHandler.showSuccess('Fatura başarıyla oluşturuldu!');
                 closeNewInvoiceModal();
                 
-                // Fatura listesini yenile
+                // Fatura listesini ve istatistikleri yenile
                 loadInvoices();
+                loadInvoiceStats();
 
             } catch (error) {
                 console.error('Fatura oluşturma hatası:', error);
                 errorHandler.showError('Fatura oluşturulurken hata: ' + error.message);
+            } finally {
+                errorHandler.hideLoading();
+            }
+        }
+
+        async function updateInvoice() {
+            try {
+                errorHandler.showLoading();
+
+                const formData = new FormData(document.getElementById('editInvoiceForm'));
+                const invoiceId = formData.get('invoice_id');
+                
+                // Tutar değerini temizle ve parse et
+                let amount = formData.get('amount').replace(/[^0-9.,]/g, '');
+                amount = amount.replace(',', '.');
+                
+                const invoiceData = {
+                    patient: formData.get('patient'),
+                    invoice_date: formData.get('invoice_date'),
+                    amount: amount,
+                    description: formData.get('description') || '',
+                    status: formData.get('status'),
+                    user: 1 // Test için admin user
+                };
+
+                console.log('Güncelleme verisi:', invoiceData);
+
+                const response = await fetch(`/api/invoices/invoices/${invoiceId}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify(invoiceData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Fatura güncellenemedi: ${JSON.stringify(errorData)}`);
+                }
+
+                const result = await response.json();
+                console.log('Fatura güncellendi:', result);
+
+                errorHandler.showSuccess('Fatura başarıyla güncellendi!');
+                closeEditInvoiceModal();
+                
+                // Fatura listesini ve istatistikleri yenile
+                loadInvoices();
+                loadInvoiceStats();
+
+            } catch (error) {
+                console.error('Fatura güncelleme hatası:', error);
+                errorHandler.showError('Fatura güncellenirken hata: ' + error.message);
             } finally {
                 errorHandler.hideLoading();
             }
@@ -753,10 +1123,6 @@
 
         function sendEmail(id) {
             errorHandler.showInfo(`Fatura ${id} e-posta gönderiliyor`);
-        }
-
-        function editInvoice(id) {
-            errorHandler.showInfo(`Fatura ${id} düzenleniyor`);
         }
 
         async function deleteInvoice(id) {
@@ -823,6 +1189,149 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Fatura Görüntüle Modal -->
+    <div id="viewInvoiceModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-eye"></i> Fatura Detayları</h2>
+                <button class="close-btn" onclick="closeViewInvoiceModal()">&times;</button>
+            </div>
+            <div class="invoice-details">
+                <div class="invoice-header">
+                    <div class="invoice-info">
+                        <h3 id="invoiceTitle">Fatura #</h3>
+                        <div class="invoice-meta">
+                            <span id="invoiceDate">Tarih: -</span>
+                            <span id="invoiceStatus" class="status-badge">-</span>
+                        </div>
+                    </div>
+                    <div class="invoice-amount">
+                        <div class="amount-label">Toplam Tutar</div>
+                        <div class="amount-value" id="invoiceAmount">₺0.00</div>
+                    </div>
+                </div>
+                
+                <div class="invoice-body">
+                    <div class="section">
+                        <h4><i class="fa-solid fa-user"></i> Hasta Bilgileri</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Ad Soyad:</label>
+                                <span id="patientName">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h4><i class="fa-solid fa-file-text"></i> Fatura Detayları</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Açıklama:</label>
+                                <span id="invoiceDescription">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Oluşturma Tarihi:</label>
+                                <span id="invoiceCreated">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Son Güncelleme:</label>
+                                <span id="invoiceUpdated">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeViewInvoiceModal()">Kapat</button>
+                    <button type="button" class="btn-primary" onclick="editInvoiceFromView()">
+                        <i class="fa-solid fa-edit"></i> Düzenle
+                    </button>
+                    <button type="button" class="btn-secondary" disabled title="Yakında eklenecek">
+                        <i class="fa-solid fa-download"></i> PDF İndir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fatura Düzenle Modal -->
+    <div id="editInvoiceModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-edit"></i> Fatura Düzenle</h2>
+                <button class="close-btn" onclick="closeEditInvoiceModal()">&times;</button>
+            </div>
+            <div class="invoice-details">
+                <div class="invoice-header">
+                    <div class="invoice-info">
+                        <h3 id="editInvoiceTitle">Fatura #</h3>
+                        <div class="invoice-meta">
+                            <span id="editInvoiceDate">Düzenleme Tarihi: -</span>
+                            <span id="editInvoiceStatus" class="status-badge">-</span>
+                        </div>
+                    </div>
+                    <div class="invoice-amount">
+                        <div class="amount-label">Mevcut Tutar</div>
+                        <div class="amount-value" id="editInvoiceAmount">₺0.00</div>
+                    </div>
+                </div>
+                
+                <form id="editInvoiceForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit_invoice_id" name="invoice_id">
+                    
+                    <div class="section">
+                        <h4><i class="fa-solid fa-user"></i> Hasta Bilgileri</h4>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label for="edit_patient_id">Hasta <span class="required">*</span></label>
+                                <select id="edit_patient_id" name="patient" required>
+                                    <option value="">Hasta Seçin</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_invoice_date">Fatura Tarihi <span class="required">*</span></label>
+                                <input type="date" id="edit_invoice_date" name="invoice_date" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h4><i class="fa-solid fa-money-bill-wave"></i> Fatura Detayları</h4>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label for="edit_amount">Tutar (TL) <span class="required">*</span></label>
+                                <input type="text" id="edit_amount" name="amount" placeholder="0.00" required 
+                                       pattern="[0-9.,]+" oninput="formatAmountInput(this); updateEditAmount(this)">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_status">Durum</label>
+                                <select id="edit_status" name="status" onchange="updateEditStatus(this)">
+                                    <option value="Draft">Taslak</option>
+                                    <option value="Issued">Düzenlendi</option>
+                                    <option value="Paid">Ödendi</option>
+                                    <option value="Cancelled">İptal Edildi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_description">Açıklama</label>
+                            <textarea id="edit_description" name="description" rows="4" 
+                                      placeholder="Fatura açıklaması..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeEditInvoiceModal()">İptal</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-save"></i> Güncelle
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

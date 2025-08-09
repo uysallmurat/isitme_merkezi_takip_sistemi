@@ -1120,14 +1120,69 @@
         // Test istatistiklerini yükle
         async function loadTestStats() {
             try {
-                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
-                document.getElementById('totalTests').textContent = data.total_test_reports || 0;
-                document.getElementById('completedTests').textContent = data.completed_test_reports || 0;
-                document.getElementById('pendingTests').textContent = data.pending_test_reports || 0;
-                document.getElementById('weeklyTests').textContent = data.weekly_test_reports || 0;
+                // Tüm test raporlarını al
+                const response = await fetch(`${API_BASE_URL}/hearing_tests/hearing_tests/`);
+                if (!response.ok) {
+                    throw new Error('Test raporu verileri alınamadı');
+                }
+                
+                const testReports = await response.json();
+                console.log('İstatistik için test raporları:', testReports);
+                
+                // İstatistikleri hesapla
+                const stats = calculateTestStats(testReports);
+                
+                // Kartları güncelle
+                document.getElementById('totalTests').textContent = stats.totalTests;
+                document.getElementById('completedTests').textContent = stats.completedTests;
+                document.getElementById('pendingTests').textContent = stats.pendingTests;
+                document.getElementById('weeklyTests').textContent = stats.weeklyTests;
+                
             } catch (error) {
                 console.error('Test istatistikleri yüklenemedi:', error);
+                // Hata durumunda sıfır göster
+                document.getElementById('totalTests').textContent = '0';
+                document.getElementById('completedTests').textContent = '0';
+                document.getElementById('pendingTests').textContent = '0';
+                document.getElementById('weeklyTests').textContent = '0';
             }
+        }
+
+        // Test istatistiklerini hesapla
+        function calculateTestStats(testReports) {
+            let totalTests = testReports.length;
+            let completedTests = 0;
+            let pendingTests = 0;
+            let weeklyTests = 0;
+            
+            const today = new Date();
+            const weekStart = new Date(today);
+            weekStart.setDate(today.getDate() - today.getDay()); // Bu haftanın başlangıcı
+            weekStart.setHours(0, 0, 0, 0);
+            
+            testReports.forEach(test => {
+                const testDate = new Date(test.test_date);
+                
+                // Tamamlanan testler (status='Completed' veya diagnosis dolu olanlar)
+                if (test.status === 'Completed' || (test.diagnosis && test.diagnosis.trim() !== '')) {
+                    completedTests++;
+                } else {
+                    // Bekleyen testler (status='Incomplete' veya diagnosis boş olanlar)
+                    pendingTests++;
+                }
+                
+                // Bu hafta yapılan testler
+                if (testDate >= weekStart && testDate <= today) {
+                    weeklyTests++;
+                }
+            });
+            
+            return {
+                totalTests,
+                completedTests,
+                pendingTests,
+                weeklyTests
+            };
         }
 
         // Test raporlarını tabloya render et

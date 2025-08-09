@@ -1491,16 +1491,61 @@
         // Dashboard verilerini yükle
         async function loadDashboardData() {
             try {
-                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
-                dashboardData = data;
-                updateDashboardStats(data);
+                // Tüm verileri paralel olarak al
+                const [patientsResponse, appointmentsResponse, testsResponse, devicesResponse] = await Promise.all([
+                    fetch(`${API_BASE_URL}/patients/`),
+                    fetch(`${API_BASE_URL}/appointments/`),
+                    fetch(`${API_BASE_URL}/hearing_tests/hearing_tests/`),
+                    fetch(`${API_BASE_URL}/devices/devices/`)
+                ]);
+                
+                if (!patientsResponse.ok || !appointmentsResponse.ok || !testsResponse.ok || !devicesResponse.ok) {
+                    throw new Error('Veriler alınamadı');
+                }
+                
+                const [patients, appointments, tests, devices] = await Promise.all([
+                    patientsResponse.json(),
+                    appointmentsResponse.json(),
+                    testsResponse.json(),
+                    devicesResponse.json()
+                ]);
+                
+                console.log('Dashboard verileri:', { patients, appointments, tests, devices });
+                
+                // İstatistikleri hesapla ve güncelle
+                const stats = calculateDashboardStats(patients, appointments, tests, devices);
+                dashboardData = stats;
+                updateDashboardStats(stats);
+                
+                // Diğer bölümleri yükle
                 loadRecentPatients();
                 loadUpcomingAppointments();
                 loadDeviceInventory();
                 loadRecentTests();
+                
             } catch (error) {
                 console.error('Dashboard verileri yüklenemedi:', error);
+                // Hata durumunda sıfır değerleri göster
+                updateDashboardStats({
+                    total_patients: 0,
+                    total_appointments: 0,
+                    total_tests: 0,
+                    total_devices: 0
+                });
             }
+        }
+
+        // Dashboard istatistiklerini hesapla
+        function calculateDashboardStats(patients, appointments, tests, devices) {
+            const stats = {
+                total_patients: patients.length,
+                total_appointments: appointments.length,
+                total_tests: tests.length,
+                total_devices: devices.length
+            };
+            
+            console.log('Dashboard istatistikleri:', stats);
+            return stats;
         }
 
         // Dashboard istatistiklerini güncelle

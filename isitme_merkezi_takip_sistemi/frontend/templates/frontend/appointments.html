@@ -502,14 +502,106 @@
         // Randevu istatistiklerini yükle
         async function loadAppointmentStats() {
             try {
-                const data = await errorHandler.apiRequest(`${API_BASE_URL}/dashboard/statistics/`);
-                document.getElementById('totalAppointments').textContent = data.total_appointments || 0;
-                document.getElementById('todayAppointments').textContent = data.today_appointments || 0;
-                document.getElementById('completedAppointments').textContent = data.completed_appointments || 0;
-                document.getElementById('weeklyAppointments').textContent = data.weekly_appointments || 0;
+                // Tüm randevuları al
+                const response = await fetch(`${API_BASE_URL}/appointments/`);
+                if (!response.ok) {
+                    throw new Error('Randevu verileri alınamadı');
+                }
+                
+                const appointments = await response.json();
+                console.log('İstatistik için randevular:', appointments);
+                
+                // İstatistikleri hesapla
+                const stats = calculateAppointmentStats(appointments);
+                
+                // Kartları güncelle
+                document.getElementById('totalAppointments').textContent = stats.totalAppointments;
+                document.getElementById('todayAppointments').textContent = stats.todayAppointments;
+                document.getElementById('completedAppointments').textContent = stats.completedAppointments;
+                document.getElementById('weeklyAppointments').textContent = stats.weeklyAppointments;
+                
             } catch (error) {
                 console.error('Randevu istatistikleri yüklenemedi:', error);
+                // Hata durumunda sıfır göster
+                document.getElementById('totalAppointments').textContent = '0';
+                document.getElementById('todayAppointments').textContent = '0';
+                document.getElementById('completedAppointments').textContent = '0';
+                document.getElementById('weeklyAppointments').textContent = '0';
             }
+        }
+
+        // Randevu istatistiklerini hesapla
+        function calculateAppointmentStats(appointments) {
+            let totalAppointments = appointments.length;
+            let todayAppointments = 0;
+            let completedAppointments = 0;
+            let weeklyAppointments = 0;
+            
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0]; // YYYY-MM-DD formatı
+            
+            // Bu haftanın başlangıcını hesapla (Pazartesi)
+            const weekStart = new Date(today);
+            const dayOfWeek = today.getDay(); // 0=Pazar, 1=Pazartesi, ..., 6=Cumartesi
+            const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Pazar ise 6 gün geriye, diğerleri dayOfWeek-1
+            weekStart.setDate(today.getDate() - daysToMonday);
+            weekStart.setHours(0, 0, 0, 0);
+            
+            // Bu haftanın sonunu hesapla (Pazar)
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            weekEnd.setHours(23, 59, 59, 999);
+            
+            console.log('Hafta hesaplama:', {
+                today: today.toISOString(),
+                weekStart: weekStart.toISOString(),
+                weekEnd: weekEnd.toISOString(),
+                dayOfWeek: dayOfWeek,
+                daysToMonday: daysToMonday
+            });
+            
+            appointments.forEach(appointment => {
+                const appointmentDate = new Date(appointment.appointment_date);
+                const appointmentDateStr = appointmentDate.toISOString().split('T')[0];
+                
+                console.log('Randevu kontrol:', {
+                    date: appointmentDate.toISOString(),
+                    dateStr: appointmentDateStr,
+                    todayStr: todayStr,
+                    isToday: appointmentDateStr === todayStr,
+                    isThisWeek: appointmentDate >= weekStart && appointmentDate <= weekEnd,
+                    status: appointment.status
+                });
+                
+                // Bugünkü randevular
+                if (appointmentDateStr === todayStr) {
+                    todayAppointments++;
+                }
+                
+                // Tamamlanan randevular
+                if (appointment.status === 'completed') {
+                    completedAppointments++;
+                }
+                
+                // Bu hafta randevular (Pazartesi - Pazar)
+                if (appointmentDate >= weekStart && appointmentDate <= weekEnd) {
+                    weeklyAppointments++;
+                }
+            });
+            
+            console.log('İstatistik sonuçları:', {
+                totalAppointments,
+                todayAppointments,
+                completedAppointments,
+                weeklyAppointments
+            });
+            
+            return {
+                totalAppointments,
+                todayAppointments,
+                completedAppointments,
+                weeklyAppointments
+            };
         }
 
         // Hasta listesini yükle
