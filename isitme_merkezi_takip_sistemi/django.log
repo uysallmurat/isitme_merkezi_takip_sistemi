@@ -1,0 +1,298 @@
+INFO 2025-08-11 00:41:42,534 autoreload 30172 25352 Watching for file changes with StatReloader
+INFO 2025-08-11 00:41:54,047 autoreload 30172 25352 C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\views.py changed, reloading.
+INFO 2025-08-11 00:41:55,850 autoreload 21824 17148 Watching for file changes with StatReloader
+INFO 2025-08-11 00:43:17,565 autoreload 27028 11832 Watching for file changes with StatReloader
+INFO 2025-08-11 00:44:36,093 autoreload 27548 29524 Watching for file changes with StatReloader
+INFO 2025-08-11 00:44:49,771 basehttp 27548 14500 "GET /devices/ HTTP/1.1" 200 39663
+INFO 2025-08-11 00:44:49,948 basehttp 27548 14500 "GET /api/devices/devices/ HTTP/1.1" 200 2092
+INFO 2025-08-11 00:44:49,970 basehttp 27548 14500 "GET /api/devices/devices/ HTTP/1.1" 200 2092
+INFO 2025-08-11 00:44:51,446 basehttp 27548 14500 "GET /test-reports/ HTTP/1.1" 200 85238
+INFO 2025-08-11 00:44:51,774 basehttp 27548 14500 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17502
+INFO 2025-08-11 00:44:51,798 basehttp 27548 23116 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17502
+INFO 2025-08-11 00:44:57,125 basehttp 27548 23116 "GET /api/hearing_tests/hearing_tests/3/ HTTP/1.1" 200 718
+INFO 2025-08-11 00:45:01,101 basehttp 27548 23116 "GET /api/hearing_tests/hearing_tests/2/ HTTP/1.1" 200 677
+INFO 2025-08-11 00:45:01,132 basehttp 27548 23116 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:45:06,378 views 27548 23116 HearingTest update request data: <QueryDict: {'csrfmiddlewaretoken': ['LuCrgsYNVxbC4jhADD5uPmXJAX8i2EypWCUDOn29NKI8arCCMNo9X6YZeihZgw8I'], 'test_id': ['2'], 'patient': ['1'], 'test_type': ['Speech'], 'test_date': ['2025-08-08T01:02'], 'status': ['Completed'], 'right_ear_250': [''], 'right_ear_500': [''], 'right_ear_1000': [''], 'right_ear_2000': [''], 'right_ear_4000': [''], 'right_ear_8000': [''], 'left_ear_250': [''], 'left_ear_500': [''], 'left_ear_1000': [''], 'left_ear_2000': [''], 'left_ear_4000': [''], 'left_ear_8000': [''], 'right_ear_srt': ['30'], 'left_ear_srt': ['25'], 'right_ear_sds': ['85'], 'left_ear_sds': ['90'], 'diagnosis': [''], 'notes': [''], 'recommendations': [''], 'report_pdf': [''], 'user': ['1']}>
+INFO 2025-08-11 00:45:06,380 views 27548 23116 HearingTest update request method: PATCH
+INFO 2025-08-11 00:45:06,381 views 27548 23116 HearingTest update request content type: multipart/form-data; boundary=----WebKitFormBoundary5XR1xkPZGgW1e6tm
+INFO 2025-08-11 00:45:06,383 views 27548 23116 HearingTest update request headers: {'Content-Length': '2860', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary5XR1xkPZGgW1e6tm', 'Host': '127.0.0.1:8000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Windows"', 'X-Csrftoken': 'LuCrgsYNVxbC4jhADD5uPmXJAX8i2EypWCUDOn29NKI8arCCMNo9X6YZeihZgw8I', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0', 'Sec-Ch-Ua': '"Not;A=Brand";v="99", "Microsoft Edge";v="139", "Chromium";v="139"', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://127.0.0.1:8000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://127.0.0.1:8000/test-reports/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'csrftoken=lismI5ew2nHGgivcjktPiUbqOvjRo2Kt'}
+INFO 2025-08-11 00:45:06,384 views 27548 23116 HearingTest update partial: True
+INFO 2025-08-11 00:45:06,401 views 27548 23116 HearingTest update instance ID: 2
+INFO 2025-08-11 00:45:06,403 views 27548 23116 HearingTest update serializer created
+ERROR 2025-08-11 00:45:06,404 views 27548 23116 HearingTest update unexpected error: This QueryDict instance is immutable
+ERROR 2025-08-11 00:45:06,405 views 27548 23116 HearingTest update unexpected error type: <class 'AttributeError'>
+ERROR 2025-08-11 00:45:06,517 views 27548 23116 HearingTest update unexpected error traceback: Traceback (most recent call last):
+  File "C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\views.py", line 159, in update
+    if serializer.is_valid():
+       ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\rest_framework\serializers.py", line 225, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\rest_framework\serializers.py", line 444, in run_validation
+    value = self.to_internal_value(data)
+  File "C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\serializers.py", line 38, in to_internal_value
+    data[field_name] = None
+    ~~~~^^^^^^^^^^^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 613, in __setitem__
+    self._assert_mutable()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 610, in _assert_mutable
+    raise AttributeError("This QueryDict instance is immutable")
+AttributeError: This QueryDict instance is immutable
+
+ERROR 2025-08-11 00:45:06,522 log 27548 23116 Internal Server Error: /api/hearing_tests/hearing_tests/2/
+ERROR 2025-08-11 00:45:06,525 basehttp 27548 23116 "PATCH /api/hearing_tests/hearing_tests/2/ HTTP/1.1" 500 66
+INFO 2025-08-11 00:46:01,012 autoreload 8720 20684 Watching for file changes with StatReloader
+INFO 2025-08-11 00:46:05,042 basehttp 8720 436 "GET /test-reports/ HTTP/1.1" 200 85238
+INFO 2025-08-11 00:46:05,221 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17502
+INFO 2025-08-11 00:46:05,221 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17502
+INFO 2025-08-11 00:46:06,335 basehttp 8720 436 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:46:07,268 basehttp 8720 436 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:46:08,083 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:08,318 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=mu& HTTP/1.1" 200 3720
+INFO 2025-08-11 00:46:08,409 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=mus& HTTP/1.1" 200 3720
+INFO 2025-08-11 00:46:09,901 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=mu& HTTP/1.1" 200 3720
+INFO 2025-08-11 00:46:10,098 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:15,107 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m&diagnosis=i& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:15,387 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m&diagnosis=ik& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:15,857 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m&diagnosis=iki& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:16,442 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m&diagnosis=ik& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:16,606 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m&diagnosis=i& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:16,748 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:16,881 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:17,002 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:19,360 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=m&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:19,557 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=mu&patient_name=m& HTTP/1.1" 200 3720
+INFO 2025-08-11 00:46:19,654 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=mus&patient_name=m& HTTP/1.1" 200 3720
+INFO 2025-08-11 00:46:20,066 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=mus&patient_name=m& HTTP/1.1" 200 3720
+INFO 2025-08-11 00:46:20,364 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=mu&patient_name=m& HTTP/1.1" 200 3720
+INFO 2025-08-11 00:46:20,522 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=m&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:21,660 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=s&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:21,665 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ssa&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:21,750 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ssa&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:22,172 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ssa&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:22,240 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ss&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:22,408 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=s&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:23,749 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=p&patient_name=m& HTTP/1.1" 200 8715
+INFO 2025-08-11 00:46:24,037 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=pu&patient_name=m& HTTP/1.1" 200 2142
+INFO 2025-08-11 00:46:24,125 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=pur&patient_name=m& HTTP/1.1" 200 2142
+INFO 2025-08-11 00:46:24,540 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=pur&patient_name=m& HTTP/1.1" 200 2142
+INFO 2025-08-11 00:46:24,686 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=pu&patient_name=m& HTTP/1.1" 200 2142
+INFO 2025-08-11 00:46:24,845 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=p&patient_name=m& HTTP/1.1" 200 8715
+INFO 2025-08-11 00:46:25,964 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=o&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:26,238 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=oq&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:26,718 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=o&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:26,821 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=oa&patient_name=m& HTTP/1.1" 200 2212
+INFO 2025-08-11 00:46:27,247 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=oa&patient_name=m& HTTP/1.1" 200 2212
+INFO 2025-08-11 00:46:27,354 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=o&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:28,621 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=t&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:28,708 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=tam&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:28,708 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ta&patient_name=m& HTTP/1.1" 200 5191
+INFO 2025-08-11 00:46:28,846 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tamm&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:28,936 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tamma&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:29,388 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tamm&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:29,798 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tam&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:30,234 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tam&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:30,743 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ta&patient_name=m& HTTP/1.1" 200 5191
+INFO 2025-08-11 00:46:31,164 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ta&patient_name=m& HTTP/1.1" 200 5191
+INFO 2025-08-11 00:46:31,583 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=t&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:35,299 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=t&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:35,735 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=t&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:36,291 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ta&patient_name=m& HTTP/1.1" 200 5191
+INFO 2025-08-11 00:46:36,338 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tam&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:36,589 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tama&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:37,046 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tama&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:37,546 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=tam&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:37,937 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=ta&patient_name=m& HTTP/1.1" 200 5191
+INFO 2025-08-11 00:46:38,109 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=t&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:38,815 basehttp 8720 9040 "GET /api/hearing_tests/hearing_tests/?search=c&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:38,819 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=co&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:38,958 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=com&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:39,385 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=com&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:39,536 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=comp&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:39,949 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=comp&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:40,459 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=compl&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:40,582 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=comple&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:40,948 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=complet&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:41,132 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=complete&patient_name=m& HTTP/1.1" 200 7233
+INFO 2025-08-11 00:46:45,362 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=u&patient_name=m& HTTP/1.1" 200 7304
+INFO 2025-08-11 00:46:45,557 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=un&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:45,994 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=un&patient_name=m& HTTP/1.1" 200 2
+INFO 2025-08-11 00:46:46,485 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=u&patient_name=m& HTTP/1.1" 200 7304
+INFO 2025-08-11 00:46:46,843 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=u&patient_name=m& HTTP/1.1" 200 7304
+INFO 2025-08-11 00:46:48,556 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=c&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:48,681 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=ca&patient_name=m& HTTP/1.1" 200 2952
+INFO 2025-08-11 00:46:49,068 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=ca&patient_name=m& HTTP/1.1" 200 2952
+INFO 2025-08-11 00:46:49,954 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=c&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:50,370 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/?search=c&patient_name=m& HTTP/1.1" 200 10184
+INFO 2025-08-11 00:46:54,095 basehttp 8720 436 "GET /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 710
+INFO 2025-08-11 00:46:54,112 basehttp 8720 436 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:47:03,187 views 8720 436 HearingTest update request method: PATCH
+INFO 2025-08-11 00:47:03,189 views 8720 436 HearingTest update request content type: multipart/form-data; boundary=----WebKitFormBoundaryvXA0160xKNUKyfAo
+INFO 2025-08-11 00:47:03,190 views 8720 436 HearingTest update request headers: {'Content-Length': '2902', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryvXA0160xKNUKyfAo', 'Host': '127.0.0.1:8000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Windows"', 'X-Csrftoken': 'fPFu3pSnjWAvzDcINhASohp98nHtqMPhqXXGBkWJb971FLxKWrTxw1qpMIQaEEpA', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0', 'Sec-Ch-Ua': '"Not;A=Brand";v="99", "Microsoft Edge";v="139", "Chromium";v="139"', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://127.0.0.1:8000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://127.0.0.1:8000/test-reports/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'csrftoken=lismI5ew2nHGgivcjktPiUbqOvjRo2Kt'}
+INFO 2025-08-11 00:47:03,191 views 8720 436 HearingTest update partial: True
+INFO 2025-08-11 00:47:03,203 views 8720 436 HearingTest update instance ID: 1
+INFO 2025-08-11 00:47:03,204 views 8720 436 HearingTest update serializer created
+ERROR 2025-08-11 00:47:03,205 views 8720 436 HearingTest update unexpected error: This QueryDict instance is immutable
+ERROR 2025-08-11 00:47:03,206 views 8720 436 HearingTest update unexpected error type: <class 'AttributeError'>
+ERROR 2025-08-11 00:47:03,217 views 8720 436 HearingTest update unexpected error traceback: Traceback (most recent call last):
+  File "C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\views.py", line 159, in update
+    if serializer.is_valid():
+       ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\rest_framework\serializers.py", line 225, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\rest_framework\serializers.py", line 444, in run_validation
+    value = self.to_internal_value(data)
+  File "C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\serializers.py", line 38, in to_internal_value
+    data[field_name] = None
+    ~~~~^^^^^^^^^^^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 613, in __setitem__
+    self._assert_mutable()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 610, in _assert_mutable
+    raise AttributeError("This QueryDict instance is immutable")
+AttributeError: This QueryDict instance is immutable
+
+ERROR 2025-08-11 00:47:03,223 log 8720 436 Internal Server Error: /api/hearing_tests/hearing_tests/1/
+ERROR 2025-08-11 00:47:03,225 basehttp 8720 436 "PATCH /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 500 66
+INFO 2025-08-11 00:47:03,615 views 8720 436 HearingTest update request method: PATCH
+INFO 2025-08-11 00:47:03,618 views 8720 436 HearingTest update request content type: multipart/form-data; boundary=----WebKitFormBoundaryTrW8QuijtiWKd1Yl
+INFO 2025-08-11 00:47:03,620 views 8720 436 HearingTest update request headers: {'Content-Length': '2902', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryTrW8QuijtiWKd1Yl', 'Host': '127.0.0.1:8000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Windows"', 'X-Csrftoken': 'fPFu3pSnjWAvzDcINhASohp98nHtqMPhqXXGBkWJb971FLxKWrTxw1qpMIQaEEpA', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0', 'Sec-Ch-Ua': '"Not;A=Brand";v="99", "Microsoft Edge";v="139", "Chromium";v="139"', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://127.0.0.1:8000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://127.0.0.1:8000/test-reports/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'csrftoken=lismI5ew2nHGgivcjktPiUbqOvjRo2Kt'}
+INFO 2025-08-11 00:47:03,623 views 8720 436 HearingTest update partial: True
+INFO 2025-08-11 00:47:03,644 views 8720 436 HearingTest update instance ID: 1
+INFO 2025-08-11 00:47:03,645 views 8720 436 HearingTest update serializer created
+ERROR 2025-08-11 00:47:03,647 views 8720 436 HearingTest update unexpected error: This QueryDict instance is immutable
+ERROR 2025-08-11 00:47:03,648 views 8720 436 HearingTest update unexpected error type: <class 'AttributeError'>
+ERROR 2025-08-11 00:47:03,659 views 8720 436 HearingTest update unexpected error traceback: Traceback (most recent call last):
+  File "C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\views.py", line 159, in update
+    if serializer.is_valid():
+       ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\rest_framework\serializers.py", line 225, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\rest_framework\serializers.py", line 444, in run_validation
+    value = self.to_internal_value(data)
+  File "C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\serializers.py", line 38, in to_internal_value
+    data[field_name] = None
+    ~~~~^^^^^^^^^^^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 613, in __setitem__
+    self._assert_mutable()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\muysa\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 610, in _assert_mutable
+    raise AttributeError("This QueryDict instance is immutable")
+AttributeError: This QueryDict instance is immutable
+
+ERROR 2025-08-11 00:47:03,662 log 8720 436 Internal Server Error: /api/hearing_tests/hearing_tests/1/
+ERROR 2025-08-11 00:47:03,665 basehttp 8720 436 "PATCH /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 500 66
+WARNING 2025-08-11 00:47:06,461 log 8720 436 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-11 00:47:06,462 basehttp 8720 436 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7037
+INFO 2025-08-11 00:48:09,373 autoreload 8720 20684 C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\serializers.py changed, reloading.
+INFO 2025-08-11 00:48:10,246 autoreload 5576 30264 Watching for file changes with StatReloader
+INFO 2025-08-11 00:48:23,956 basehttp 5576 22900 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17502
+INFO 2025-08-11 00:48:59,792 autoreload 5576 30264 C:\Users\muysa\Desktop\AI Test\Isitme_Merkezi_Takip_Sistemi\isitme_merkezi_takip_sistemi\hearing_tests\serializers.py changed, reloading.
+INFO 2025-08-11 00:49:00,683 autoreload 18964 5260 Watching for file changes with StatReloader
+INFO 2025-08-11 00:49:07,082 basehttp 18964 16876 "GET /test-reports/ HTTP/1.1" 200 85238
+WARNING 2025-08-11 00:49:07,182 log 18964 16876 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-11 00:49:07,185 basehttp 18964 16876 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7037
+INFO 2025-08-11 00:49:07,280 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17502
+INFO 2025-08-11 00:49:07,280 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17502
+INFO 2025-08-11 00:49:08,918 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 710
+INFO 2025-08-11 00:49:08,977 basehttp 18964 16876 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:49:14,075 views 18964 16876 HearingTest update request method: PATCH
+INFO 2025-08-11 00:49:14,079 views 18964 16876 HearingTest update request content type: multipart/form-data; boundary=----WebKitFormBoundaryxqtlN1LFU9AsqdJH
+INFO 2025-08-11 00:49:14,081 views 18964 16876 HearingTest update request headers: {'Content-Length': '2902', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryxqtlN1LFU9AsqdJH', 'Host': '127.0.0.1:8000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Android"', 'X-Csrftoken': 'YKTvVTZKYKGutCs3ju70fNF57GCCblQv9SbHtO36QXd0zKN5sEqFnxGlL1LjpdqO', 'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36 Edg/139.0.0.0', 'Sec-Ch-Ua': '"Not;A=Brand";v="99", "Microsoft Edge";v="139", "Chromium";v="139"', 'Sec-Ch-Ua-Mobile': '?1', 'Accept': '*/*', 'Origin': 'http://127.0.0.1:8000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://127.0.0.1:8000/test-reports/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'csrftoken=lismI5ew2nHGgivcjktPiUbqOvjRo2Kt'}
+INFO 2025-08-11 00:49:14,085 views 18964 16876 HearingTest update partial: True
+INFO 2025-08-11 00:49:14,101 views 18964 16876 HearingTest update instance ID: 1
+INFO 2025-08-11 00:49:14,103 views 18964 16876 HearingTest update serializer created
+INFO 2025-08-11 00:49:14,121 views 18964 16876 HearingTest update serializer is valid
+INFO 2025-08-11 00:49:14,142 views 18964 16876 HearingTest update saved successfully: 1
+INFO 2025-08-11 00:49:14,146 basehttp 18964 16876 "PATCH /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 699
+INFO 2025-08-11 00:49:14,262 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17491
+INFO 2025-08-11 00:49:14,270 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17491
+INFO 2025-08-11 00:49:21,093 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 699
+INFO 2025-08-11 00:49:21,130 basehttp 18964 3880 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:49:28,804 views 18964 3880 HearingTest update request method: PATCH
+INFO 2025-08-11 00:49:28,805 views 18964 3880 HearingTest update request content type: multipart/form-data; boundary=----WebKitFormBoundaryhT25HXhOpl1koVXT
+INFO 2025-08-11 00:49:28,808 views 18964 3880 HearingTest update request headers: {'Content-Length': '2899', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryhT25HXhOpl1koVXT', 'Host': '127.0.0.1:8000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Android"', 'X-Csrftoken': 'YKTvVTZKYKGutCs3ju70fNF57GCCblQv9SbHtO36QXd0zKN5sEqFnxGlL1LjpdqO', 'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36 Edg/139.0.0.0', 'Sec-Ch-Ua': '"Not;A=Brand";v="99", "Microsoft Edge";v="139", "Chromium";v="139"', 'Sec-Ch-Ua-Mobile': '?1', 'Accept': '*/*', 'Origin': 'http://127.0.0.1:8000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://127.0.0.1:8000/test-reports/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'csrftoken=lismI5ew2nHGgivcjktPiUbqOvjRo2Kt'}
+INFO 2025-08-11 00:49:28,809 views 18964 3880 HearingTest update partial: True
+INFO 2025-08-11 00:49:28,828 views 18964 3880 HearingTest update instance ID: 1
+INFO 2025-08-11 00:49:28,832 views 18964 3880 HearingTest update serializer created
+INFO 2025-08-11 00:49:28,851 views 18964 3880 HearingTest update serializer is valid
+INFO 2025-08-11 00:49:28,873 views 18964 3880 HearingTest update saved successfully: 1
+INFO 2025-08-11 00:49:28,878 basehttp 18964 3880 "PATCH /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 696
+INFO 2025-08-11 00:49:29,029 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17488
+INFO 2025-08-11 00:49:29,030 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17488
+INFO 2025-08-11 00:49:31,559 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 696
+INFO 2025-08-11 00:49:31,594 basehttp 18964 3880 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:49:38,124 views 18964 3880 HearingTest update request method: PATCH
+INFO 2025-08-11 00:49:38,125 views 18964 3880 HearingTest update request content type: multipart/form-data; boundary=----WebKitFormBoundarywgBlUZ1HjDel9MmM
+INFO 2025-08-11 00:49:38,127 views 18964 3880 HearingTest update request headers: {'Content-Length': '2900', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundarywgBlUZ1HjDel9MmM', 'Host': '127.0.0.1:8000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Android"', 'X-Csrftoken': 'YKTvVTZKYKGutCs3ju70fNF57GCCblQv9SbHtO36QXd0zKN5sEqFnxGlL1LjpdqO', 'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36 Edg/139.0.0.0', 'Sec-Ch-Ua': '"Not;A=Brand";v="99", "Microsoft Edge";v="139", "Chromium";v="139"', 'Sec-Ch-Ua-Mobile': '?1', 'Accept': '*/*', 'Origin': 'http://127.0.0.1:8000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://127.0.0.1:8000/test-reports/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'csrftoken=lismI5ew2nHGgivcjktPiUbqOvjRo2Kt'}
+INFO 2025-08-11 00:49:38,129 views 18964 3880 HearingTest update partial: True
+INFO 2025-08-11 00:49:38,140 views 18964 3880 HearingTest update instance ID: 1
+INFO 2025-08-11 00:49:38,142 views 18964 3880 HearingTest update serializer created
+INFO 2025-08-11 00:49:38,160 views 18964 3880 HearingTest update serializer is valid
+INFO 2025-08-11 00:49:38,176 views 18964 3880 HearingTest update saved successfully: 1
+INFO 2025-08-11 00:49:38,178 basehttp 18964 3880 "PATCH /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 697
+INFO 2025-08-11 00:49:38,376 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17489
+INFO 2025-08-11 00:49:38,383 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17489
+INFO 2025-08-11 00:51:05,740 basehttp 18964 16876 "GET /test-reports/ HTTP/1.1" 200 86612
+WARNING 2025-08-11 00:51:05,873 log 18964 16876 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-11 00:51:05,875 basehttp 18964 16876 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7037
+INFO 2025-08-11 00:51:05,957 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17489
+INFO 2025-08-11 00:51:05,957 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17489
+INFO 2025-08-11 00:51:08,310 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 697
+INFO 2025-08-11 00:51:08,350 basehttp 18964 16876 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:51:13,805 views 18964 16876 HearingTest update request method: PATCH
+INFO 2025-08-11 00:51:13,807 views 18964 16876 HearingTest update request content type: multipart/form-data; boundary=----WebKitFormBoundaryXYUPpOlx7BTDcOxA
+INFO 2025-08-11 00:51:13,810 views 18964 16876 HearingTest update request headers: {'Content-Length': '2899', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryXYUPpOlx7BTDcOxA', 'Host': '127.0.0.1:8000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Android"', 'X-Csrftoken': 'nqdDaX5a5SMIlztnlHWAVFBrrOXjuY0tyyvPIS9wX5jerHOpuRff3pCH5960IQAM', 'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36 Edg/139.0.0.0', 'Sec-Ch-Ua': '"Not;A=Brand";v="99", "Microsoft Edge";v="139", "Chromium";v="139"', 'Sec-Ch-Ua-Mobile': '?1', 'Accept': '*/*', 'Origin': 'http://127.0.0.1:8000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://127.0.0.1:8000/test-reports/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'csrftoken=lismI5ew2nHGgivcjktPiUbqOvjRo2Kt'}
+INFO 2025-08-11 00:51:13,817 views 18964 16876 HearingTest update partial: True
+INFO 2025-08-11 00:51:13,842 views 18964 16876 HearingTest update instance ID: 1
+INFO 2025-08-11 00:51:13,846 views 18964 16876 HearingTest update serializer created
+INFO 2025-08-11 00:51:13,869 views 18964 16876 HearingTest update serializer is valid
+INFO 2025-08-11 00:51:13,895 views 18964 16876 HearingTest update saved successfully: 1
+INFO 2025-08-11 00:51:13,901 basehttp 18964 16876 "PATCH /api/hearing_tests/hearing_tests/1/ HTTP/1.1" 200 696
+INFO 2025-08-11 00:51:14,108 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17488
+INFO 2025-08-11 00:51:14,114 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17488
+INFO 2025-08-11 00:51:20,870 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0& HTTP/1.1" 200 3717
+INFO 2025-08-11 00:51:20,933 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0& HTTP/1.1" 200 3717
+INFO 2025-08-11 00:51:21,269 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0& HTTP/1.1" 200 3717
+INFO 2025-08-11 00:51:22,384 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0p& HTTP/1.1" 200 2
+INFO 2025-08-11 00:51:22,551 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0pt& HTTP/1.1" 200 2
+INFO 2025-08-11 00:51:22,721 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0pta& HTTP/1.1" 200 2
+INFO 2025-08-11 00:51:22,822 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0ptal& HTTP/1.1" 200 2
+INFO 2025-08-11 00:51:23,175 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0pta& HTTP/1.1" 200 2
+INFO 2025-08-11 00:51:23,519 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0pt& HTTP/1.1" 200 2
+INFO 2025-08-11 00:51:23,683 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0p& HTTP/1.1" 200 2
+INFO 2025-08-11 00:51:23,902 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=%C4%B0& HTTP/1.1" 200 3717
+INFO 2025-08-11 00:51:24,679 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=c& HTTP/1.1" 200 17488
+INFO 2025-08-11 00:51:24,801 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=ca& HTTP/1.1" 200 6582
+INFO 2025-08-11 00:51:25,100 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=can& HTTP/1.1" 200 6582
+INFO 2025-08-11 00:51:25,608 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=can& HTTP/1.1" 200 6582
+INFO 2025-08-11 00:51:25,894 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=ca& HTTP/1.1" 200 6582
+INFO 2025-08-11 00:51:26,218 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=c& HTTP/1.1" 200 17488
+INFO 2025-08-11 00:51:28,787 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=a& HTTP/1.1" 200 17488
+INFO 2025-08-11 00:51:29,187 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=a& HTTP/1.1" 200 17488
+INFO 2025-08-11 00:51:29,301 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=ah& HTTP/1.1" 200 6438
+INFO 2025-08-11 00:51:29,523 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=ahm& HTTP/1.1" 200 2772
+INFO 2025-08-11 00:51:29,599 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=ahme& HTTP/1.1" 200 2772
+INFO 2025-08-11 00:51:30,021 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=ahme& HTTP/1.1" 200 2772
+INFO 2025-08-11 00:51:30,273 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=ahm& HTTP/1.1" 200 2772
+INFO 2025-08-11 00:51:30,465 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=ah& HTTP/1.1" 200 6438
+INFO 2025-08-11 00:51:30,861 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/?search=a& HTTP/1.1" 200 17488
+INFO 2025-08-11 00:51:45,073 basehttp 18964 16876 "GET /inventory/ HTTP/1.1" 200 71212
+INFO 2025-08-11 00:51:45,130 basehttp 18964 16876 "GET /api/stock_items/stock_items/ HTTP/1.1" 200 1263
+INFO 2025-08-11 00:51:45,148 basehttp 18964 16876 "GET /api/stock_items/stock_items/ HTTP/1.1" 200 1263
+INFO 2025-08-11 00:51:46,204 basehttp 18964 16876 "GET /test-reports/ HTTP/1.1" 200 86612
+INFO 2025-08-11 00:51:46,358 basehttp 18964 16876 "GET /api/hearing_tests/hearing_tests/? HTTP/1.1" 200 17488
+INFO 2025-08-11 00:51:46,364 basehttp 18964 3880 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17488
+INFO 2025-08-11 00:52:02,114 basehttp 18964 3880 "GET /dashboard/ HTTP/1.1" 200 65155
+INFO 2025-08-11 00:52:02,181 basehttp 18964 16876 "GET /api/appointments/ HTTP/1.1" 200 1905
+INFO 2025-08-11 00:52:02,189 basehttp 18964 3880 "GET /api/patients/ HTTP/1.1" 200 3277
+INFO 2025-08-11 00:52:02,191 basehttp 18964 29584 "GET /api/devices/devices/ HTTP/1.1" 200 2092
+INFO 2025-08-11 00:52:02,218 basehttp 18964 21176 "GET /api/hearing_tests/hearing_tests/ HTTP/1.1" 200 17488
+INFO 2025-08-11 00:52:02,275 basehttp 18964 16876 "GET /api/hearing_tests/?limit=5 HTTP/1.1" 200 74
+INFO 2025-08-11 00:52:02,276 basehttp 18964 3880 "GET /api/devices/?limit=5 HTTP/1.1" 200 121
+WARNING 2025-08-11 00:52:02,278 log 18964 29584 Bad Request: /api/appointments/
+INFO 2025-08-11 00:52:02,282 basehttp 18964 21176 "GET /api/patients/?limit=5 HTTP/1.1" 200 3277
+WARNING 2025-08-11 00:52:02,283 basehttp 18964 29584 "GET /api/appointments/?limit=5&status=pending HTTP/1.1" 400 120

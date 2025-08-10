@@ -717,12 +717,8 @@
         async function loadInventoryStats() {
             try {
                 // Tüm stok ürünlerini al
-                const response = await fetch(`${API_BASE_URL}/stock_items/stock_items/`);
-                if (!response.ok) {
-                    throw new Error('Stok verileri alınamadı');
-                }
-                
-                const stockItems = await response.json();
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/`);
+                const stockItems = response.results || response;
                 console.log('İstatistik için stok ürünleri:', stockItems);
                 
                 // İstatistikleri hesapla
@@ -786,14 +782,14 @@
             
             tbody.innerHTML = products.map(product => `
                 <tr>
-                    <td>${product.product_name || '-'}</td>
-                    <td>${getCategoryText(product.category)}</td>
-                    <td>${product.stock_quantity || 0}</td>
-                    <td>₺${product.price || 0}</td>
+                    <td>${product.name || '-'}</td>
+                    <td>${getCategoryText(product.item_type)}</td>
+                    <td>${product.current_stock || 0}</td>
+                    <td>₺${product.unit_price || 0}</td>
                     <td>${product.supplier_name || '-'}</td>
                     <td>
-                        <span class="status-badge status-${getStockStatus(product.stock_quantity)}">
-                            ${getStockStatusText(product.stock_quantity)}
+                        <span class="status-badge status-${getStockStatus(product.current_stock)}">
+                            ${getStockStatusText(product.current_stock)}
                         </span>
                     </td>
                     <td class="action-buttons">
@@ -1099,7 +1095,7 @@
             if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
             
             try {
-                await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/stock_items/${id}/`, {
+                await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/${id}/`, {
                     method: 'DELETE'
                 });
                 errorHandler.showSuccess('Ürün silindi');

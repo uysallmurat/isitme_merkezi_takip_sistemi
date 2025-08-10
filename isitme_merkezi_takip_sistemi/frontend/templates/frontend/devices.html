@@ -63,6 +63,28 @@
             align-items: center;
             margin-bottom: 2rem;
         }
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .main-search-container {
+            display: flex;
+            align-items: center;
+        }
+        .main-search-container .filter-group {
+            margin: 0;
+        }
+        .main-search-container .filter-group input {
+            min-width: 400px;
+            padding: 0.8rem;
+            font-size: 1rem;
+        }
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
         .page-title {
             color: var(--main-text);
             margin: 0;
@@ -310,6 +332,55 @@
         .btn-secondary:hover {
             background: #5a6268;
         }
+        /* Sütun filtre stilleri */
+        .sortable-header {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+        .sortable-header:hover {
+            background-color: #e9ecef;
+        }
+        .filter-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 200px;
+        }
+        .date-range-filter {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .date-range-filter input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .clear-filters-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .clear-filters-btn:hover {
+            background: #5a6268;
+        }
         @media (max-width: 900px) {
             .sidebar { display: none; }
             .main-content { padding: 1rem; }
@@ -350,11 +421,24 @@
         </aside>
         <main class="main-content">
             <div class="page-header">
-                <h1 class="page-title"><i class="fa-solid fa-headset"></i> Cihaz Yönetimi</h1>
-                <a href="#" class="btn-primary" onclick="openNewDeviceModal()">
-                    <i class="fa-solid fa-plus"></i>
-                    Yeni Cihaz
-                </a>
+                <div class="title-section">
+                    <h1 class="page-title"><i class="fa-solid fa-headset"></i> Cihaz Yönetimi</h1>
+                    <div class="main-search-container">
+                        <div class="filter-group">
+                            <input type="text" id="mainSearch" placeholder="Cihaz ara..." onkeyup="applyMainSearch()">
+                        </div>
+                    </div>
+                </div>
+                <div class="header-buttons">
+                    <button type="button" class="clear-filters-btn" onclick="clearAllFilters()">
+                        <i class="fa-solid fa-filter-circle-xmark"></i>
+                        Filtreleri Temizle
+                    </button>
+                    <a href="#" class="btn-primary" onclick="openNewDeviceModal()">
+                        <i class="fa-solid fa-plus"></i>
+                        Yeni Cihaz
+                    </a>
+                </div>
             </div>
             
             <div class="stats-cards">
@@ -389,51 +473,65 @@
             </div>
             
             <div class="content-card">
-                <div class="filters">
-                    <div class="filter-group">
-                        <label for="search">Arama</label>
-                        <input type="text" id="search" placeholder="Cihaz adı, marka, model...">
-                    </div>
-                    <div class="filter-group">
-                        <label for="status">Durum</label>
-                        <select id="status">
-                            <option value="">Tümü</option>
-                            <option value="active">Aktif</option>
-                            <option value="inactive">Pasif</option>
-                            <option value="maintenance">Bakımda</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="brand">Marka</label>
-                        <select id="brand">
-                            <option value="">Tümü</option>
-                            <option value="phonak">Phonak</option>
-                            <option value="oticon">Oticon</option>
-                            <option value="resound">ReSound</option>
-                            <option value="starkey">Starkey</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="stockFilter">Stok Durumu</label>
-                        <select id="stockFilter">
-                            <option value="">Tümü</option>
-                            <option value="in_stock">Stokta</option>
-                            <option value="low_stock">Az Stok</option>
-                            <option value="out_of_stock">Stok Yok</option>
-                        </select>
-                    </div>
-                </div>
-                
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>Cihaz Adı</th>
-                                <th>Marka</th>
-                                <th>Model</th>
-                                <th>Stok</th>
-                                <th>Durum</th>
-                                <th>Son Güncelleme</th>
+                                <th class="sortable-header" onclick="toggleFilter('name')">
+                                    Cihaz Adı <i class="fa-solid fa-filter"></i>
+                                    <div class="filter-dropdown" id="name-filter">
+                                        <input type="text" placeholder="Cihaz adı ara..." onkeyup="filterByName(this.value)">
+                                    </div>
+                                </th>
+                                <th class="sortable-header" onclick="toggleFilter('brand')">
+                                    Marka <i class="fa-solid fa-filter"></i>
+                                    <div class="filter-dropdown" id="brand-filter">
+                                        <select onchange="filterByBrand(this.value)">
+                                            <option value="">Tümü</option>
+                                            <option value="phonak">Phonak</option>
+                                            <option value="oticon">Oticon</option>
+                                            <option value="resound">ReSound</option>
+                                            <option value="starkey">Starkey</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th class="sortable-header" onclick="toggleFilter('model')">
+                                    Model <i class="fa-solid fa-filter"></i>
+                                    <div class="filter-dropdown" id="model-filter">
+                                        <input type="text" placeholder="Model ara..." onkeyup="filterByModel(this.value)">
+                                    </div>
+                                </th>
+                                <th class="sortable-header" onclick="toggleFilter('stock')">
+                                    Stok <i class="fa-solid fa-filter"></i>
+                                    <div class="filter-dropdown" id="stock-filter">
+                                        <select onchange="filterByStock(this.value)">
+                                            <option value="">Tümü</option>
+                                            <option value="in_stock">Stokta</option>
+                                            <option value="low_stock">Az Stok</option>
+                                            <option value="out_of_stock">Stok Yok</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th class="sortable-header" onclick="toggleFilter('status')">
+                                    Durum <i class="fa-solid fa-filter"></i>
+                                    <div class="filter-dropdown" id="status-filter">
+                                        <select onchange="filterByStatus(this.value)">
+                                            <option value="">Tümü</option>
+                                            <option value="active">Aktif</option>
+                                            <option value="inactive">Pasif</option>
+                                            <option value="maintenance">Bakımda</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th class="sortable-header" onclick="toggleFilter('updated')">
+                                    Son Güncelleme <i class="fa-solid fa-filter"></i>
+                                    <div class="filter-dropdown" id="updated-filter">
+                                        <div class="date-range-filter">
+                                            <input type="date" id="updated-start" placeholder="Başlangıç" onchange="filterByUpdatedDate()">
+                                            <input type="date" id="updated-end" placeholder="Bitiş" onchange="filterByUpdatedDate()">
+                                        </div>
+                                    </div>
+                                </th>
                                 <th>İşlemler</th>
                             </tr>
                         </thead>
@@ -536,7 +634,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadDevices();
             loadDeviceStats();
-            setupFilters();
             
             // Yeni cihaz form submit
             document.getElementById('newDeviceForm').addEventListener('submit', async function(e) {
@@ -583,12 +680,137 @@
                     }
                 }
             });
+            
+            // Main search input için debounce
+            const mainSearchInput = document.getElementById('mainSearch');
+            if (mainSearchInput) {
+                mainSearchInput.addEventListener('input', debounce(() => {
+                    applyMainSearch();
+                }, 500));
+            }
         });
+
+        // Aktif filtreler
+        let activeFilters = {
+            name: '', brand: '', model: '', stock: '', status: '',
+            updated: { start: '', end: '' }
+        };
+
+        // Filtre dropdown'larını aç/kapat
+        function toggleFilter(columnName) {
+            closeAllFilters();
+            const filterDropdown = document.getElementById(`${columnName}-filter`);
+            if (filterDropdown) {
+                filterDropdown.style.display = 'block';
+            }
+        }
+
+        // Tüm filtre dropdown'larını kapat
+        function closeAllFilters() {
+            const allDropdowns = document.querySelectorAll('.filter-dropdown');
+            allDropdowns.forEach(dropdown => {
+                dropdown.style.display = 'none';
+            });
+        }
+
+        // Filtre fonksiyonları
+        function filterByName(value) {
+            activeFilters.name = value;
+            applyColumnFilters();
+        }
+
+        function filterByBrand(value) {
+            activeFilters.brand = value;
+            applyColumnFilters();
+        }
+
+        function filterByModel(value) {
+            activeFilters.model = value;
+            applyColumnFilters();
+        }
+
+        function filterByStock(value) {
+            activeFilters.stock = value;
+            applyColumnFilters();
+        }
+
+        function filterByStatus(value) {
+            activeFilters.status = value;
+            applyColumnFilters();
+        }
+
+        function filterByUpdatedDate() {
+            activeFilters.updated.start = document.getElementById('updated-start').value;
+            activeFilters.updated.end = document.getElementById('updated-end').value;
+            applyColumnFilters();
+        }
+
+        // Sütun filtrelerini uygula
+        function applyColumnFilters() {
+            loadDevices();
+        }
+
+        // Ana arama filtresi
+        function applyMainSearch() {
+            activeFilters.name = document.getElementById('mainSearch').value;
+            loadDevices();
+        }
+
+        // Tüm filtreleri temizle
+        function clearAllFilters() {
+            activeFilters = {
+                name: '', brand: '', model: '', stock: '', status: '',
+                updated: { start: '', end: '' }
+            };
+            
+            // Main search input'u temizle
+            const mainSearchInput = document.getElementById('mainSearch');
+            if (mainSearchInput) {
+                mainSearchInput.value = '';
+            }
+            
+            // Tarih input'larını temizle
+            const updatedStart = document.getElementById('updated-start');
+            const updatedEnd = document.getElementById('updated-end');
+            if (updatedStart) updatedStart.value = '';
+            if (updatedEnd) updatedEnd.value = '';
+            
+            loadDevices();
+        }
 
         // Cihazları yükle
         async function loadDevices() {
             try {
-                const response = await errorHandler.apiRequest(`${API_BASE_URL}/devices/`);
+                let url = `${API_BASE_URL}/devices/devices/`;
+                const params = new URLSearchParams();
+                
+                if (activeFilters.name) {
+                    params.append('search', activeFilters.name);
+                }
+                if (activeFilters.brand) {
+                    params.append('brand', activeFilters.brand);
+                }
+                if (activeFilters.model) {
+                    params.append('model', activeFilters.model);
+                }
+                if (activeFilters.status) {
+                    params.append('status', activeFilters.status);
+                }
+                if (activeFilters.stock) {
+                    params.append('stock_filter', activeFilters.stock);
+                }
+                if (activeFilters.updated.start) {
+                    params.append('updated_at_gte', activeFilters.updated.start);
+                }
+                if (activeFilters.updated.end) {
+                    params.append('updated_at_lte', activeFilters.updated.end);
+                }
+                
+                if (params.toString()) {
+                    url += '?' + params.toString();
+                }
+                
+                const response = await errorHandler.apiRequest(url);
                 renderDevices(response.results || response);
             } catch (error) {
                 renderDevices([]);
@@ -599,12 +821,8 @@
         async function loadDeviceStats() {
             try {
                 // Tüm cihazları al
-                const response = await fetch(`${API_BASE_URL}/devices/devices/`);
-                if (!response.ok) {
-                    throw new Error('Cihaz verileri alınamadı');
-                }
-                
-                const devices = await response.json();
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/devices/devices/`);
+                const devices = response.results || response;
                 console.log('İstatistik için cihazlar:', devices);
                 
                 // İstatistikleri hesapla
@@ -680,11 +898,11 @@
             
             tbody.innerHTML = devices.map(device => `
                 <tr>
-                    <td>${device.device_name || '-'}</td>
+                    <td>${device.name || '-'}</td>
                     <td>${device.brand || '-'}</td>
                     <td>${device.model || '-'}</td>
-                    <td class="${getStockClass(device.stock_quantity)}">
-                        ${device.stock_quantity || 0}
+                    <td class="${getStockClass(device.current_stock)}">
+                        ${device.current_stock || 0}
                     </td>
                     <td>
                         <span class="status-badge status-${device.status || 'active'}">
@@ -724,46 +942,6 @@
             }
         }
 
-        // Filtreleri kur
-        function setupFilters() {
-            const searchInput = document.getElementById('search');
-            const statusSelect = document.getElementById('status');
-            const brandSelect = document.getElementById('brand');
-            const stockFilterSelect = document.getElementById('stockFilter');
-
-            // Arama filtresi
-            searchInput.addEventListener('input', debounce(() => {
-                applyFilters();
-            }, 500));
-
-            // Diğer filtreler
-            statusSelect.addEventListener('change', applyFilters);
-            brandSelect.addEventListener('change', applyFilters);
-            stockFilterSelect.addEventListener('change', applyFilters);
-        }
-
-        // Filtreleri uygula
-        async function applyFilters() {
-            const search = document.getElementById('search').value;
-            const status = document.getElementById('status').value;
-            const brand = document.getElementById('brand').value;
-            const stockFilter = document.getElementById('stockFilter').value;
-
-            let url = `${API_BASE_URL}/devices/?`;
-            
-            if (search) url += `search=${encodeURIComponent(search)}&`;
-            if (status) url += `status=${status}&`;
-            if (brand) url += `brand=${brand}&`;
-            if (stockFilter) url += `stock_filter=${stockFilter}&`;
-
-            try {
-                const response = await errorHandler.apiRequest(url);
-                renderDevices(response.results || response);
-            } catch (error) {
-                renderDevices([]);
-            }
-        }
-
         // Debounce fonksiyonu
         function debounce(func, wait) {
             let timeout;
@@ -799,7 +977,7 @@
             if (!confirm('Bu cihazı silmek istediğinize emin misiniz?')) return;
             
             try {
-                await errorHandler.apiRequest(`${API_BASE_URL}/devices/${id}/`, {
+                await errorHandler.apiRequest(`${API_BASE_URL}/devices/devices/${id}/`, {
                     method: 'DELETE'
                 });
                 errorHandler.showSuccess('Cihaz silindi');
@@ -817,6 +995,13 @@
                 closeNewDeviceModal();
             }
         }
+
+        // Filtre dropdown'ları dışına tıklandığında kapat
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.sortable-header')) {
+                closeAllFilters();
+            }
+        });
     </script>
 </body>
 </html> 

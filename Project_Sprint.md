@@ -656,11 +656,176 @@ Sistem güvenliğini artırmak için tüm kritik veritabanı ilişkilerinde CASC
 - **Data Consistency**: User field'lar, model migrations, test data creation tamamlandı
 - **Sıradaki Adım**: User field tutarlılığı kontrolü ve breadcrumb sistemi entegrasyonu
 
+## 🔥 GERÇEK ZAMANLI İSTATİSTİK KARTLARI SİSTEMİ (YENİ - TAMAMLANDI)
+
+### Amaç
+Tüm sayfaların özet kartlarını statik verilerden gerçek API verilerine çevirerek, kullanıcılara anlık ve doğru istatistikler sunmak.
+
+### Tamamlanan Modüller
+
+#### 1. 📊 **Fatura Yönetimi Kartları**
+- ✅ **Toplam Gelir**: Tüm faturaların toplam tutarı (TL formatında)
+- ✅ **Bekleyen Ödemeler**: `pending` durumundaki faturaların tutarı
+- ✅ **Vadesi Geçen**: Bugünden önceki `pending` faturaların tutarı  
+- ✅ **Toplam Fatura**: Tüm fatura sayısı
+- **API Endpoint**: `/api/invoices/invoices/`
+- **Hesaplama**: Client-side `calculateInvoiceStats()` fonksiyonu
+
+#### 2. 📦 **Stok Yönetimi Kartları**
+- ✅ **Toplam Ürün**: Tüm stok ürün sayısı
+- ✅ **Stok Değeri**: Tüm ürünlerin toplam değeri (TL formatında)
+- ✅ **Düşük Stok**: `current_stock < minimum_stock` olan ürünler
+- ✅ **Stokta Yok**: `current_stock = 0` olan ürünler
+- **API Endpoint**: `/api/stock_items/stock_items/`
+- **Hesaplama**: Client-side `calculateStockStats()` fonksiyonu
+
+#### 3. 📋 **Test Raporları Kartları**
+- ✅ **Toplam Test**: Tüm test raporu sayısı
+- ✅ **Tamamlanan Testler**: `status='Completed'` veya `diagnosis` dolu olanlar
+- ✅ **Bekleyen Testler**: `status='Incomplete'` veya `diagnosis` boş olanlar
+- ✅ **Bu Hafta Testler**: Pazartesi-Pazar arası yapılan testler
+- **API Endpoint**: `/api/hearing_tests/hearing_tests/`
+- **Hesaplama**: Client-side `calculateTestStats()` fonksiyonu
+
+#### 4. 🎧 **Cihaz Yönetimi Kartları**
+- ✅ **Toplam Cihaz**: Tüm cihaz sayısı
+- ✅ **Aktif Cihazlar**: `Available` + `In_Use` durumundaki cihazlar
+- ✅ **Bakımdaki Cihazlar**: `Maintenance` durumundaki cihazlar
+- ✅ **Az Stoklu Türler**: Her türden 3'ten az olan cihaz türü sayısı
+- **API Endpoint**: `/api/devices/devices/`
+- **Hesaplama**: Client-side `calculateDeviceStats()` fonksiyonu
+
+#### 5. 📅 **Randevu Yönetimi Kartları**
+- ✅ **Toplam Randevu**: Tüm randevu sayısı
+- ✅ **Bugünkü Randevular**: Sadece bugün tarihli randevular
+- ✅ **Tamamlanan Randevular**: `status='completed'` olan randevular
+- ✅ **Bu Hafta Randevular**: Pazartesi-Pazar arası randevular (düzeltildi)
+- **API Endpoint**: `/api/appointments/`
+- **Hesaplama**: Client-side `calculateAppointmentStats()` fonksiyonu
+- **Özel Düzeltme**: Hafta hesaplama algoritması (Pazartesi başlangıcı)
+
+#### 6. 👥 **Hasta Yönetimi Kartları**
+- ✅ **Toplam Hasta**: Tüm hasta sayısı
+- ✅ **Aktif Hastalar**: `status='active'` olan hastalar
+- ✅ **Bu Ay Yeni Hasta**: Bu ay kayıt olan hastalar
+- ✅ **Bu Ay Randevu**: Bu ay yapılan/yapılacak randevu sayısı
+- **API Endpoints**: `/api/patients/` + `/api/appointments/`
+- **Hesaplama**: Client-side `calculatePatientStats()` fonksiyonu
+
+#### 7. 🏠 **Dashboard Ana Kartları**
+- ✅ **Toplam Hasta**: Tüm hasta sayısı
+- ✅ **Toplam Randevu**: Tüm randevu sayısı
+- ✅ **Test Raporları**: Tüm test raporu sayısı
+- ✅ **Cihaz Envanteri**: Tüm cihaz sayısı
+- **API Endpoints**: 4 paralel çağrı (`Promise.all`)
+- **Hesaplama**: Client-side `calculateDashboardStats()` fonksiyonu
+- **Özellik**: Animasyonlu sayı güncellemeleri
+
+### Teknik İyileştirmeler
+
+#### Performance Optimizasyonu
+- **Paralel API Çağrıları**: `Promise.all()` kullanımı
+- **Client-side Hesaplama**: Server yükünü azaltma
+- **Gerçek Zamanlı Güncelleme**: CRUD işlemlerinden sonra otomatik kart güncellemesi
+
+#### User Experience
+- **Loading Spinners**: Veri yüklenirken animasyonlu göstergeler
+- **Success Animations**: Başarılı güncelleme animasyonları
+- **Error Handling**: Hata durumunda sıfır değerleri gösterme
+- **Debug Logging**: Console'da detaylı veri takibi
+
+#### Code Quality
+- **Modular Functions**: Her sayfa için ayrı hesaplama fonksiyonları
+- **Consistent Naming**: Standart fonksiyon isimlendirmesi
+- **Error Resilience**: API hatalarına karşı dayanıklılık
+
+### Test Verileri Oluşturuldu
+- **Faturalar**: 4 farklı durumda fatura (paid, pending, overdue)
+- **Stok Ürünleri**: 4 farklı stok seviyesinde ürün (normal, düşük, yok)
+- **Test Raporları**: 4 farklı durumda test (tamamlanan, bekleyen, bu hafta)
+- **Cihazlar**: 8 farklı durumda cihaz (aktif, bakımda, az stoklu türler)
+- **Randevular**: 7 farklı zamanda randevu (bugün, bu hafta, tamamlanan)
+- **Hastalar**: 5 farklı durumda hasta (aktif, pasif, yeni, eski)
+
 ### Kalan Görevler
-- 📋 **User Field Tutarlılığı Kontrolü** (pending)
 - 🔄 **Breadcrumb Navigasyon Sistemi** (UI entegrasyonu)
-- ⏳ **Performance Optimizasyonu**
+- ⏳ **Performance Testleri ve Optimizasyon**
 - ⏳ **Frontend Test Coverage %90+**
 - ⏳ **Production Deployment Hazırlıkları**
+- 📋 **Fatura modülündeki tüm butonları çalışır hale getir** - Daha sonra baştan yazılacak
+
+---
+
+## 🔧 **DRY (Don't Repeat Yourself) Refactoring - YENİ EKLENDİ**
+
+### Amaç
+Proje genelinde tekrarlanan kod yapılarını ortak hale getirerek, kod kalitesini artırmak ve bakım kolaylığı sağlamak.
+
+### Tespit Edilen Tekrarlanan Kodlar
+
+#### **1. ViewSet Yapıları (Yüksek Öncelik)**
+- **Filter Backend Konfigürasyonu**: 3 dosyada aynı yapı
+  ```python
+  filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+  ```
+- **ModelViewSet Temel Yapısı**: 5 dosyada aynı pattern
+  ```python
+  class XxxViewSet(viewsets.ModelViewSet):
+      queryset = Xxx.objects.all()
+      serializer_class = XxxSerializer
+  ```
+
+#### **2. Filtreleme Mantığı (Yüksek Öncelik)**
+- **Tarih Aralığı Filtreleme**: 3 dosyada benzer kod
+- **Metin Arama Filtreleme**: 3 dosyada benzer kod
+- **Status/Type Filtreleme**: 3 dosyada benzer kod
+
+#### **3. Create Metodları (Orta Öncelik)**
+- **Hata Yönetimi ve Logging**: 4 dosyada benzer yapı
+- **Validation Error Handling**: 3 dosyada benzer yapı
+- **Exception Handling**: 4 dosyada benzer pattern
+
+#### **4. Serializer Yapıları (Düşük Öncelik)**
+- **ModelSerializer Temel Yapısı**: 8 dosyada aynı yapı
+- **Admin Konfigürasyonu**: 6 dosyada aynı pattern
+
+### Planlanan Çözüm Yapısı
+
+#### **A. Ortak Base Classes Oluşturma**
+- `BaseViewSet` - Filter backend ve temel ViewSet yapısı
+- `BaseFilterMixin` - Ortak filtreleme mantığı
+- `BaseCreateMixin` - Ortak create metodu yapısı
+- `BaseSerializer` - Ortak serializer yapısı
+
+#### **B. Utility Functions**
+- `date_range_filter()` - Tarih aralığı filtreleme
+- `text_search_filter()` - Metin arama filtreleme
+- `common_error_response()` - Standart hata response'ları
+
+#### **C. Mixin'ler**
+- `LoggingMixin` - Ortak logging işlemleri
+- `ValidationMixin` - Ortak validation işlemleri
+
+#### **D. Ortak Konfigürasyon**
+- `DEFAULT_FILTER_BACKENDS` - Merkezi filter backend ayarları
+- `DEFAULT_PAGINATION` - Merkezi sayfalama ayarları
+
+### Beklenen Faydalar
+- **Kod Tekrarı Azalması**: %40-50 oranında azalma
+- **Bakım Kolaylığı**: Tek yerden değişiklik yapabilme
+- **Kod Kalitesi**: Standart yapılar ve tutarlılık
+- **Geliştirme Hızı**: Yeni modüller için hazır şablonlar
+
+### Öncelik Sıralaması
+1. **Yüksek Öncelik**: ViewSet base classes ve filtreleme mantığı
+2. **Orta Öncelik**: Create metodları ve hata yönetimi
+3. **Düşük Öncelik**: Serializer ve admin yapıları
+
+### Tahmini Süre
+- **Analiz ve Planlama**: 1-2 gün
+- **Base Classes Geliştirme**: 3-4 gün
+- **Mevcut Kodların Refactoring**: 2-3 gün
+- **Test ve Doğrulama**: 1-2 gün
+- **Toplam**: 7-11 gün
 
 ---

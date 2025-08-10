@@ -28,6 +28,12 @@ class HearingTestSerializer(serializers.ModelSerializer):
         return data
     
     def to_internal_value(self, data):
+        # QueryDict immutable olduğu için kopyala
+        if hasattr(data, '_mutable'):
+            data = data.copy()
+        else:
+            data = dict(data)
+        
         # Boş string değerleri None'a çevir
         for field_name in [
             'right_ear_250', 'right_ear_500', 'right_ear_1000', 'right_ear_2000', 'right_ear_4000', 'right_ear_8000',

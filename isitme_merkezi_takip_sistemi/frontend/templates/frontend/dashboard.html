@@ -760,10 +760,28 @@
         }
         
         .sidebar a i {
-            color: var(--primary-orange);
+            color: var(--neutral-500);
             font-size: 1.1rem;
             width: 20px;
             text-align: center;
+            transition: var(--transition);
+        }
+        
+        .sidebar a.active i {
+            color: var(--primary-orange);
+        }
+        
+        .sidebar a.active {
+            color: var(--neutral-800);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(255, 255, 255, 0.8) 0%, 
+                    rgba(255, 111, 0, 0.1) 100%
+                );
+            box-shadow: 
+                0 4px 16px rgba(255, 111, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transform: translateX(4px);
         }
         
         .main-content {
@@ -802,6 +820,14 @@
             font-weight: 700;
             letter-spacing: -0.5px;
             line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .page-title i {
+            color: var(--primary-orange);
+            font-size: 1.5rem;
         }
         
         .btn-primary {
@@ -1285,7 +1311,7 @@
                 <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
             </div>
             <ul>
-                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-chart-line"></i> ANASAYFA</a></li>
+                <li><a href="/dashboard/" class="nav-link nav-item active" data-route="/dashboard"><i class="fa-solid fa-chart-line"></i> ANASAYFA</a></li>
                 <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
                 <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
                 <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
@@ -1295,13 +1321,11 @@
             </ul>
         </aside>
         <main class="main-content">
-            <!-- Breadcrumb Navigation -->
-            <div class="breadcrumb">
-                <span class="breadcrumb-current">Ana Sayfa</span>
-                </div>
-            
             <div class="page-header">
-                <h1 class="page-title">Kontrol Paneli</h1>
+                <h1 class="page-title">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Kontrol Paneli
+                </h1>
                 <button onclick="refreshDashboard()" class="btn-primary ripple" id="refreshBtn">
                     <i class="fa-solid fa-refresh"></i>
                     Yenile

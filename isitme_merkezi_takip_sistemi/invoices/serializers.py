@@ -7,7 +7,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        """API response'da patient name'i ekle"""
+        """API response'da patient name ve user bilgilerini ekle"""
         data = super().to_representation(instance)
         
         # Patient name'i ekle
@@ -15,5 +15,16 @@ class InvoiceSerializer(serializers.ModelSerializer):
             data['patient_name'] = f"{instance.patient.first_name} {instance.patient.last_name}"
         else:
             data['patient_name'] = 'Bilinmeyen Hasta'
+        
+        # User bilgilerini ekle
+        if instance.user:
+            data['user'] = {
+                'id': instance.user.id,
+                'username': instance.user.username,
+                'first_name': instance.user.first_name,
+                'last_name': instance.user.last_name,
+            }
+        else:
+            data['user'] = None
         
         return data

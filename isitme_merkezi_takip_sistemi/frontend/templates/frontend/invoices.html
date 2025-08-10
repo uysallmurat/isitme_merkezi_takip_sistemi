@@ -195,6 +195,87 @@
             color: #666;
             font-size: 0.9rem;
         }
+        /* Enhanced table styles */
+        .enhanced-table {
+            min-width: 1200px; /* Minimum genişlik - horizontal scroll için */
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            position: relative;
+            max-width: 100%;
+        }
+
+        /* Sticky columns */
+        .enhanced-table th.sticky-col,
+        .enhanced-table td.sticky-col {
+            position: sticky;
+            left: 0;
+            background: #f8f9fa;
+            z-index: 10;
+            border-right: 2px solid #dee2e6;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .enhanced-table th.sticky-actions,
+        .enhanced-table td.sticky-actions {
+            position: sticky;
+            right: 0;
+            background: #f8f9fa;
+            z-index: 10;
+            border-left: 2px solid #dee2e6;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        /* Header sticky styling */
+        .enhanced-table thead th {
+            background: #f8f9fa;
+            font-weight: 600;
+            text-align: center;
+            padding: 12px 8px;
+            border-bottom: 2px solid #dee2e6;
+            white-space: nowrap;
+        }
+
+        .enhanced-table tbody td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        /* Column specific widths */
+        .enhanced-table th:nth-child(1), .enhanced-table td:nth-child(1) { min-width: 100px; } /* Fatura No */
+        .enhanced-table th:nth-child(2), .enhanced-table td:nth-child(2) { min-width: 150px; } /* Hasta */
+        .enhanced-table th:nth-child(3), .enhanced-table td:nth-child(3) { min-width: 120px; } /* Fatura Tarihi */
+        .enhanced-table th:nth-child(4), .enhanced-table td:nth-child(4) { min-width: 120px; } /* Tutar */
+        .enhanced-table th:nth-child(5), .enhanced-table td:nth-child(5) { min-width: 200px; } /* Açıklama */
+        .enhanced-table th:nth-child(6), .enhanced-table td:nth-child(6) { min-width: 100px; } /* Durum */
+        .enhanced-table th:nth-child(7), .enhanced-table td:nth-child(7) { min-width: 120px; } /* Oluşturan */
+        .enhanced-table th:nth-child(8), .enhanced-table td:nth-child(8) { min-width: 140px; } /* Oluşturma Tarihi */
+        .enhanced-table th:nth-child(9), .enhanced-table td:nth-child(9) { min-width: 140px; } /* Son Güncelleme */
+        .enhanced-table th:nth-child(10), .enhanced-table td:nth-child(10) { min-width: 200px; } /* İşlemler */
+
+        /* Scroll indicator */
+        .table-container::after {
+            content: '← Sağa sola kaydırın →';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 5;
+        }
+
         @media (max-width: 900px) {
             .sidebar { display: none; }
             .main-content { padding: 1rem; }
@@ -536,21 +617,24 @@
                 </div>
                 
                 <div class="table-container">
-                    <table>
+                    <table class="enhanced-table">
                         <thead>
                             <tr>
-                                <th>Fatura No</th>
+                                <th class="sticky-col">Fatura No</th>
                                 <th>Hasta</th>
-                                <th>Tarih</th>
+                                <th>Fatura Tarihi</th>
                                 <th>Tutar</th>
                                 <th>Açıklama</th>
                                 <th>Durum</th>
-                                <th>İşlemler</th>
+                                <th>Oluşturan</th>
+                                <th>Oluşturma Tarihi</th>
+                                <th>Son Güncelleme</th>
+                                <th class="sticky-actions">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody id="invoicesTable">
                             <tr>
-                                <td colspan="7" style="text-align: center; padding: 2rem;">
+                                <td colspan="10" style="text-align: center; padding: 2rem;">
                                     <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
                                 </td>
                             </tr>
@@ -655,7 +739,7 @@
             const tbody = document.getElementById('invoicesTable');
             
             if (invoices.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Fatura bulunamadı</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 2rem;">Fatura bulunamadı</td></tr>';
                 return;
             }
             
@@ -664,32 +748,59 @@
             
             tbody.innerHTML = invoices.map(invoice => `
                 <tr>
-                    <td>#${invoice.id}</td>
+                    <td class="sticky-col">#${invoice.id}</td>
                     <td>${invoice.patient_name || 'Bilinmeyen Hasta'}</td>
                     <td>${formatDate(invoice.invoice_date)}</td>
                     <td>₺${parseFloat(invoice.amount || 0).toLocaleString('tr-TR', {minimumFractionDigits: 2})}</td>
-                    <td>${invoice.description || '-'}</td>
+                    <td title="${invoice.description || '-'}">${truncateText(invoice.description || '-', 25)}</td>
                     <td>
                         <span class="status-badge status-${invoice.status.toLowerCase()}">
                             ${getStatusText(invoice.status)}
                         </span>
                     </td>
-                    <td class="action-buttons">
-                        <button class="btn-small btn-view" onclick="viewInvoice(${invoice.id})">
-                            <i class="fa-solid fa-eye"></i> Görüntüle
+                    <td>${getUserName(invoice.user)}</td>
+                    <td>${formatDateTime(invoice.created_at)}</td>
+                    <td>${formatDateTime(invoice.updated_at)}</td>
+                    <td class="sticky-actions action-buttons">
+                        <button class="btn-small btn-view" onclick="viewInvoice(${invoice.id})" title="Görüntüle">
+                            <i class="fa-solid fa-eye"></i>
                         </button>
                         <button class="btn-small btn-pdf" onclick="downloadPDF(${invoice.id})" disabled title="Yakında eklenecek">
-                            <i class="fa-solid fa-file-pdf"></i> PDF
+                            <i class="fa-solid fa-file-pdf"></i>
                         </button>
                         <button class="btn-small btn-email" onclick="sendEmail(${invoice.id})" disabled title="Yakında eklenecek">
-                            <i class="fa-solid fa-envelope"></i> E-posta
+                            <i class="fa-solid fa-envelope"></i>
                         </button>
-                        <button class="btn-small btn-delete" onclick="deleteInvoice(${invoice.id})">
-                            <i class="fa-solid fa-trash"></i> Sil
+                        <button class="btn-small btn-delete" onclick="deleteInvoice(${invoice.id})" title="Sil">
+                            <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
                 </tr>
             `).join('');
+        }
+
+        // Metni kırp
+        function truncateText(text, maxLength) {
+            if (!text || text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+
+        // User name'i getir
+        function getUserName(user) {
+            if (!user) return 'Sistem';
+            return user.first_name && user.last_name ? 
+                   `${user.first_name} ${user.last_name}` : 
+                   user.username || 'Bilinmeyen';
+        }
+
+        // DateTime formatla
+        function formatDateTime(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('tr-TR') + ' ' + date.toLocaleTimeString('tr-TR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
 
         // Hizmet metnini getir
