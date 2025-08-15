@@ -1522,13 +1522,9 @@
     <div class="topbar">
         <div class="logo">MAVİ İŞİTME MERKEZİ</div>
         <nav>
-            <a href="/dashboard/" class="home-link nav-link" data-route="/dashboard">
-                <i class="fa-solid fa-house home-icon"></i>
-                Ana Sayfa
-            </a>
             <a href="/logout/" class="logout-link nav-link" onclick="confirmLogout(event)">
                 <i class="fa-solid fa-right-from-bracket"></i>
-                Çıkış
+                 ÇIKIŞ 
             </a>
         </nav>
     </div>
@@ -2254,18 +2250,7 @@
             }
         });
 
-        // Modal dışına tıklayınca kapat
-        window.onclick = function(event) {
-            const newModal = document.getElementById('newPatientModal');
-            const editModal = document.getElementById('editPatientModal');
-            
-            if (event.target === newModal) {
-                closeNewPatientModal();
-            }
-            if (event.target === editModal) {
-                closeEditPatientModal();
-            }
-        }
+
 
         // Sütun başlığı filtre fonksiyonları
         function toggleFilter(columnName) {

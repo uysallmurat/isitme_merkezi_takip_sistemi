@@ -131,12 +131,6 @@
             gap: 0.5rem;
         }
         
-        .topbar nav a:hover {
-            color: var(--neutral-800);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
         .topbar nav a.home-link {
             background: linear-gradient(135deg, 
                 rgba(76, 175, 80, 0.08) 0%, 
@@ -153,6 +147,12 @@
             border: 1px solid rgba(244, 67, 54, 0.2);
         }
         
+        .topbar nav a:hover {
+            color: var(--neutral-800);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
         .topbar nav a.home-link:hover {
             background: linear-gradient(135deg, 
                 rgba(76, 175, 80, 0.15) 0%, 
@@ -167,292 +167,6 @@
                 rgba(244, 67, 54, 0.08) 100%
             );
             color: #C62828;
-        }
-        
-        .home-icon {
-            font-size: 1.1rem;
-            opacity: 0.7;
-        }
-        
-        /* Advanced Feedback Systems */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            pointer-events: none;
-        }
-        
-        .toast {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 1rem 1.5rem;
-            margin-bottom: 0.5rem;
-            box-shadow: var(--shadow-lg);
-            border-left: 4px solid;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            min-width: 300px;
-            pointer-events: auto;
-            transform: translateX(400px);
-            transition: var(--transition);
-        }
-        
-        .toast.show {
-            transform: translateX(0);
-        }
-        
-        .toast.success {
-            border-left-color: var(--primary-green);
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, var(--white) 100%);
-        }
-        
-        .toast.error {
-            border-left-color: #f44336;
-            background: linear-gradient(135deg, rgba(244, 67, 54, 0.05) 0%, var(--white) 100%);
-        }
-        
-        .toast.warning {
-            border-left-color: var(--primary-orange);
-            background: linear-gradient(135deg, rgba(255, 111, 0, 0.05) 0%, var(--white) 100%);
-        }
-        
-        .toast.info {
-            border-left-color: var(--primary-blue);
-            background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, var(--white) 100%);
-        }
-        
-        .toast-icon {
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-        
-        .toast.success .toast-icon { color: var(--primary-green); }
-        .toast.error .toast-icon { color: #f44336; }
-        .toast.warning .toast-icon { color: var(--primary-orange); }
-        .toast.info .toast-icon { color: var(--primary-blue); }
-        
-        .toast-content {
-            flex: 1;
-        }
-        
-        .toast-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 0.25rem;
-            color: var(--neutral-800);
-        }
-        
-        .toast-message {
-            font-size: 0.85rem;
-            color: var(--neutral-600);
-            margin: 0;
-        }
-        
-        .toast-close {
-            background: none;
-            border: none;
-            color: var(--neutral-500);
-            cursor: pointer;
-            padding: 0.25rem;
-            border-radius: 4px;
-            transition: var(--transition);
-        }
-        
-        .toast-close:hover {
-            background: var(--neutral-100);
-            color: var(--neutral-700);
-        }
-        
-        /* Page Transition Effects */
-        .page-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-blue) 100%);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease-in-out;
-        }
-        
-        .page-transition.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .page-transition-content {
-            text-align: center;
-            color: white;
-        }
-        
-        .page-transition-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-        
-        .page-transition-text {
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-        
-        /* Progress Bar */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-blue) 100%);
-            z-index: 9998;
-            transition: width 0.3s ease;
-        }
-        
-        /* Confirmation Modal */
-        .confirmation-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-            backdrop-filter: blur(4px);
-        }
-        
-        .confirmation-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .confirmation-modal {
-            background: var(--white);
-            border-radius: var(--border-radius-lg);
-            padding: 2rem;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            transform: scale(0.8);
-            transition: var(--transition);
-            box-shadow: var(--shadow-xl);
-        }
-        
-        .confirmation-overlay.show .confirmation-modal {
-            transform: scale(1);
-        }
-        
-        .confirmation-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-        }
-        
-        .confirmation-icon.warning {
-            background: linear-gradient(135deg, var(--primary-orange) 0%, #ff8f00 100%);
-        }
-        
-        .confirmation-icon.danger {
-            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-        }
-        
-        .confirmation-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--neutral-800);
-            margin-bottom: 0.5rem;
-        }
-        
-        .confirmation-message {
-            color: var(--neutral-600);
-            margin-bottom: 2rem;
-            line-height: 1.5;
-        }
-        
-        .confirmation-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-        
-        .btn-confirm {
-            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius-sm);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .btn-confirm:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .btn-cancel {
-            background: var(--neutral-200);
-            color: var(--neutral-700);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius-sm);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .btn-cancel:hover {
-            background: var(--neutral-300);
-            transform: translateY(-2px);
-        }
-        
-        /* Loading Animations */
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            display: inline-block;
-        }
-        
-        .loading-spinner.primary {
-            border: 2px solid rgba(255, 111, 0, 0.3);
-            border-top-color: var(--primary-orange);
-        }
-        
-        .loading-spinner.large {
-            width: 32px;
-            height: 32px;
-            border-width: 3px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
         
         .page-container {
@@ -619,28 +333,6 @@
             transform: translateX(4px);
         }
         
-        /* Smooth Navigation Links */
-        .nav-link {
-            position: relative;
-            transition: var(--transition);
-        }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--primary-orange);
-            transition: var(--transition);
-            transform: translateX(-50%);
-        }
-        
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        
         .main-content {
             flex: 1;
             padding: 2rem;
@@ -670,12 +362,6 @@
             border-radius: 2px;
         }
         
-        .title-section {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-        
         .page-title {
             color: var(--neutral-800);
             margin: 0;
@@ -691,38 +377,6 @@
         .page-title i {
             color: var(--primary-orange);
             font-size: 1.5rem;
-        }
-        
-        .main-search-container {
-            display: flex;
-            align-items: center;
-        }
-        
-        .main-search-container .filter-group {
-            margin: 0;
-        }
-        
-        .main-search-container .filter-group input {
-            min-width: 400px;
-            padding: 0.875rem 1rem;
-            border: 2px solid var(--neutral-200);
-            border-radius: var(--border-radius-sm);
-            font-size: 0.95rem;
-            transition: var(--transition);
-            background: var(--neutral-50);
-        }
-        
-        .main-search-container .filter-group input:focus {
-            outline: none;
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 0 3px rgba(255,111,0,0.1);
-            background: var(--white);
-        }
-        
-        .header-buttons {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
         }
         
         .btn-primary {
@@ -761,53 +415,6 @@
         
         .btn-primary:hover::before {
             left: 100%;
-        }
-        
-        .clear-filters-btn {
-            background: var(--neutral-200);
-            color: var(--neutral-700);
-            border: none;
-            padding: 0.875rem 1.5rem;
-            border-radius: var(--border-radius-sm);
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: var(--transition);
-        }
-        
-        .clear-filters-btn:hover {
-            background: var(--neutral-300);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .content-card {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 2rem;
-            border: 1px solid var(--neutral-200);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .content-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-orange) 0%, var(--accent-orange) 50%, var(--primary-blue) 100%);
-        }
-        
-        .content-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
         }
         
         .stats-cards {
@@ -875,22 +482,22 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
         }
         
-        .stat-card:nth-child(1) .stat-icon { 
+        .stat-icon.appointments { 
             background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-orange) 100%);
         }
         .stat-card:nth-child(1)::before { background: var(--primary-orange); }
         
-        .stat-card:nth-child(2) .stat-icon { 
+        .stat-icon.today { 
             background: linear-gradient(135deg, var(--primary-blue) 0%, #64B5F6 100%);
         }
         .stat-card:nth-child(2)::before { background: var(--primary-blue); }
         
-        .stat-card:nth-child(3) .stat-icon { 
+        .stat-icon.completed { 
             background: linear-gradient(135deg, var(--primary-green) 0%, #81C784 100%);
         }
         .stat-card:nth-child(3)::before { background: var(--primary-green); }
         
-        .stat-card:nth-child(4) .stat-icon { 
+        .stat-icon.weekly { 
             background: linear-gradient(135deg, var(--primary-purple) 0%, #BA68C8 100%);
         }
         .stat-card:nth-child(4)::before { background: var(--primary-purple); }
@@ -917,10 +524,83 @@
             letter-spacing: 0.5px;
         }
         
+        .content-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            border: 1px solid var(--neutral-200);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-orange) 0%, var(--accent-orange) 50%, var(--primary-blue) 100%);
+        }
+        
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--neutral-50) 0%, var(--neutral-100) 100%);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--neutral-200);
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: var(--neutral-700);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--neutral-200);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255,111,0,0.1);
+            background: var(--white);
+            transform: translateY(-1px);
+        }
+        
         .table-container {
             overflow-x: auto;
             border-radius: var(--border-radius-sm);
             border: 1px solid var(--neutral-200);
+            box-shadow: var(--shadow-sm);
         }
         
         table {
@@ -949,26 +629,35 @@
         }
         
         tbody tr:hover {
-            background: var(--neutral-50);
+            background: linear-gradient(135deg, var(--neutral-50) 0%, rgba(255, 111, 0, 0.02) 100%);
+            transform: scale(1.01);
         }
         
         .status-badge {
-            padding: 0.4rem 1rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
             font-size: 0.85rem;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .status-active { 
+        .status-scheduled { 
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            color: #0D47A1;
+            border: 1px solid #90CAF9;
+        }
+        
+        .status-completed { 
             background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
             color: #2E7D32;
             border: 1px solid #A5D6A7;
         }
         
-        .status-inactive { 
+        .status-cancelled { 
             background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
             color: #C62828;
             border: 1px solid #EF9A9A;
@@ -977,6 +666,7 @@
         .action-buttons {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
         
         .btn-small {
@@ -989,354 +679,190 @@
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.5rem;
             transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .btn-edit { 
             background: linear-gradient(135deg, var(--primary-blue) 0%, #64B5F6 100%);
             color: white;
+            box-shadow: var(--shadow-sm);
         }
         
         .btn-delete { 
             background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
             color: white;
+            box-shadow: var(--shadow-sm);
         }
         
         .btn-view { 
             background: linear-gradient(135deg, var(--primary-green) 0%, #81C784 100%);
             color: white;
-        }
-        
-        .btn-status {
-            padding: 0.4rem 0.8rem;
-            border: none;
-            border-radius: var(--border-radius-sm);
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: var(--transition);
-            margin: 0 2px;
-        }
-        
-        .btn-activate {
-            background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
-            color: #2E7D32;
-            border: 1px solid #A5D6A7;
-        }
-        
-        .btn-activate:hover {
-            background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .btn-deactivate {
-            background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
-            color: #C62828;
-            border: 1px solid #EF9A9A;
-        }
-        
-        .btn-deactivate:hover {
-            background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%);
-            transform: translateY(-1px);
             box-shadow: var(--shadow-sm);
         }
         
         .btn-small:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         
-        .btn-secondary {
-            background: var(--neutral-200);
-            color: var(--neutral-700);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius-sm);
-            cursor: pointer;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--neutral-300);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-content {
-            background-color: var(--white);
-            margin: 5% auto;
-            padding: 0;
-            border: none;
-            border-radius: var(--border-radius-lg);
-            width: 90%;
-            max-width: 500px;
-            box-shadow: var(--shadow-xl);
-            transform: scale(0.8);
-            transition: var(--transition);
-        }
-
-        .modal.show .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--neutral-200);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, var(--neutral-50) 0%, var(--neutral-100) 100%);
-            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-        }
-
-        .modal-header h2 {
-            margin: 0;
-            color: var(--neutral-800);
-            font-size: 1.25rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .close {
-            color: var(--neutral-500);
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-            transition: var(--transition);
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .close:hover {
-            color: var(--neutral-700);
-            background: var(--neutral-200);
-        }
-
-        .modal-body {
-            padding: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--neutral-700);
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.875rem;
-            border: 2px solid var(--neutral-200);
-            border-radius: var(--border-radius-sm);
-            font-size: 0.95rem;
-            box-sizing: border-box;
-            transition: var(--transition);
-            background: var(--neutral-50);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.1);
-            background: var(--white);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-        }
-
-        /* Pagination Styles */
-        .pagination-container {
-            margin-top: 2rem;
-            display: flex;
-            justify-content: center;
-        }
-
-        .pagination {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .pagination button {
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--neutral-200);
-            background: var(--white);
-            color: var(--neutral-700);
-            cursor: pointer;
-            border-radius: var(--border-radius-sm);
-            transition: var(--transition);
-            font-weight: 500;
-        }
-
-        .pagination button:hover {
-            background: var(--neutral-100);
-            border-color: var(--primary-orange);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .pagination button.active {
-            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-orange) 100%);
-            color: var(--white);
-            border-color: var(--primary-orange);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Sütun başlığı filtre stilleri */
-        .sortable-header {
-            position: relative;
-            cursor: pointer;
-            user-select: none;
-            transition: var(--transition);
-        }
-
-        .sortable-header:hover {
-            background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-200) 100%);
-        }
-
-        .sortable-header i {
-            margin-left: 8px;
-            color: var(--neutral-500);
-            font-size: 0.8rem;
-            transition: var(--transition);
-        }
-
-        .sortable-header:hover i {
-            color: var(--primary-orange);
-        }
-
-        .filter-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: var(--white);
-            border: 1px solid var(--neutral-200);
-            border-radius: var(--border-radius-sm);
-            box-shadow: var(--shadow-lg);
-            padding: 1rem;
-            min-width: 250px;
-            z-index: 1000;
-            display: none;
-            backdrop-filter: blur(16px);
-        }
-
-        .filter-dropdown input,
-        .filter-dropdown select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--neutral-200);
-            border-radius: var(--border-radius-sm);
-            margin-bottom: 0.75rem;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-
-        .filter-dropdown input:focus,
-        .filter-dropdown select:focus {
-            outline: none;
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 0 3px rgba(255,111,0,0.1);
-        }
-
-        .date-range-filter {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .filter-options {
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid var(--neutral-200);
-            border-radius: var(--border-radius-sm);
-        }
-
-        .filter-option {
-            padding: 0.75rem;
-            cursor: pointer;
-            border-bottom: 1px solid var(--neutral-200);
-            transition: var(--transition);
-        }
-
-        .filter-option:hover {
-            background: var(--neutral-100);
-        }
-
-        .filter-option:last-child {
-            border-bottom: none;
-        }
-
         /* Loading Animations */
         .loading-spinner {
             width: 20px;
             height: 20px;
-            border: 2px solid rgba(255, 111, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            border-top-color: var(--primary-orange);
+            border-top-color: #fff;
             animation: spin 1s ease-in-out infinite;
             display: inline-block;
         }
-
+        
+        .loading-spinner.primary {
+            border: 2px solid rgba(255, 111, 0, 0.3);
+            border-top-color: var(--primary-orange);
+        }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
+        
         /* Fade In Animation */
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
-
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
+        /* Interactive Elements */
+        .interactive-element {
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .interactive-element:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Toast Notification System */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        
+        .toast {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 300px;
+            pointer-events: auto;
+            transform: translateX(400px);
+            transition: var(--transition);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left-color: var(--primary-green);
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, var(--white) 100%);
+        }
+        
+        .toast.error {
+            border-left-color: #f44336;
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.05) 0%, var(--white) 100%);
+        }
+        
+        .toast.warning {
+            border-left-color: var(--primary-orange);
+            background: linear-gradient(135deg, rgba(255, 111, 0, 0.05) 0%, var(--white) 100%);
+        }
+        
+        .toast.info {
+            border-left-color: var(--primary-blue);
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, var(--white) 100%);
+        }
+        
+        .toast-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .toast.success .toast-icon { color: var(--primary-green); }
+        .toast.error .toast-icon { color: #f44336; }
+        .toast.warning .toast-icon { color: var(--primary-orange); }
+        .toast.info .toast-icon { color: var(--primary-blue); }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+            color: var(--neutral-800);
+        }
+        
+        .toast-message {
+            font-size: 0.85rem;
+            color: var(--neutral-600);
+            margin: 0;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--neutral-500);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        
+        .toast-close:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+        
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .ripple:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
         /* Responsive Design */
         @media (max-width: 1024px) {
             .sidebar { 
@@ -1359,7 +885,6 @@
                 display: flex;
                 gap: 1rem;
                 justify-content: center;
-                flex-wrap: wrap;
             }
             
             .page-container {
@@ -1371,6 +896,10 @@
                 padding: 1rem;
                 border-right: none;
                 border-bottom: 1px solid var(--neutral-200);
+            }
+            
+            .sidebar-logo {
+                display: none;
             }
             
             .sidebar ul {
@@ -1402,16 +931,6 @@
                 text-align: center;
             }
             
-            .title-section {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .main-search-container .filter-group input {
-                min-width: auto;
-                width: 100%;
-            }
-            
             .page-title {
                 font-size: 1.5rem;
             }
@@ -1426,23 +945,9 @@
                 padding: 1.5rem;
             }
             
-            .content-card {
-                padding: 1rem;
-            }
-            
-            th, td {
-                padding: 0.5rem;
-                font-size: 0.85rem;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                gap: 0.25rem;
-            }
-            
-            .btn-small {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
+            .filters {
+                grid-template-columns: 1fr;
+                gap: 1rem;
             }
         }
         
@@ -1482,46 +987,17 @@
                 flex-direction: column;
                 gap: 0.25rem;
             }
-            
-            .btn-small {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
-            }
         }
     </style>
 </head>
 <body class="page-bg">
-    <!-- Progress Bar -->
-    <div class="progress-bar" id="progressBar"></div>
-    
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-    
-    <!-- Page Transition -->
-    <div class="page-transition" id="pageTransition">
-        <div class="page-transition-content">
-            <div class="page-transition-spinner"></div>
-            <div class="page-transition-text">Yükleniyor...</div>
-        </div>
-    </div>
-    
-    <!-- Confirmation Modal -->
-    <div class="confirmation-overlay" id="confirmationOverlay">
-        <div class="confirmation-modal">
-            <div class="confirmation-icon" id="confirmationIcon">
-                <i class="fa-solid fa-exclamation-triangle"></i>
-            </div>
-            <div class="confirmation-title" id="confirmationTitle">Emin misiniz?</div>
-            <div class="confirmation-message" id="confirmationMessage">Bu işlem geri alınamaz.</div>
-            <div class="confirmation-actions">
-                <button class="btn-cancel" id="confirmationCancel">İptal</button>
-                <button class="btn-confirm" id="confirmationConfirm">Onayla</button>
-            </div>
-        </div>
-    </div>
     <div class="topbar">
         <div class="logo">MAVİ İŞİTME MERKEZİ</div>
         <nav>
+            <a href="/dashboard/" class="home-link nav-link" data-route="/dashboard">
+                <i class="fa-solid fa-house"></i>
+                Ana Sayfa
+            </a>
             <a href="/logout/" class="logout-link nav-link" onclick="confirmLogout(event)">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 Çıkış
@@ -1545,30 +1021,17 @@
             </ul>
         </aside>
         <main class="main-content">
-		    <div class="page-header">
-                <div class="title-section">
-                    <h1 class="page-title">
-                        <i class="fa-solid fa-calendar-check"></i>
-                        Randevu Yönetimi
-                    </h1>
-                </div>
-                <div class="main-search-container">
-                    <div class="filter-group">
-                        <input type="text" id="mainSearch" placeholder="Hasta adi ile ara..." onkeyup="applyFilters()">
-                    </div>
-                </div>
-                <div class="header-buttons">
-                    <button type="button" class="clear-filters-btn" onclick="clearAllFilters()">
-                        <i class="fa-solid fa-filter-circle-xmark"></i>
-                        Filtreleri Temizle
-                    </button>
-                    <button type="button" class="btn-primary" onclick="openNewAppointmentModal()">
-                        <i class="fa-solid fa-plus"></i>
-                        Yeni Randevu
-                    </button>
-                </div>
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Randevu Yönetimi
+                </h1>
+                <button type="button" class="btn-primary ripple" onclick="openNewAppointmentModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Randevu
+                </button>
             </div>
-			
+            
             <div class="stats-cards">
                 <div class="stat-card interactive-element fade-in">
                     <div class="stat-icon appointments">
@@ -1617,63 +1080,39 @@
             </div>
             
             <div class="content-card">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="search">Arama</label>
+                        <input type="text" id="search" placeholder="Hasta adı, telefon...">
+                    </div>
+                    <div class="filter-group">
+                        <label for="status">Durum</label>
+                        <select id="status">
+                            <option value="">Tümü</option>
+                            <option value="scheduled">Planlandı</option>
+                            <option value="completed">Tamamlandı</option>
+                            <option value="cancelled">İptal Edildi</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFrom">Başlangıç Tarihi</label>
+                        <input type="date" id="dateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateTo">Bitiş Tarihi</label>
+                        <input type="date" id="dateTo">
+                    </div>
+                </div>
+                
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th class="sortable-header" onclick="toggleFilter('name')">
-                                    <i class="fa-solid fa-user"></i>
-                                    Ad Soyad
-                                    <i class="fa-solid fa-filter"></i>
-                                    <div class="filter-dropdown" id="name-filter">
-                                        <input type="text" placeholder="Ad soyad ara..." onkeyup="filterByName(this.value)">
-                                        <div class="filter-options" id="name-options"></div>
-                                    </div>
-                                </th>
-                                <th class="sortable-header" onclick="toggleFilter('date')">
-                                    <i class="fa-solid fa-calendar"></i>
-                                    Tarih
-                                    <i class="fa-solid fa-filter"></i>
-                                    <div class="filter-dropdown" id="date-filter">
-                                        <input type="date" onchange="filterByDate(this.value)">
-                                    </div>
-                                </th>
-                                <th class="sortable-header" onclick="toggleFilter('time')">
-                                    <i class="fa-solid fa-clock"></i>
-                                    Saat
-                                    <i class="fa-solid fa-filter"></i>
-                                    <div class="filter-dropdown" id="time-filter">
-                                        <input type="time" onchange="filterByTime(this.value)">
-                                    </div>
-                                </th>
-                                <th class="sortable-header" onclick="toggleFilter('type')">
-                                    <i class="fa-solid fa-tag"></i>
-                                    Tür
-                                    <i class="fa-solid fa-filter"></i>
-                                    <div class="filter-dropdown" id="type-filter">
-                                        <select onchange="filterByType(this.value)">
-                                            <option value="">Tümü</option>
-                                            <option value="consultation">Konsültasyon</option>
-                                            <option value="hearing_test">İşitme Testi</option>
-                                            <option value="device_fitting">Cihaz Uygulaması</option>
-                                            <option value="follow_up">Kontrol</option>
-                                            <option value="maintenance">Bakım</option>
-                                        </select>
-                                    </div>
-                                </th>
-                                <th class="sortable-header" onclick="toggleFilter('status')">
-                                    <i class="fa-solid fa-info-circle"></i>
-                                    Durum
-                                    <i class="fa-solid fa-filter"></i>
-                                    <div class="filter-dropdown" id="status-filter">
-                                        <select onchange="filterByStatus(this.value)">
-                                            <option value="">Tümü</option>
-                                            <option value="scheduled">Planlandı</option>
-                                            <option value="completed">Tamamlandı</option>
-                                            <option value="cancelled">İptal Edildi</option>
-                                        </select>
-                                    </div>
-                                </th>
+                                <th>Hasta</th>
+                                <th>Tarih</th>
+                                <th>Saat</th>
+                                <th>Tür</th>
+                                <th>Durum</th>
                                 <th>İşlemler</th>
                             </tr>
                         </thead>
@@ -1761,21 +1200,7 @@
         async function loadAppointments() {
             try {
                 console.log('Randevular yükleniyor...');
-                
-                // Filtreleme parametrelerini oluştur
-                let url = `${API_BASE_URL}/appointments/?`;
-                
-                if (activeFilters.name) url += `search=${encodeURIComponent(activeFilters.name)}&`;
-                if (activeFilters.date) url += `date=${encodeURIComponent(activeFilters.date)}&`;
-                if (activeFilters.time) url += `time=${encodeURIComponent(activeFilters.time)}&`;
-                if (activeFilters.type) url += `type=${encodeURIComponent(activeFilters.type)}&`;
-                if (activeFilters.status) url += `status=${encodeURIComponent(activeFilters.status)}&`;
-                if (activeFilters.dateStart) url += `date_from=${encodeURIComponent(activeFilters.dateStart)}&`;
-                if (activeFilters.dateEnd) url += `date_to=${encodeURIComponent(activeFilters.dateEnd)}&`;
-                
-                console.log('Filtreleme URL:', url);
-                
-                const response = await errorHandler.apiRequest(url);
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/`);
                 console.log('Randevu API Response:', response);
                 console.log('Randevu sayısı:', response?.length || response?.results?.length || 0);
                 renderAppointments(response.results || response);
@@ -1957,40 +1382,44 @@
             }
         }
 
-        // Global filter state
-        let activeFilters = {
-            name: '',
-            date: '',
-            time: '',
-            type: '',
-            status: '',
-            dateStart: '',
-            dateEnd: ''
-        };
-
-        let currentPage = 1;
-
         // Filtreleri kur
         function setupFilters() {
-            const mainSearch = document.getElementById('mainSearch');
-            
-            // Ana arama filtresi
-            if (mainSearch) {
-                mainSearch.addEventListener('input', debounce(() => {
-                    applyFilters();
-                }, 500));
-            }
+            const searchInput = document.getElementById('search');
+            const statusSelect = document.getElementById('status');
+            const dateFromInput = document.getElementById('dateFrom');
+            const dateToInput = document.getElementById('dateTo');
+
+            // Arama filtresi
+            searchInput.addEventListener('input', debounce(() => {
+                applyFilters();
+            }, 500));
+
+            // Diğer filtreler
+            statusSelect.addEventListener('change', applyFilters);
+            dateFromInput.addEventListener('change', applyFilters);
+            dateToInput.addEventListener('change', applyFilters);
         }
 
         // Filtreleri uygula
         async function applyFilters() {
-            const mainSearch = document.getElementById('mainSearch');
-            if (mainSearch) {
-                activeFilters.name = mainSearch.value;
-            }
+            const search = document.getElementById('search').value;
+            const status = document.getElementById('status').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+
+            let url = `${API_BASE_URL}/appointments/?`;
             
-            // Filtreleri uygula
-            loadAppointments();
+            if (search) url += `search=${encodeURIComponent(search)}&`;
+            if (status) url += `status=${status}&`;
+            if (dateFrom) url += `date_from=${dateFrom}&`;
+            if (dateTo) url += `date_to=${dateTo}&`;
+
+            try {
+                const response = await errorHandler.apiRequest(url);
+                renderAppointments(response.results || response);
+            } catch (error) {
+                renderAppointments([]);
+            }
         }
 
         // Debounce fonksiyonu
@@ -2004,128 +1433,6 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
             };
-        }
-
-        // Sütun başlığı filtre fonksiyonları
-        function toggleFilter(columnName) {
-            // Close all other filters first
-            closeAllFilters();
-            
-            const filterDropdown = document.getElementById(`${columnName}-filter`);
-            if (filterDropdown) {
-                filterDropdown.style.display = 'block';
-                
-                // Load name options if opening name filter
-                if (columnName === 'name') {
-                    loadNameOptions();
-                }
-            }
-        }
-
-        function closeAllFilters() {
-            const allFilters = document.querySelectorAll('.filter-dropdown');
-            allFilters.forEach(filter => {
-                filter.style.display = 'none';
-            });
-        }
-
-        // Close filters when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.sortable-header')) {
-                closeAllFilters();
-            }
-        });
-
-        async function loadNameOptions() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/patients/`);
-                const data = await response.json();
-                const names = [...new Set(data.results.map(patient => `${patient.first_name} ${patient.last_name}`))];
-                
-                const optionsContainer = document.getElementById('name-options');
-                optionsContainer.innerHTML = '';
-                
-                names.forEach(name => {
-                    const option = document.createElement('div');
-                    option.className = 'filter-option';
-                    option.textContent = name;
-                    option.onclick = () => selectNameFilter(name);
-                    optionsContainer.appendChild(option);
-                });
-            } catch (error) {
-                console.error('İsim seçenekleri yüklenirken hata:', error);
-            }
-        }
-
-        function selectNameFilter(name) {
-            document.querySelector('#name-filter input').value = name;
-            filterByName(name);
-            closeAllFilters();
-        }
-
-        function filterByName(value) {
-            activeFilters.name = value;
-            applyColumnFilters();
-        }
-
-        function filterByDate(value) {
-            activeFilters.date = value;
-            applyColumnFilters();
-        }
-
-        function filterByTime(value) {
-            activeFilters.time = value;
-            applyColumnFilters();
-        }
-
-        function filterByType(value) {
-            activeFilters.type = value;
-            applyColumnFilters();
-        }
-
-        function filterByStatus(value) {
-            activeFilters.status = value;
-            applyColumnFilters();
-        }
-
-        function filterByDateRange() {
-            const startDate = document.getElementById('date-start').value;
-            const endDate = document.getElementById('date-end').value;
-            activeFilters.dateStart = startDate;
-            activeFilters.dateEnd = endDate;
-            applyColumnFilters();
-        }
-
-        function applyColumnFilters() {
-            currentPage = 1;
-            loadAppointments();
-        }
-
-        function clearAllFilters() {
-            // Reset all filter inputs
-            document.querySelectorAll('.filter-dropdown input, .filter-dropdown select').forEach(input => {
-                input.value = '';
-            });
-            
-            // Reset global filter state
-            activeFilters = {
-                name: '',
-                date: '',
-                time: '',
-                type: '',
-                status: '',
-                dateStart: '',
-                dateEnd: ''
-            };
-            
-            // Clear main search
-            const mainSearch = document.getElementById('mainSearch');
-            if (mainSearch) {
-                mainSearch.value = '';
-            }
-            
-            currentPage = 1;
-            loadAppointments();
         }
 
         // Randevu işlemleri
