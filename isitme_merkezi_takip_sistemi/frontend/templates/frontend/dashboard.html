@@ -1501,10 +1501,7 @@
             
             loadDashboardData();
             
-            // Welcome toast
-            setTimeout(() => {
-                showToast('success', 'Hoş Geldiniz!', 'Dashboard başarıyla yüklendi.', 3000);
-            }, 1000);
+            // Welcome toast kaldırıldı
         });
 
         // Dashboard verilerini yükle
@@ -1823,8 +1820,18 @@
         // Yaklaşan randevuları yükle
         async function loadUpcomingAppointments() {
             try {
-                const response = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/?limit=5&status=pending`);
-                renderUpcomingAppointments(response.results || response);
+                // Hem scheduled hem de pending randevuları al
+                const scheduledResponse = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/?limit=3&status=scheduled`);
+                const pendingResponse = await errorHandler.apiRequest(`${API_BASE_URL}/appointments/?limit=2&status=pending`);
+                
+                const scheduledAppointments = scheduledResponse.results || scheduledResponse || [];
+                const pendingAppointments = pendingResponse.results || pendingResponse || [];
+                
+                // İki listeyi birleştir ve tarihe göre sırala
+                const allAppointments = [...scheduledAppointments, ...pendingAppointments];
+                allAppointments.sort((a, b) => new Date(a.appointment_date) - new Date(b.appointment_date));
+                
+                renderUpcomingAppointments(allAppointments.slice(0, 5));
             } catch (error) {
                 renderUpcomingAppointments([]);
             }
@@ -1839,14 +1846,19 @@
                 return;
             }
             
-            tbody.innerHTML = appointments.map(appointment => `
+            tbody.innerHTML = appointments.map(appointment => {
+                const statusClass = appointment.status === 'pending' ? 'status-pending' : 'status-scheduled';
+                const statusText = appointment.status === 'pending' ? 'Bekliyor' : 'Planlandı';
+                
+                return `
                 <tr>
                     <td>${formatDate(appointment.appointment_date)}</td>
                     <td>${appointment.patient_name || '-'}</td>
                     <td>${appointment.appointment_time || '-'}</td>
-                    <td><span class="status-badge status-pending">Bekliyor</span></td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                 </tr>
-            `).join('');
+            `;
+            }).join('');
         }
 
         // Cihaz envanterini yükle

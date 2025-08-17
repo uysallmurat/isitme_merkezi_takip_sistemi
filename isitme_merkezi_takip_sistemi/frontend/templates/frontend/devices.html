@@ -356,6 +356,18 @@
         
         .confirmation-overlay.show .confirmation-modal {
             transform: scale(1);
+            animation: confirmationSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes confirmationSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         
         .confirmation-icon {
@@ -1084,20 +1096,42 @@
 
         .modal-content {
             background-color: var(--white);
-            margin: 5% auto;
+            margin: 2% auto;
             padding: 0;
             border: none;
             border-radius: var(--border-radius-lg);
             width: 90%;
-            max-width: 500px;
+            max-width: 800px;
+            max-height: 90vh;
             box-shadow: var(--shadow-xl);
             transform: scale(0.8);
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal.show .modal-content {
             transform: scale(1);
+            animation: modalSlideIn 0.3s ease-out;
         }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal:not(.show) .modal-content {
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }	
 
         .modal-header {
             padding: 1.5rem 2rem;
@@ -1141,6 +1175,29 @@
 
         .modal-body {
             padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+            max-height: calc(90vh - 120px);
+            scrollbar-width: thin;
+            scrollbar-color: var(--neutral-300) var(--neutral-100);
+        }
+        
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--neutral-100);
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--neutral-400);
         }
 
         .form-group {
@@ -1175,6 +1232,51 @@
             border-color: var(--primary-orange);
             box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.1);
             background: var(--white);
+        }
+
+        /* Form Section Styling */
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--neutral-50);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .section-title {
+            color: var(--neutral-800);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-orange);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--primary-orange);
+            border-radius: 2px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .required {
+            color: #f44336;
+            font-weight: 600;
         }
 
         .form-actions {
@@ -1535,7 +1637,7 @@
                 <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
             </div>
             <ul>
-                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-chart-line"></i> ANASAYFA</a></li>
+                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
                 <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
                 <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
                 <li><a href="/devices/" class="nav-link nav-item active" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
@@ -2096,12 +2198,20 @@
 
         // Cihaz işlemleri
         function openNewDeviceModal() {
-            document.getElementById('newDeviceModal').style.display = 'block';
+            const modal = document.getElementById('newDeviceModal');
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
         }
 
         function closeNewDeviceModal() {
-            document.getElementById('newDeviceModal').style.display = 'none';
-            document.getElementById('newDeviceForm').reset();
+            const modal = document.getElementById('newDeviceModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.getElementById('newDeviceForm').reset();
+            }, 300);
         }
 
         function viewDevice(id) {
@@ -2113,26 +2223,87 @@
         }
 
         async function deleteDevice(id) {
-            if (!confirm('Bu cihazı silmek istediğinize emin misiniz?')) return;
-            
-            try {
-                await errorHandler.apiRequest(`${API_BASE_URL}/devices/devices/${id}/`, {
-                    method: 'DELETE'
-                });
-                errorHandler.showSuccess('Cihaz silindi');
-                loadDevices();
-            } catch (error) {
-                // Hata zaten errorHandler tarafından gösterildi
-            }
+            showConfirmation(
+                'Cihazı Sil',
+                'Bu cihazı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
+                'danger',
+                async () => {
+                    try {
+                        await errorHandler.apiRequest(`${API_BASE_URL}/devices/devices/${id}/`, {
+                            method: 'DELETE'
+                        });
+                        errorHandler.showSuccess('Cihaz silindi');
+                        loadDevices();
+                    } catch (error) {
+                        // Hata zaten errorHandler tarafından gösterildi
+                    }
+                }
+            );
         }
 
         // Modal dışına tıklayınca kapat
         window.onclick = function(event) {
             const newDeviceModal = document.getElementById('newDeviceModal');
-            
             if (event.target === newDeviceModal) {
                 closeNewDeviceModal();
             }
+            
+            const confirmationOverlay = document.getElementById('confirmationOverlay');
+            if (event.target === confirmationOverlay) {
+                hideConfirmation();
+            }
+        }
+
+        // Confirmation modal fonksiyonları
+        function showConfirmation(title, message, iconClass, onConfirm) {
+            const overlay = document.getElementById('confirmationOverlay');
+            const icon = document.getElementById('confirmationIcon');
+            const titleEl = document.getElementById('confirmationTitle');
+            const messageEl = document.getElementById('confirmationMessage');
+            const confirmBtn = document.getElementById('confirmationConfirm');
+            const cancelBtn = document.getElementById('confirmationCancel');
+            
+            // İçeriği güncelle
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            icon.className = `confirmation-icon ${iconClass}`;
+            
+            // Event listener'ları temizle ve yeniden ekle
+            confirmBtn.onclick = null;
+            cancelBtn.onclick = null;
+            
+            confirmBtn.onclick = () => {
+                hideConfirmation();
+                if (onConfirm) onConfirm();
+            };
+            
+            cancelBtn.onclick = hideConfirmation;
+            
+            // Modal'ı göster
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.classList.add('show');
+            }, 10);
+        }
+        
+        function hideConfirmation() {
+            const overlay = document.getElementById('confirmationOverlay');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+        
+        function confirmLogout(event) {
+            event.preventDefault();
+            showConfirmation(
+                'Çıkış Yap',
+                'Çıkış yapmak istediğinize emin misiniz?',
+                'warning',
+                () => {
+                    window.location.href = '/logout/';
+                }
+            );
         }
 
         // Filtre dropdown'ları dışına tıklandığında kapat

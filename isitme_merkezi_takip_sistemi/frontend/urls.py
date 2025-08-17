@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view, dashboard_view, logout_view, patients_view, appointments_view, devices_view, test_reports_view, inventory_view, invoices_view
+from .views import login_view, dashboard_view, logout_view, patients_view, appointments_view, devices_view, test_reports_view, inventory_view, invoices_view, suppliers_view
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -10,6 +10,7 @@ urlpatterns = [
     path('devices/', devices_view, name='devices'),
     path('test-reports/', test_reports_view, name='test-reports'),
     path('inventory/', inventory_view, name='inventory'),
+    path('suppliers/', suppliers_view, name='suppliers'),
     path('invoices/', invoices_view, name='invoices'),
     path('logout/', logout_view, name='logout'),
     path('router-test/', TemplateView.as_view(template_name='frontend/router-test.html'), name='router-test'),

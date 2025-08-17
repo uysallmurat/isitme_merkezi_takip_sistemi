@@ -356,6 +356,18 @@
         
         .confirmation-overlay.show .confirmation-modal {
             transform: scale(1);
+            animation: confirmationSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes confirmationSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         
         .confirmation-icon {
@@ -1084,19 +1096,41 @@
 
         .modal-content {
             background-color: var(--white);
-            margin: 5% auto;
+            margin: 2% auto;
             padding: 0;
             border: none;
             border-radius: var(--border-radius-lg);
             width: 90%;
-            max-width: 500px;
+            max-width: 800px;
+            max-height: 90vh;
             box-shadow: var(--shadow-xl);
             transform: scale(0.8);
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal.show .modal-content {
             transform: scale(1);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        .modal:not(.show) .modal-content {
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-header {
@@ -1141,6 +1175,29 @@
 
         .modal-body {
             padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+            max-height: calc(90vh - 120px);
+            scrollbar-width: thin;
+            scrollbar-color: var(--neutral-300) var(--neutral-100);
+        }
+        
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--neutral-100);
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--neutral-400);
         }
 
         .form-group {
@@ -1175,6 +1232,51 @@
             border-color: var(--primary-orange);
             box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.1);
             background: var(--white);
+        }
+
+        /* Form Section Styling */
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--neutral-50);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .section-title {
+            color: var(--neutral-800);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-orange);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--primary-orange);
+            border-radius: 2px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .required {
+            color: #f44336;
+            font-weight: 600;
         }
 
         .form-actions {
@@ -1535,7 +1637,7 @@
                 <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
             </div>
             <ul>
-                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-chart-line"></i> ANASAYFA</a></li>
+                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
                 <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
                 <li><a href="/appointments/" class="nav-link nav-item active" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
                 <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
@@ -1751,10 +1853,7 @@
             loadPatients();
             setupFilters();
             
-            // Welcome toast
-            setTimeout(() => {
-                showToast('success', 'Hoş Geldiniz!', 'Randevu yönetimi başarıyla yüklendi.', 3000);
-            }, 1000);
+            // Welcome toast kaldırıldı
         });
 
         // Randevuları yükle
@@ -2130,7 +2229,12 @@
 
         // Randevu işlemleri
         function openNewAppointmentModal() {
-            document.getElementById('newAppointmentModal').style.display = 'block';
+            const modal = document.getElementById('newAppointmentModal');
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            
             document.getElementById('newAppointmentForm').reset();
             
             // Bugünün tarihini varsayılan olarak ayarla
@@ -2139,7 +2243,11 @@
         }
 
         function closeNewAppointmentModal() {
-            document.getElementById('newAppointmentModal').style.display = 'none';
+            const modal = document.getElementById('newAppointmentModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
 
         async function viewAppointment(id) {
@@ -2174,7 +2282,11 @@
                 statusBadge.className = `status-badge ${appointment.status.toLowerCase()}`;
                 
                 // Modal'ı göster
-                document.getElementById('viewAppointmentModal').style.display = 'block';
+                const modal = document.getElementById('viewAppointmentModal');
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 10);
                 
             } catch (error) {
                 console.error('Randevu detayları yüklenemedi:', error);
@@ -2204,19 +2316,31 @@
                 document.getElementById('editAppointmentNotes').value = appointment.notes || '';
                 
                 // Modal'ı göster
-                document.getElementById('editAppointmentModal').style.display = 'block';
+                const modal = document.getElementById('editAppointmentModal');
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 10);
                 
             } catch (error) {
                 console.error('Randevu düzenleme verisi yüklenemedi:', error);
             }
         }
         
-        function closeViewAppointmentModal() {
-            document.getElementById('viewAppointmentModal').style.display = 'none';
+                function closeViewAppointmentModal() {
+            const modal = document.getElementById('viewAppointmentModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
-        
+
         function closeEditAppointmentModal() {
-            document.getElementById('editAppointmentModal').style.display = 'none';
+            const modal = document.getElementById('editAppointmentModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
         
         async function submitEditAppointment() {
@@ -2273,17 +2397,22 @@
         }
 
         async function deleteAppointment(id) {
-            if (!confirm('Bu randevuyu silmek istediğinize emin misiniz?')) return;
-            
-            try {
-                await errorHandler.apiRequest(`${API_BASE_URL}/appointments/${id}/`, {
-                    method: 'DELETE'
-                });
-                errorHandler.showSuccess('Randevu silindi');
-                loadAppointments();
-            } catch (error) {
-                // Hata zaten errorHandler tarafından gösterildi
-            }
+            showConfirmation(
+                'Randevuyu Sil',
+                'Bu randevuyu silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
+                'danger',
+                async () => {
+                    try {
+                        await errorHandler.apiRequest(`${API_BASE_URL}/appointments/${id}/`, {
+                            method: 'DELETE'
+                        });
+                        errorHandler.showSuccess('Randevu silindi');
+                        loadAppointments();
+                    } catch (error) {
+                        // Hata zaten errorHandler tarafından gösterildi
+                    }
+                }
+            );
         }
 
         // Form submit event listener
@@ -2322,10 +2451,77 @@
 
         // Modal dışına tıklayınca kapat
         window.onclick = function(event) {
-            const modal = document.getElementById('newAppointmentModal');
-            if (event.target === modal) {
+            const newAppointmentModal = document.getElementById('newAppointmentModal');
+            if (event.target === newAppointmentModal) {
                 closeNewAppointmentModal();
             }
+            
+            const viewAppointmentModal = document.getElementById('viewAppointmentModal');
+            if (event.target === viewAppointmentModal) {
+                closeViewAppointmentModal();
+            }
+            
+            const editAppointmentModal = document.getElementById('editAppointmentModal');
+            if (event.target === editAppointmentModal) {
+                closeEditAppointmentModal();
+            }
+            
+            const confirmationOverlay = document.getElementById('confirmationOverlay');
+            if (event.target === confirmationOverlay) {
+                hideConfirmation();
+            }
+        }
+
+        // Confirmation modal fonksiyonları
+        function showConfirmation(title, message, iconClass, onConfirm) {
+            const overlay = document.getElementById('confirmationOverlay');
+            const icon = document.getElementById('confirmationIcon');
+            const titleEl = document.getElementById('confirmationTitle');
+            const messageEl = document.getElementById('confirmationMessage');
+            const confirmBtn = document.getElementById('confirmationConfirm');
+            const cancelBtn = document.getElementById('confirmationCancel');
+            
+            // İçeriği güncelle
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            icon.className = `confirmation-icon ${iconClass}`;
+            
+            // Event listener'ları temizle ve yeniden ekle
+            confirmBtn.onclick = null;
+            cancelBtn.onclick = null;
+            
+            confirmBtn.onclick = () => {
+                hideConfirmation();
+                if (onConfirm) onConfirm();
+            };
+            
+            cancelBtn.onclick = hideConfirmation;
+            
+            // Modal'ı göster
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.classList.add('show');
+            }, 10);
+        }
+        
+        function hideConfirmation() {
+            const overlay = document.getElementById('confirmationOverlay');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+        
+        function confirmLogout(event) {
+            event.preventDefault();
+            showConfirmation(
+                'Çıkış Yap',
+                'Çıkış yapmak istediğinize emin misiniz?',
+                'warning',
+                () => {
+                    window.location.href = '/logout/';
+                }
+            );
         }
         
         // Toast Notification System
@@ -2515,90 +2711,7 @@
     </div>
 
     <style>
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s ease-out;
-            backdrop-filter: blur(4px);
-        }
-        
-        .modal-content {
-            background: var(--white);
-            margin: 3% auto;
-            padding: 0;
-            border-radius: var(--border-radius-lg);
-            width: 90%;
-            max-width: 700px;
-            box-shadow: var(--shadow-xl);
-            animation: slideIn 0.3s ease-out;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--neutral-200);
-        }
-        
-        .modal-header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--neutral-200);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-orange) 100%);
-            color: white;
-            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .modal-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-        }
-        
-        .modal-header h2 {
-            margin: 0;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .modal-header .close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: var(--border-radius-sm);
-            transition: var(--transition);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .modal-header .close:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.1);
-        }
-        
-        .modal-body {
-            padding: 2rem;
-            background: var(--white);
-        }
-        
+        /* Detail Grid Styles */
         .detail-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -2631,56 +2744,13 @@
             box-shadow: var(--shadow-sm);
         }
         
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-            color: var(--neutral-700);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 0.9rem;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid var(--neutral-200);
-            border-radius: var(--border-radius-sm);
-            font-size: 1rem;
-            transition: var(--transition);
-            background: var(--white);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.1);
-            transform: translateY(-1px);
-        }
-        
         .modal-footer {
             padding: 1.5rem 2rem;
             border-top: 1px solid var(--neutral-200);
             display: flex;
-            justify-content: flex-end;
             gap: 1rem;
-            background: linear-gradient(135deg, var(--neutral-50) 0%, var(--neutral-100) 100%);
+            justify-content: flex-end;
+            background: var(--neutral-50);
             border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
         }
         

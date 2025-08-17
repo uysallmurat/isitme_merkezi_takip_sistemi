@@ -447,3 +447,258 @@ Sistem testleri için çeşitli durumları kapsayan test verileri oluşturuldu:
 - 📋 **Fatura modülündeki tüm butonları çalışır hale getir** - Daha sonra baştan yazılacak
 
 ---
+
+# Toast/Notification Sistemi Teknik Dokümantasyonu
+
+## 1. Sistem Genel Bakış
+
+Proje genelinde kullanılan modern ve kullanıcı dostu toast/notification sistemi, kullanıcılara işlem sonuçları hakkında anlık geri bildirim sağlar. Sistem, error-handler.js dosyasında merkezi olarak yönetilir ve tüm sayfalarda tutarlı şekilde kullanılır.
+
+## 2. Teknik Mimari
+
+### 2.1 Core Components
+- **error-handler.js**: Merkezi toast yönetimi ve API iletişimi
+- **CSS Stilleri**: Her sayfada tanımlı toast container stilleri
+- **HTML Container**: `toast-container` div'i ile toast'ların render edilmesi
+
+### 2.2 Toast Container Yapısı
+```html
+<!-- Her sayfada bulunan toast container -->
+<div class="toast-container" id="toastContainer"></div>
+```
+
+### 2.3 CSS Stilleri
+```css
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    min-width: 300px;
+}
+
+.toast {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease-out;
+}
+
+.toast.success { border-color: #28a745; }
+.toast.error { border-color: #dc3545; }
+.toast.warning { border-color: #ffc107; }
+.toast.info { border-color: #17a2b8; }
+```
+
+## 3. Toast Türleri ve Kullanım Alanları
+
+### 3.1 Success Toast (Başarı)
+- **Renk**: Yeşil (#28a745)
+- **İkon**: `fa-check-circle`
+- **Kullanım**: Başarılı işlemler, kayıt işlemleri, güncellemeler
+- **Örnek Kullanımlar**:
+  - Hasta başarıyla kaydedildi
+  - Randevu oluşturuldu
+  - Cihaz stoktan çıkarıldı
+  - Fatura oluşturuldu
+
+### 3.2 Error Toast (Hata)
+- **Renk**: Kırmızı (#dc3545)
+- **İkon**: `fa-exclamation-circle`
+- **Kullanım**: Hatalar, başarısız işlemler, validasyon hataları
+- **Örnek Kullanımlar**:
+  - Bağlantı hatası
+  - Form validasyon hataları
+  - API hataları
+  - Silme işlemi başarısız
+
+### 3.3 Warning Toast (Uyarı)
+- **Renk**: Sarı (#ffc107)
+- **İkon**: `fa-exclamation-triangle`
+- **Kullanım**: Uyarılar, dikkat gerektiren durumlar
+- **Örnek Kullanımlar**:
+  - Eksik bilgi uyarısı
+  - Düşük stok uyarısı
+  - Vadesi geçen fatura uyarısı
+
+### 3.4 Info Toast (Bilgi)
+- **Renk**: Mavi (#17a2b8)
+- **İkon**: `fa-info-circle`
+- **Kullanım**: Bilgilendirme mesajları, sistem durumu
+- **Örnek Kullanımlar**:
+  - Sistem güncellemeleri
+  - Bilgilendirme mesajları
+
+## 4. JavaScript API ve Kullanım
+
+### 4.1 Temel Toast Fonksiyonu
+```javascript
+// errorHandler.js'de tanımlı
+function showToast(type, title, message, duration = 5000) {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <div class="toast-header">
+            <i class="fas fa-${getIcon(type)}"></i>
+            <strong>${title}</strong>
+            <button onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+        <div class="toast-body">${message}</div>
+    `;
+    
+    document.getElementById('toastContainer').appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.remove();
+        }
+    }, duration);
+}
+```
+
+### 4.2 ErrorHandler Entegrasyonu
+```javascript
+// Başarı mesajı
+errorHandler.showSuccess('Başarılı!', 'İşlem başarıyla tamamlandı.');
+
+// Hata mesajı
+errorHandler.showError('Hata!', 'Bir hata oluştu.');
+
+// Uyarı mesajı
+errorHandler.showWarning('Dikkat!', 'Lütfen tüm alanları doldurun.');
+
+// Bilgi mesajı
+errorHandler.showInfo('Bilgi', 'Sistem güncellendi.');
+```
+
+### 4.3 Direkt Toast Kullanımı
+```javascript
+// Doğrudan showToast fonksiyonu
+showToast('success', 'Başarılı!', 'Hasta kaydedildi.', 3000);
+showToast('error', 'Hata!', 'Bağlantı hatası.', 5000);
+```
+
+## 5. Sayfa Bazlı Toast Kullanımları
+
+### 5.1 Dashboard
+- **Kullanım**: Sayfa yükleme bildirimleri (kaldırıldı)
+- **Toast Türü**: Success, Error
+- **Durum**: Welcome toast kaldırıldı
+
+### 5.2 Hastalar (Patients)
+- **Kullanım**: CRUD işlemleri, form validasyonları
+- **Toast Türü**: Success, Error, Warning
+- **Örnekler**:
+  - Hasta başarıyla kaydedildi
+  - Form validasyon hataları
+  - Silme işlemi onayı
+
+### 5.3 Randevular (Appointments)
+- **Kullanım**: Randevu oluşturma, güncelleme, silme
+- **Toast Türü**: Success, Error, Warning
+- **Örnekler**:
+  - Randevu oluşturuldu
+  - Çakışma uyarısı
+  - Tarih validasyon hatası
+
+### 5.4 Cihazlar (Devices)
+- **Kullanım**: Cihaz kayıt, stok işlemleri
+- **Toast Türü**: Success, Error, Warning
+- **Örnekler**:
+  - Cihaz kaydedildi
+  - Stok yetersiz uyarısı
+  - Seri numara çakışması
+
+### 5.5 Test Raporları (Test Reports)
+- **Kullanım**: Test kayıt, rapor oluşturma
+- **Toast Türü**: Success, Error, Warning
+- **Örnekler**:
+  - Test raporu oluşturuldu
+  - PDF oluşturma hatası
+  - Veri eksikliği uyarısı
+
+### 5.6 Stok Yönetimi (Inventory)
+- **Kullanım**: Stok giriş/çıkış, ürün yönetimi
+- **Toast Türü**: Success, Error, Warning
+- **Örnekler**:
+  - Stok güncellendi
+  - Düşük stok uyarısı
+  - Ürün bulunamadı hatası
+
+### 5.7 Fatura Yönetimi (Invoices)
+- **Kullanım**: Fatura oluşturma, ödeme takibi
+- **Toast Türü**: Success, Error, Warning
+- **Örnekler**:
+  - Fatura oluşturuldu
+  - Ödeme hatırlatması
+  - Vadesi geçen fatura uyarısı
+
+## 6. Animasyon ve UX Özellikleri
+
+### 6.1 Giriş Animasyonu
+```css
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+```
+
+### 6.2 Otomatik Kapanma
+- **Varsayılan Süre**: 5 saniye
+- **Özelleştirilebilir**: Her toast için ayrı süre
+- **Manuel Kapatma**: × butonu ile anında kapatma
+
+### 6.3 Responsive Tasarım
+- **Mobile**: Minimum 300px genişlik
+- **Desktop**: Maksimum 400px genişlik
+- **Z-index**: 1000 (diğer elementlerin üstünde)
+
+## 7. Güvenlik ve Performans
+
+### 7.1 XSS Koruması
+- **Input Sanitization**: HTML injection koruması
+- **Safe Rendering**: Güvenli DOM manipülasyonu
+
+### 7.2 Performans Optimizasyonu
+- **Memory Management**: Otomatik toast temizleme
+- **DOM Manipulation**: Minimal DOM değişikliği
+- **Event Handling**: Efficient event listener yönetimi
+
+## 8. Test ve Kalite Güvencesi
+
+### 8.1 Test Coverage
+- **Unit Tests**: Toast fonksiyonları için testler
+- **Integration Tests**: ErrorHandler entegrasyonu
+- **UI Tests**: Toast görünüm ve animasyon testleri
+
+### 8.2 Browser Uyumluluğu
+- **Modern Browsers**: Chrome, Firefox, Safari, Edge
+- **CSS Support**: Backdrop-filter, CSS animations
+- **JavaScript**: ES6+ features
+
+## 9. Gelecek Geliştirmeler
+
+### 9.1 Planlanan Özellikler
+- **Toast Queue**: Çoklu toast yönetimi
+- **Custom Themes**: Kullanıcı tanımlı renk şemaları
+- **Sound Notifications**: Ses bildirimleri
+- **Push Notifications**: Browser push API entegrasyonu
+
+### 9.2 Teknik İyileştirmeler
+- **WebSocket Integration**: Real-time notifications
+- **Service Worker**: Offline notification support
+- **Accessibility**: Screen reader uyumluluğu
+
+## 10. Sonuç
+
+Toast sistemi, proje genelinde tutarlı ve kullanıcı dostu bir deneyim sağlar. Modern tasarım prensipleri, responsive yapı ve kapsamlı hata yönetimi ile kullanıcıların işlem sonuçlarını anında görmelerini sağlar. Sistem, gelecekteki geliştirmeler için esnek bir mimari sunar ve tüm modern web standartlarına uyumludur.

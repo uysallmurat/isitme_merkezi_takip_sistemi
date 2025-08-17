@@ -1082,21 +1082,43 @@
             backdrop-filter: blur(4px);
         }
 
-        .modal-content {
+                         .modal-content {
             background-color: var(--white);
-            margin: 5% auto;
+            margin: 2% auto;
             padding: 0;
             border: none;
             border-radius: var(--border-radius-lg);
             width: 90%;
-            max-width: 500px;
+            max-width: 800px;
+            max-height: 90vh;
             box-shadow: var(--shadow-xl);
             transform: scale(0.8);
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal.show .modal-content {
             transform: scale(1);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        .modal:not(.show) .modal-content {
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-header {
@@ -1141,48 +1163,116 @@
 
         .modal-body {
             padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+            max-height: calc(90vh - 120px);
+            scrollbar-width: thin;
+            scrollbar-color: var(--neutral-300) var(--neutral-100);
+        }
+        
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--neutral-100);
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--neutral-400);
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--neutral-700);
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.875rem;
-            border: 2px solid var(--neutral-200);
-            border-radius: var(--border-radius-sm);
-            font-size: 0.95rem;
-            box-sizing: border-box;
-            transition: var(--transition);
-            background: var(--neutral-50);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.1);
-            background: var(--white);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-        }
+                 .form-group {
+             margin-bottom: 1.5rem;
+         }
+ 
+         .form-group label {
+             display: block;
+             margin-bottom: 0.5rem;
+             color: var(--neutral-700);
+             font-weight: 500;
+             font-size: 0.9rem;
+         }
+ 
+         .form-group input,
+         .form-group textarea,
+         .form-group select {
+             width: 100%;
+             padding: 0.875rem;
+             border: 2px solid var(--neutral-200);
+             border-radius: var(--border-radius-sm);
+             font-size: 0.95rem;
+             box-sizing: border-box;
+             transition: var(--transition);
+             background: var(--neutral-50);
+         }
+ 
+         .form-group input:focus,
+         .form-group textarea:focus,
+         .form-group select:focus {
+             outline: none;
+             border-color: var(--primary-orange);
+             box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.1);
+             background: var(--white);
+         }
+ 
+         /* Form Section Styling */
+         .form-section {
+             margin-bottom: 2rem;
+             padding: 1.5rem;
+             background: var(--neutral-50);
+             border-radius: var(--border-radius-sm);
+             border: 1px solid var(--neutral-200);
+         }
+ 
+         .section-title {
+             color: var(--neutral-800);
+             font-size: 1.1rem;
+             font-weight: 600;
+             margin: 0 0 1.5rem 0;
+             padding-bottom: 0.5rem;
+             border-bottom: 2px solid var(--primary-orange);
+             display: flex;
+             align-items: center;
+             gap: 0.5rem;
+         }
+ 
+         .section-title::before {
+             content: '';
+             width: 4px;
+             height: 20px;
+             background: var(--primary-orange);
+             border-radius: 2px;
+         }
+ 
+         .form-row {
+             display: grid;
+             grid-template-columns: 1fr 1fr;
+             gap: 1rem;
+             margin-bottom: 1rem;
+         }
+ 
+         .form-row .form-group {
+             margin-bottom: 1rem;
+         }
+ 
+         .required {
+             color: #f44336;
+             font-weight: 600;
+         }
+ 
+         .form-actions {
+             display: flex;
+             gap: 1rem;
+             justify-content: flex-end;
+             margin-top: 2rem;
+         }
 
         /* Pagination Styles */
         .pagination-container {
@@ -1348,12 +1438,34 @@
             }
         }
         
-        @media (max-width: 768px) {
-            .topbar {
-                padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
-            }
+                 @media (max-width: 768px) {
+             .topbar {
+                 padding: 1rem;
+                 flex-direction: column;
+                 gap: 1rem;
+             }
+             
+             .form-row {
+                 grid-template-columns: 1fr;
+             }
+             
+             .modal-content {
+                 max-width: 95%;
+                 margin: 1% auto;
+                 max-height: 95vh;
+             }
+             
+             .modal-body {
+                 max-height: calc(95vh - 100px);
+                 padding: 1rem;
+                 scrollbar-width: thin;
+                 scrollbar-color: var(--neutral-300) var(--neutral-100);
+             }
+             
+             .form-section {
+                 padding: 0.75rem;
+                 margin-bottom: 1rem;
+             }
             
             .topbar nav {
                 display: flex;
@@ -1535,7 +1647,7 @@
                 <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
             </div>
             <ul>
-                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-chart-line"></i> ANASAYFA</a></li>
+                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
                 <li><a href="/patients/" class="nav-link nav-item active" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
                 <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
                 <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
@@ -1615,6 +1727,14 @@
                     <table>
                         <thead>
                             <tr>
+                                <th class="sortable-header" onclick="toggleFilter('tcNumber')">
+                                    <i class="fa-solid fa-id-card"></i>
+                                    TC Kimlik No 
+                                    <i class="fa-solid fa-filter"></i>
+                                    <div class="filter-dropdown" id="tcNumber-filter">
+                                        <input type="text" placeholder="TC no ara..." onkeyup="filterByTcNumber(this.value)">
+                                    </div>
+                                </th>
                                 <th class="sortable-header" onclick="toggleFilter('name')">
                                     <i class="fa-solid fa-user"></i>
                                     Ad Soyad 
@@ -1682,7 +1802,7 @@
                         </thead>
                         <tbody id="patientsTable">
                             <tr>
-                                <td colspan="7" style="text-align: center; padding: 2rem;">
+                                <td colspan="8" style="text-align: center; padding: 2rem;">
                                     <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
                                 </td>
                             </tr>
@@ -1709,48 +1829,177 @@
                 <span class="close" onclick="closeNewPatientModal()">&times;</span>
             </div>
             <div class="modal-body">
-                <form id="newPatientForm">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="firstName">Ad *</label>
-                        <input type="text" id="firstName" name="first_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Soyad *</label>
-                        <input type="text" id="lastName" name="last_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="birthDate">Doğum Tarihi *</label>
-                        <input type="date" id="birthDate" name="birth_date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="gender">Cinsiyet *</label>
-                        <select id="gender" name="gender" required>
-                            <option value="">Seçin...</option>
-                            <option value="M">Erkek</option>
-                            <option value="F">Kadın</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Telefon *</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">E-posta</label>
-                        <input type="email" id="email" name="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Adres</label>
-                        <textarea id="address" name="address" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Durum *</label>
-                        <select id="status" name="status" required>
-                            <option value="">Seçin...</option>
-                            <option value="active" selected>Aktif</option>
-                            <option value="inactive">Pasif</option>
-                        </select>
-                    </div>
+                                 <form id="newPatientForm">
+                     {% csrf_token %}
+                     
+                     <!-- Temel Bilgiler -->
+                     <div class="form-section">
+                         <h3 class="section-title">Temel Bilgiler</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="tcNumber">TC Kimlik No <span class="required">*</span></label>
+                                 <input type="text" id="tcNumber" name="tc_number" maxlength="11" required>
+                             </div>
+                             <div class="form-group">
+                                 <label for="firstName">Ad <span class="required">*</span></label>
+                                 <input type="text" id="firstName" name="first_name" required>
+                             </div>
+                         </div>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="lastName">Soyad <span class="required">*</span></label>
+                                 <input type="text" id="lastName" name="last_name" required>
+                             </div>
+                             <div class="form-group">
+                                 <label for="birthDate">Doğum Tarihi <span class="required">*</span></label>
+                                 <input type="date" id="birthDate" name="birth_date" required>
+                             </div>
+                         </div>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="gender">Cinsiyet <span class="required">*</span></label>
+                                 <select id="gender" name="gender" required>
+                                     <option value="">Seçin...</option>
+                                     <option value="M">Erkek</option>
+                                     <option value="F">Kadın</option>
+                                 </select>
+                             </div>
+                             <div class="form-group">
+                                 <label for="occupation">Meslek</label>
+                                 <input type="text" id="occupation" name="occupation">
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <!-- İletişim Bilgileri -->
+                     <div class="form-section">
+                         <h3 class="section-title">İletişim Bilgileri</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="phone">Telefon <span class="required">*</span></label>
+                                 <input type="tel" id="phone" name="phone" required>
+                             </div>
+                             <div class="form-group">
+                                 <label for="email">E-posta</label>
+                                 <input type="email" id="email" name="email">
+                             </div>
+                         </div>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="city">Şehir</label>
+                                 <input type="text" id="city" name="city">
+                             </div>
+                             <div class="form-group">
+                                 <label for="district">İlçe</label>
+                                 <input type="text" id="district" name="district">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label for="address">Adres</label>
+                             <textarea id="address" name="address" rows="3"></textarea>
+                         </div>
+                     </div>
+                     
+                     <!-- Tıbbi Bilgiler -->
+                     <div class="form-section">
+                         <h3 class="section-title">Tıbbi Bilgiler</h3>
+                         <div class="form-group">
+                             <label for="medicalHistory">Tıbbi Geçmiş</label>
+                             <textarea id="medicalHistory" name="medical_history" rows="3"></textarea>
+                         </div>
+                         <div class="form-group">
+                             <label for="allergies">Alerjiler</label>
+                             <textarea id="allergies" name="allergies" rows="2"></textarea>
+                         </div>
+                         <div class="form-group">
+                             <label for="currentMedications">Mevcut İlaçlar</label>
+                             <textarea id="currentMedications" name="current_medications" rows="2"></textarea>
+                         </div>
+                     </div>
+                     
+                     <!-- Acil Durum Bilgileri -->
+                     <div class="form-section">
+                         <h3 class="section-title">Acil Durum Bilgileri</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="emergencyContact">Acil Durum İletişim Kişisi</label>
+                                 <input type="text" id="emergencyContact" name="emergency_contact">
+                             </div>
+                             <div class="form-group">
+                                 <label for="emergencyPhone">Acil Durum Telefonu</label>
+                                 <input type="tel" id="emergencyPhone" name="emergency_phone">
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <!-- İşitme Cihazı Bilgileri -->
+                     <div class="form-section">
+                         <h3 class="section-title">İşitme Cihazı Bilgileri</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="hearingAidType">İşitme Cihazı Türü</label>
+                                 <select id="hearingAidType" name="hearing_aid_type">
+                                     <option value="">Seçin...</option>
+                                     <option value="BTE">BTE (Kulak Arkası)</option>
+                                     <option value="ITE">ITE (Kulak İçi)</option>
+                                     <option value="ITC">ITC (Kulak Kanalı)</option>
+                                     <option value="CIC">CIC (Tam Gizli)</option>
+                                     <option value="RIC">RIC (Kulak Arkası Açık)</option>
+                                     <option value="None">Kullanmıyor</option>
+                                 </select>
+                             </div>
+                             <div class="form-group">
+                                 <label for="hearingAidBrand">Marka</label>
+                                 <input type="text" id="hearingAidBrand" name="hearing_aid_brand">
+                             </div>
+                         </div>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="hearingAidModel">Model</label>
+                                 <input type="text" id="hearingAidModel" name="hearing_aid_model">
+                             </div>
+                             <div class="form-group">
+                                 <label for="hearingAidSerial">Seri No</label>
+                                 <input type="text" id="hearingAidSerial" name="hearing_aid_serial">
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <!-- Sosyal Bilgiler -->
+                     <div class="form-section">
+                         <h3 class="section-title">Sosyal Bilgiler</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="insuranceProvider">Sigorta Sağlayıcısı</label>
+                                 <input type="text" id="insuranceProvider" name="insurance_provider">
+                             </div>
+                             <div class="form-group">
+                                 <label for="insuranceNumber">Sigorta Numarası</label>
+                                 <input type="text" id="insuranceNumber" name="insurance_number">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label for="referringDoctor">Sevk Eden Doktor</label>
+                             <input type="text" id="referringDoctor" name="referring_doctor">
+                         </div>
+                     </div>
+                     
+                     <!-- Genel Bilgiler -->
+                     <div class="form-section">
+                         <h3 class="section-title">Genel Bilgiler</h3>
+                         <div class="form-group">
+                             <label for="notes">Notlar</label>
+                             <textarea id="notes" name="notes" rows="3"></textarea>
+                         </div>
+                         <div class="form-group">
+                             <label for="status">Durum <span class="required">*</span></label>
+                             <select id="status" name="status" required>
+                                 <option value="">Seçin...</option>
+                                 <option value="active" selected>Aktif</option>
+                                 <option value="inactive">Pasif</option>
+                             </select>
+                         </div>
+                     </div>
                     <div class="form-actions">
                         <button type="button" onclick="closeNewPatientModal()" class="btn-secondary">
                             <i class="fa-solid fa-times"></i>
@@ -1778,53 +2027,174 @@
                     {% csrf_token %}
                     <input type="hidden" id="editPatientId" name="patient_id">
                     
-                    <div class="form-group">
-                        <label for="editFirstName">Ad *</label>
-                        <input type="text" id="editFirstName" name="first_name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editLastName">Soyad *</label>
-                        <input type="text" id="editLastName" name="last_name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editBirthDate">Doğum Tarihi *</label>
-                        <input type="date" id="editBirthDate" name="birth_date" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editGender">Cinsiyet *</label>
-                        <select id="editGender" name="gender" required>
-                            <option value="">Seçin...</option>
-                            <option value="Male">Erkek</option>
-                            <option value="Female">Kadın</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editPhone">Telefon *</label>
-                        <input type="tel" id="editPhone" name="phone" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editEmail">E-posta</label>
-                        <input type="email" id="editEmail" name="email">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editAddress">Adres</label>
-                        <textarea id="editAddress" name="address" rows="3"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editStatus">Durum *</label>
-                        <select id="editStatus" name="status" required>
-                            <option value="">Seçin...</option>
-                            <option value="active">Aktif</option>
-                            <option value="inactive">Pasif</option>
-                        </select>
-                    </div>
+                     <!-- Temel Bilgiler -->
+                     <div class="form-section">
+                         <h3 class="section-title">Temel Bilgiler</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editTcNumber">TC Kimlik No <span class="required">*</span></label>
+                                 <input type="text" id="editTcNumber" name="tc_number" maxlength="11" required>
+                             </div>
+                             <div class="form-group">
+                                 <label for="editFirstName">Ad <span class="required">*</span></label>
+                                 <input type="text" id="editFirstName" name="first_name" required>
+                             </div>
+                         </div>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editLastName">Soyad <span class="required">*</span></label>
+                                 <input type="text" id="editLastName" name="last_name" required>
+                             </div>
+                             <div class="form-group">
+                                 <label for="editBirthDate">Doğum Tarihi <span class="required">*</span></label>
+                                 <input type="date" id="editBirthDate" name="birth_date" required>
+                             </div>
+                         </div>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editGender">Cinsiyet <span class="required">*</span></label>
+                                 <select id="editGender" name="gender" required>
+                                     <option value="">Seçin...</option>
+                                     <option value="M">Erkek</option>
+                                     <option value="F">Kadın</option>
+                                 </select>
+                             </div>
+                             <div class="form-group">
+                                 <label for="editOccupation">Meslek</label>
+                                 <input type="text" id="editOccupation" name="occupation">
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <!-- İletişim Bilgileri -->
+                     <div class="form-section">
+                         <h3 class="section-title">İletişim Bilgileri</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editPhone">Telefon <span class="required">*</span></label>
+                                 <input type="tel" id="editPhone" name="phone" required>
+                             </div>
+                             <div class="form-group">
+                                 <label for="editEmail">E-posta</label>
+                                 <input type="email" id="editEmail" name="email">
+                             </div>
+                         </div>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editCity">Şehir</label>
+                                 <input type="text" id="editCity" name="city">
+                             </div>
+                             <div class="form-group">
+                                 <label for="editDistrict">İlçe</label>
+                                 <input type="text" id="editDistrict" name="district">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label for="editAddress">Adres</label>
+                             <textarea id="editAddress" name="address" rows="3"></textarea>
+                         </div>
+                     </div>
+                     
+                     <!-- Tıbbi Bilgiler -->
+                     <div class="form-section">
+                         <h3 class="section-title">Tıbbi Bilgiler</h3>
+                         <div class="form-group">
+                             <label for="editMedicalHistory">Tıbbi Geçmiş</label>
+                             <textarea id="editMedicalHistory" name="medical_history" rows="3"></textarea>
+                         </div>
+                         <div class="form-group">
+                             <label for="editAllergies">Alerjiler</label>
+                             <textarea id="editAllergies" name="allergies" rows="2"></textarea>
+                         </div>
+                         <div class="form-group">
+                             <label for="editCurrentMedications">Mevcut İlaçlar</label>
+                             <textarea id="editCurrentMedications" name="current_medications" rows="2"></textarea>
+                         </div>
+                     </div>
+                     
+                     <!-- Acil Durum Bilgileri -->
+                     <div class="form-section">
+                         <h3 class="section-title">Acil Durum Bilgileri</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editEmergencyContact">Acil Durum İletişim Kişisi</label>
+                                 <input type="text" id="editEmergencyContact" name="emergency_contact">
+                             </div>
+                             <div class="form-group">
+                                 <label for="editEmergencyPhone">Acil Durum Telefonu</label>
+                                 <input type="tel" id="editEmergencyPhone" name="emergency_phone">
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <!-- İşitme Cihazı Bilgileri -->
+                     <div class="form-section">
+                         <h3 class="section-title">İşitme Cihazı Bilgileri</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editHearingAidType">İşitme Cihazı Türü</label>
+                                 <select id="editHearingAidType" name="hearing_aid_type">
+                                     <option value="">Seçin...</option>
+                                     <option value="BTE">BTE (Kulak Arkası)</option>
+                                     <option value="ITE">ITE (Kulak İçi)</option>
+                                     <option value="ITC">ITC (Kulak Kanalı)</option>
+                                     <option value="CIC">CIC (Tam Gizli)</option>
+                                     <option value="RIC">RIC (Kulak Arkası Açık)</option>
+                                     <option value="None">Kullanmıyor</option>
+                                 </select>
+                             </div>
+                             <div class="form-group">
+                                 <label for="editHearingAidBrand">Marka</label>
+                                 <input type="text" id="editHearingAidBrand" name="hearing_aid_brand">
+                             </div>
+                         </div>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editHearingAidModel">Model</label>
+                                 <input type="text" id="editHearingAidModel" name="hearing_aid_model">
+                             </div>
+                             <div class="form-group">
+                                 <label for="editHearingAidSerial">Seri No</label>
+                                 <input type="text" id="editHearingAidSerial" name="hearing_aid_serial">
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <!-- Sosyal Bilgiler -->
+                     <div class="form-section">
+                         <h3 class="section-title">Sosyal Bilgiler</h3>
+                         <div class="form-row">
+                             <div class="form-group">
+                                 <label for="editInsuranceProvider">Sigorta Sağlayıcısı</label>
+                                 <input type="text" id="editInsuranceProvider" name="insurance_provider">
+                             </div>
+                             <div class="form-group">
+                                 <label for="editInsuranceNumber">Sigorta Numarası</label>
+                                 <input type="text" id="editInsuranceNumber" name="insurance_number">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label for="editReferringDoctor">Sevk Eden Doktor</label>
+                             <input type="text" id="editReferringDoctor" name="referring_doctor">
+                         </div>
+                     </div>
+                     
+                     <!-- Genel Bilgiler -->
+                     <div class="form-section">
+                         <h3 class="section-title">Genel Bilgiler</h3>
+                         <div class="form-group">
+                             <label for="editNotes">Notlar</label>
+                             <textarea id="editNotes" name="notes" rows="3"></textarea>
+                         </div>
+                         <div class="form-group">
+                             <label for="editStatus">Durum <span class="required">*</span></label>
+                             <select id="editStatus" name="status" required>
+                                 <option value="">Seçin...</option>
+                                 <option value="active">Aktif</option>
+                                 <option value="inactive">Pasif</option>
+                             </select>
+                         </div>
+                     </div>
                     
                     <div class="form-actions">
                         <button type="button" onclick="closeEditPatientModal()" class="btn-secondary">İptal</button>
@@ -1845,6 +2215,7 @@
 
         // Global filter state
         let activeFilters = {
+            tcNumber: '',
             name: '',
             phone: '',
             email: '',
@@ -1883,7 +2254,7 @@
 
                  async function fetchPatients() {
              const tbody = document.getElementById('patientsTable');
-                              tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;"><i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...</td></tr>';
+                              tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem;"><i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...</td></tr>';
              
              // Ana arama değerini al
              const mainSearch = document.getElementById('mainSearch');
@@ -1895,6 +2266,9 @@
              }
 
                          // Apply column filters
+            if (activeFilters.tcNumber) {
+                url += `&tc_number=${encodeURIComponent(activeFilters.tcNumber)}`;
+            }
             if (activeFilters.name) {
                 url += `&name=${encodeURIComponent(activeFilters.name)}`;
             }
@@ -1938,7 +2312,7 @@
                 renderPagination(data.count, data.page_size || 10);
                          } catch (error) {
                 console.error('Hasta yükleme hatası:', error);
-                 tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Veri alınamadı.</td></tr>';
+                 tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem;">Veri alınamadı.</td></tr>';
              }
         }
 
@@ -2032,7 +2406,7 @@
                  function renderPatients(patients) {
              const tbody = document.getElementById('patientsTable');
              if (!patients || patients.length === 0) {
-                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Kayıt bulunamadı.</td></tr>';
+                 tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem;">Kayıt bulunamadı.</td></tr>';
                  return;
              }
             tbody.innerHTML = '';
@@ -2041,11 +2415,12 @@
                 const statusLabel = patient.status === 'active' ? 'Aktif' : 'Pasif';
                 tbody.innerHTML += `
                     <tr>
+                        <td>${patient.tc_number || '-'}</td>
                         <td>${patient.first_name} ${patient.last_name}</td>
                         <td>${patient.birth_date || '-'}</td>
                         <td>${patient.phone || '-'}</td>
                         <td>${patient.email || '-'}</td>
-                        <td>${patient.last_appointment || '-'}</td>
+                        <td>${patient.last_appointment_date || '-'}</td>
                         <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
                         <td>
                             <div class="action-buttons">
@@ -2086,19 +2461,55 @@
                 const patient = await errorHandler.apiRequest(`${API_BASE_URL}/patients/${id}/`);
                 console.log('Hasta verileri:', patient);
                 
-                // Form alanlarını doldur
-                document.getElementById('editPatientId').value = patient.id;
-                document.getElementById('editFirstName').value = patient.first_name || '';
-                document.getElementById('editLastName').value = patient.last_name || '';
-                document.getElementById('editBirthDate').value = patient.birth_date || '';
-                document.getElementById('editGender').value = patient.gender || '';
-                document.getElementById('editPhone').value = patient.phone || '';
-                document.getElementById('editEmail').value = patient.email || '';
-                document.getElementById('editAddress').value = patient.address || '';
-                document.getElementById('editStatus').value = patient.status || 'active';
+                                 // Form alanlarını doldur
+                 document.getElementById('editPatientId').value = patient.id;
+                 
+                 // Temel Bilgiler
+                 document.getElementById('editTcNumber').value = patient.tc_number || '';
+                 document.getElementById('editFirstName').value = patient.first_name || '';
+                 document.getElementById('editLastName').value = patient.last_name || '';
+                 document.getElementById('editBirthDate').value = patient.birth_date || '';
+                 document.getElementById('editGender').value = patient.gender || '';
+                 document.getElementById('editOccupation').value = patient.occupation || '';
+                 
+                 // İletişim Bilgileri
+                 document.getElementById('editPhone').value = patient.phone || '';
+                 document.getElementById('editEmail').value = patient.email || '';
+                 document.getElementById('editCity').value = patient.city || '';
+                 document.getElementById('editDistrict').value = patient.district || '';
+                 document.getElementById('editAddress').value = patient.address || '';
+                 
+                 // Tıbbi Bilgiler
+                 document.getElementById('editMedicalHistory').value = patient.medical_history || '';
+                 document.getElementById('editAllergies').value = patient.allergies || '';
+                 document.getElementById('editCurrentMedications').value = patient.current_medications || '';
+                 
+                 // Acil Durum Bilgileri
+                 document.getElementById('editEmergencyContact').value = patient.emergency_contact || '';
+                 document.getElementById('editEmergencyPhone').value = patient.emergency_phone || '';
+                 
+                 // İşitme Cihazı Bilgileri
+                 document.getElementById('editHearingAidType').value = patient.hearing_aid_type || '';
+                 document.getElementById('editHearingAidBrand').value = patient.hearing_aid_brand || '';
+                 document.getElementById('editHearingAidModel').value = patient.hearing_aid_model || '';
+                 document.getElementById('editHearingAidSerial').value = patient.hearing_aid_serial || '';
+                 
+                 // Sosyal Bilgiler
+                 document.getElementById('editInsuranceProvider').value = patient.insurance_provider || '';
+                 document.getElementById('editInsuranceNumber').value = patient.insurance_number || '';
+                 document.getElementById('editReferringDoctor').value = patient.referring_doctor || '';
+                 
+                 // Genel Bilgiler
+                 document.getElementById('editNotes').value = patient.notes || '';
+                 document.getElementById('editStatus').value = patient.status || 'active';
                 
                 // Modal'ı göster
-                document.getElementById('editPatientModal').style.display = 'block';
+                const modal = document.getElementById('editPatientModal');
+                modal.style.display = 'block';
+                // Kısa bir gecikme ile show class'ını ekle
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 10);
                 
             } catch (error) {
                 console.error('Hasta bilgileri yüklenemedi:', error);
@@ -2164,18 +2575,56 @@
 
         // Modal fonksiyonları - Global scope'a taşındı
         window.openNewPatientModal = function() {
-            document.getElementById('newPatientModal').style.display = 'block';
+            const modal = document.getElementById('newPatientModal');
+            modal.style.display = 'block';
+            // Kısa bir gecikme ile show class'ını ekle
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
             document.getElementById('newPatientForm').reset();
         }
 
         window.closeNewPatientModal = function() {
-            document.getElementById('newPatientModal').style.display = 'none';
+            const modal = document.getElementById('newPatientModal');
+            modal.classList.remove('show');
+            // Animasyon bittikten sonra modal'ı gizle
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
 
         // Düzenleme modal fonksiyonları
         window.closeEditPatientModal = function() {
-            document.getElementById('editPatientModal').style.display = 'none';
+            const modal = document.getElementById('editPatientModal');
+            modal.classList.remove('show');
+            // Animasyon bittikten sonra modal'ı gizle
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
+
+        // Modal dışına tıklandığında kapanma
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('show');
+                setTimeout(() => {
+                    e.target.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // ESC tuşu ile modal kapatma
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal.show');
+                openModals.forEach(modal => {
+                    modal.classList.remove('show');
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                    }, 300);
+                });
+            }
+        });
 
         // Form submit
         document.getElementById('newPatientForm').addEventListener('submit', async function(e) {
@@ -2213,16 +2662,46 @@
             const formData = new FormData(this);
             const patientId = formData.get('patient_id');
             
-            const patientData = {
-                first_name: formData.get('first_name'),
-                last_name: formData.get('last_name'),
-                birth_date: formData.get('birth_date'),
-                gender: formData.get('gender'),
-                phone: formData.get('phone'),
-                email: formData.get('email'),
-                address: formData.get('address'),
-                status: formData.get('status')
-            };
+                         const patientData = {
+                 // Temel Bilgiler
+                 tc_number: formData.get('tc_number'),
+                 first_name: formData.get('first_name'),
+                 last_name: formData.get('last_name'),
+                 birth_date: formData.get('birth_date'),
+                 gender: formData.get('gender'),
+                 occupation: formData.get('occupation'),
+                 
+                 // İletişim Bilgileri
+                 phone: formData.get('phone'),
+                 email: formData.get('email'),
+                 city: formData.get('city'),
+                 district: formData.get('district'),
+                 address: formData.get('address'),
+                 
+                 // Tıbbi Bilgiler
+                 medical_history: formData.get('medical_history'),
+                 allergies: formData.get('allergies'),
+                 current_medications: formData.get('current_medications'),
+                 
+                 // Acil Durum Bilgileri
+                 emergency_contact: formData.get('emergency_contact'),
+                 emergency_phone: formData.get('emergency_phone'),
+                 
+                 // İşitme Cihazı Bilgileri
+                 hearing_aid_type: formData.get('hearing_aid_type'),
+                 hearing_aid_brand: formData.get('hearing_aid_brand'),
+                 hearing_aid_model: formData.get('hearing_aid_model'),
+                 hearing_aid_serial: formData.get('hearing_aid_serial'),
+                 
+                 // Sosyal Bilgiler
+                 insurance_provider: formData.get('insurance_provider'),
+                 insurance_number: formData.get('insurance_number'),
+                 referring_doctor: formData.get('referring_doctor'),
+                 
+                 // Genel Bilgiler
+                 notes: formData.get('notes'),
+                 status: formData.get('status')
+             };
             
             console.log('Güncellenen hasta verisi:', patientData);
             console.log('Hasta ID:', patientId);
@@ -2309,6 +2788,11 @@
             closeAllFilters();
         }
 
+        function filterByTcNumber(value) {
+            activeFilters.tcNumber = value;
+            applyColumnFilters();
+        }
+
         function filterByName(value) {
             activeFilters.name = value;
             applyColumnFilters();
@@ -2371,6 +2855,7 @@
             
             // Reset global filter state
             activeFilters = {
+                tcNumber: '',
                 name: '',
                 phone: '',
                 email: '',

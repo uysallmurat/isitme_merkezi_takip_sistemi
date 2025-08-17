@@ -445,7 +445,7 @@ Aşağıdaki şablon, proje boyunca her önemli karar, toplantı, modül ve geli
 
 ## Sprint 5: Navigasyon, Finalizasyon ve Dokümantasyon
 
-**İlerleme:** %85
+**İlerleme:** %80
 
 ### Hedefler
 
@@ -461,6 +461,17 @@ Aşağıdaki şablon, proje boyunca her önemli karar, toplantı, modül ve geli
 - [x] Sistem test senaryolarının hazırlanması ve çalıştırılması - **Kısmen Tamamlandı**
 - [ ] Performance testleri ve optimizasyonu
 - [ ] Frontend test coverage'ını %90+ çıkarma
+
+#### 🎨 **Kod Organizasyonu ve Optimizasyon**
+- [ ] **Ortak CSS kodları `style.css` dosyasına taşınacak**
+  - HTML dosyalarındaki inline CSS'ler kaldırılacak
+  - CSS variables ve ortak stiller merkezi dosyada toplanacak
+  - Responsive tasarım kuralları birleştirilecek
+- [ ] **Ortak JavaScript kodları ayrı dosyalara taşınacak**
+  - Modal sistemleri için `modal.js` oluşturulacak
+  - Form validasyonları için `form-validation.js` oluşturulacak
+  - API işlemleri için `api-handler.js` oluşturulacak
+- [ ] **Kod tekrarları azaltılacak ve maintainability artırılacak**
 
 #### 🔒 **Güvenlik ve Deployment**
 - [x] Security audit ve KVKV uyumluluk kontrolü - **Kısmen Tamamlandı**

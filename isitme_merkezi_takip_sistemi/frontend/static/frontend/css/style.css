@@ -337,10 +337,10 @@ body.dashboard-bg {
   color: var(--main-orange-light);
 }
 .sidebar {
-  width: 220px;
+  width: 280px;
   background: #f3f4f8;
   border-right: 1.5px solid #eee;
-  padding: 2.5rem 1.2rem 1.2rem 1.2rem;
+  padding: 2.5rem 1.5rem 1.2rem 1.5rem;
 }
 .sidebar ul { list-style: none; padding: 0; }
 .sidebar li { margin-bottom: 1.5rem; }
@@ -354,7 +354,7 @@ body.dashboard-bg {
   transition: color 0.2s;
   background: transparent;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1.2rem;
   display: block;
 }
 .sidebar a:hover {
@@ -1008,4 +1008,38 @@ button:hover {
 .router-error p {
     font-size: var(--font-sm);
     margin-bottom: 24px;
+}
+
+/* Status Badge Styles */
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+    min-width: 80px;
+    text-align: center;
+}
+
+.status-scheduled {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.status-completed {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.status-cancelled {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.status-pending {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
 }

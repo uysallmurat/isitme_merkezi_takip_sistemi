@@ -4,6 +4,7 @@
 
 ### 1. `patients` (Hastalar)
 - `patient_id` (PK, INT, AUTO_INCREMENT)
+- `tc_number` (VARCHAR(11), UNIQUE) - TC Kimlik Numarası
 - `first_name` (VARCHAR(50))
 - `last_name` (VARCHAR(50))
 - `birth_date` (DATE)
@@ -11,9 +12,29 @@
 - `phone` (VARCHAR(20))
 - `email` (VARCHAR(100))
 - `address` (TEXT)
+- `city` (VARCHAR(50)) - Şehir
+- `district` (VARCHAR(50)) - İlçe
+- `medical_history` (TEXT) - Tıbbi geçmiş
+- `allergies` (TEXT) - Alerjiler
+- `current_medications` (TEXT) - Mevcut ilaçlar
+- `emergency_contact` (VARCHAR(100)) - Acil durum iletişim kişisi
+- `emergency_phone` (VARCHAR(20)) - Acil durum telefonu
+- `hearing_aid_type` (VARCHAR(50)) - Kullandığı işitme cihazı türü
+- `hearing_aid_brand` (VARCHAR(100)) - İşitme cihazı markası
+- `hearing_aid_model` (VARCHAR(100)) - İşitme cihazı modeli
+- `hearing_aid_serial` (VARCHAR(100)) - İşitme cihazı seri numarası
+- `occupation` (VARCHAR(100)) - Meslek
+- `insurance_provider` (VARCHAR(100)) - Sigorta sağlayıcısı
+- `insurance_number` (VARCHAR(50)) - Sigorta numarası
+- `referring_doctor` (VARCHAR(100)) - Sevk eden doktor
+- `notes` (TEXT) - Genel notlar
 - `status` (ENUM: 'active', 'inactive') - Hasta durumu
 - `user_id` (FK, INT, references `users.user_id`) - Kim ekledi
+- `last_appointment_date` (DATE) - Son randevu tarihi
+- `next_appointment_date` (DATE) - Sonraki randevu tarihi
+- `total_appointments` (INT, DEFAULT=0) - Toplam randevu sayısı
 - `created_at` (DATETIME)
+- `updated_at` (DATETIME) - Güncelleme tarihi
 
 ---
 

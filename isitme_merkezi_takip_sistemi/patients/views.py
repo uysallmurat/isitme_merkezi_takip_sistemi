@@ -11,13 +11,17 @@ class PatientViewSet(viewsets.ModelViewSet):
     serializer_class = PatientSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['status', 'gender']
-    search_fields = ['first_name', 'last_name', 'phone', 'email']
+    search_fields = ['tc_number', 'first_name', 'last_name', 'phone', 'email']
     ordering_fields = ['created_at', 'first_name', 'last_name']
     
     def get_queryset(self):
         queryset = Patient.objects.all()
         
         # Özel filtreler
+        tc_number = self.request.query_params.get('tc_number', None)
+        if tc_number:
+            queryset = queryset.filter(tc_number__icontains=tc_number)
+            
         name = self.request.query_params.get('name', None)
         if name:
             queryset = queryset.filter(

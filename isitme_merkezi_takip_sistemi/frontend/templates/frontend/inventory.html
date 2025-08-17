@@ -356,6 +356,18 @@
         
         .confirmation-overlay.show .confirmation-modal {
             transform: scale(1);
+            animation: confirmationSlideIn 0.3s ease-out;
+        }
+
+        @keyframes confirmationSlideIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
         
         .confirmation-icon {
@@ -1084,19 +1096,40 @@
 
         .modal-content {
             background-color: var(--white);
-            margin: 5% auto;
+            margin: 2% auto;
             padding: 0;
             border: none;
             border-radius: var(--border-radius-lg);
             width: 90%;
-            max-width: 500px;
+            max-width: 800px;
+            max-height: 90vh;
             box-shadow: var(--shadow-xl);
             transform: scale(0.8);
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal.show .modal-content {
             transform: scale(1);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        .modal:not(.show) .modal-content {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .modal-header {
@@ -1141,6 +1174,29 @@
 
         .modal-body {
             padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+            max-height: calc(90vh - 140px);
+            scrollbar-width: thin;
+            scrollbar-color: var(--neutral-300) var(--neutral-100);
+        }
+
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--neutral-100);
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--neutral-400);
         }
 
         .form-group {
@@ -1182,6 +1238,44 @@
             gap: 1rem;
             justify-content: flex-end;
             margin-top: 2rem;
+        }
+
+        /* Form Section Styling */
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--neutral-50);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--neutral-700);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-orange);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .required::after {
+            content: ' *';
+            color: var(--primary-orange);
+            font-weight: bold;
         }
 
         /* Pagination Styles */
@@ -1514,7 +1608,7 @@
             <div class="confirmation-title" id="confirmationTitle">Emin misiniz?</div>
             <div class="confirmation-message" id="confirmationMessage">Bu işlem geri alınamaz.</div>
             <div class="confirmation-actions">
-                <button class="btn-cancel" id="confirmationCancel">İptal</button>
+                <button class="btn-cancel" id="confirmationCancel" onclick="hideConfirmation()">İptal</button>
                 <button class="btn-confirm" id="confirmationConfirm">Onayla</button>
             </div>
         </div>
@@ -1535,7 +1629,7 @@
                 <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
             </div>
             <ul>
-                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-chart-line"></i> ANASAYFA</a></li>
+                <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
                 <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
                 <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
                 <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
@@ -1586,29 +1680,37 @@
                     <div class="stat-icon">
                         <i class="fa-solid fa-boxes-stacked"></i>
                     </div>
-                    <div class="stat-number" id="totalProducts">0</div>
-                    <div class="stat-label">Toplam Ürün</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">Toplam Ürün</div>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fa-solid fa-money-bill-wave"></i>
                     </div>
-                    <div class="stat-number" id="stockValue">₺0</div>
-                    <div class="stat-label">Stok Değeri</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="stockValue">0</div>
+                        <div class="stat-label">Stok Değeri</div>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fa-solid fa-exclamation-triangle"></i>
                     </div>
-                    <div class="stat-number" id="lowStock">0</div>
-                    <div class="stat-label">Düşük Stok</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="lowStock">0</div>
+                        <div class="stat-label">Düşük Stok</div>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fa-solid fa-times-circle"></i>
                     </div>
-                    <div class="stat-number" id="outOfStock">0</div>
-                    <div class="stat-label">Stok Dışı</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="outOfStock">0</div>
+                        <div class="stat-label">Stok Dışı</div>
+                    </div>
                 </div>
             </div>
             
@@ -2277,35 +2379,59 @@
 
         // Stok işlemleri
         function openNewProductModal() {
-            document.getElementById('newProductModal').style.display = 'block';
+            const modal = document.getElementById('newProductModal');
+            modal.style.display = 'block';
             document.getElementById('newProductForm').reset();
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
         }
 
         function closeNewProductModal() {
-            document.getElementById('newProductModal').style.display = 'none';
+            const modal = document.getElementById('newProductModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
 
         function openStockInModal() {
-            document.getElementById('stockInModal').style.display = 'block';
+            const modal = document.getElementById('stockInModal');
+            modal.style.display = 'block';
             loadProductsForStockIn();
             loadSuppliers();
             // Bugünün tarihini set et
             document.getElementById('transactionDate').value = new Date().toISOString().split('T')[0];
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
         }
 
         function closeStockInModal() {
-            document.getElementById('stockInModal').style.display = 'none';
+            const modal = document.getElementById('stockInModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
 
         function openStockOutModal() {
-            document.getElementById('stockOutModal').style.display = 'block';
+            const modal = document.getElementById('stockOutModal');
+            modal.style.display = 'block';
             loadProductsForStockOut();
             // Bugünün tarihini set et
             document.getElementById('stockOutDate').value = new Date().toISOString().split('T')[0];
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
         }
 
         function closeStockOutModal() {
-            document.getElementById('stockOutModal').style.display = 'none';
+            const modal = document.getElementById('stockOutModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
 
         async function viewProduct(id) {
@@ -2356,7 +2482,11 @@
                 }
                 
                 // Modal'ı göster
-                document.getElementById('viewProductModal').style.display = 'block';
+                const modal = document.getElementById('viewProductModal');
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 10);
                 
             } catch (error) {
                 console.error('Ürün detayları yüklenemedi:', error);
@@ -2391,7 +2521,11 @@
                 document.getElementById('editProductNotes').value = product.notes || '';
                 
                 // Modal'ı göster
-                document.getElementById('editProductModal').style.display = 'block';
+                const modal = document.getElementById('editProductModal');
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 10);
                 
             } catch (error) {
                 console.error('Ürün düzenleme verisi yüklenemedi:', error);
@@ -2399,11 +2533,19 @@
         }
         
         function closeViewProductModal() {
-            document.getElementById('viewProductModal').style.display = 'none';
+            const modal = document.getElementById('viewProductModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
         
         function closeEditProductModal() {
-            document.getElementById('editProductModal').style.display = 'none';
+            const modal = document.getElementById('editProductModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
         
         async function submitEditProduct() {
@@ -2474,17 +2616,22 @@
         }
 
         async function deleteProduct(id) {
-            if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
-            
-            try {
-                await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/${id}/`, {
-                    method: 'DELETE'
-                });
-                errorHandler.showSuccess('Ürün silindi');
-                loadInventory();
-            } catch (error) {
-                // Hata zaten errorHandler tarafından gösterildi
-            }
+            showConfirmation(
+                'Ürünü Sil',
+                'Bu ürünü silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
+                'danger',
+                async () => {
+                    try {
+                        await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/${id}/`, {
+                            method: 'DELETE'
+                        });
+                        errorHandler.showSuccess('Ürün silindi');
+                        loadInventory();
+                    } catch (error) {
+                        // Hata zaten errorHandler tarafından gösterildi
+                    }
+                }
+            );
         }
 
         // Stok girişi fonksiyonları
@@ -2729,6 +2876,9 @@
             const newProductModal = document.getElementById('newProductModal');
             const stockInModal = document.getElementById('stockInModal');
             const stockOutModal = document.getElementById('stockOutModal');
+            const viewProductModal = document.getElementById('viewProductModal');
+            const editProductModal = document.getElementById('editProductModal');
+            const confirmationOverlay = document.getElementById('confirmationOverlay');
             
             if (event.target === newProductModal) {
                 closeNewProductModal();
@@ -2739,6 +2889,45 @@
             if (event.target === stockOutModal) {
                 closeStockOutModal();
             }
+            if (event.target === viewProductModal) {
+                closeViewProductModal();
+            }
+            if (event.target === editProductModal) {
+                closeEditProductModal();
+            }
+            if (event.target === confirmationOverlay) {
+                hideConfirmation();
+            }
+        }
+
+        // Confirmation Modal Functions
+        function showConfirmation(title, message, iconClass, onConfirm) {
+            const overlay = document.getElementById('confirmationOverlay');
+            const icon = document.getElementById('confirmationIcon');
+            const titleEl = document.getElementById('confirmationTitle');
+            const messageEl = document.getElementById('confirmationMessage');
+            const confirmBtn = document.getElementById('confirmationConfirm');
+            
+            // Icon class'ını güncelle
+            icon.className = `confirmation-icon ${iconClass}`;
+            
+            // İçeriği güncelle
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            
+            // Confirm butonuna click event ekle
+            confirmBtn.onclick = () => {
+                onConfirm();
+                hideConfirmation();
+            };
+            
+            // Modal'ı göster
+            overlay.classList.add('show');
+        }
+
+        function hideConfirmation() {
+            const overlay = document.getElementById('confirmationOverlay');
+            overlay.classList.remove('show');
         }
     </script>
 

@@ -48,3 +48,7 @@ def inventory_view(request):
 # Fatura Yönetimi
 def invoices_view(request):
     return render(request, 'frontend/invoices.html')
+
+# Tedarikçi Yönetimi
+def suppliers_view(request):
+    return render(request, 'frontend/suppliers.html')

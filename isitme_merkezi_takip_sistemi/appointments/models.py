@@ -16,6 +16,7 @@ class Appointment(models.Model):
     notes = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=[
         ('scheduled', 'Planlandı'),
+        ('pending', 'Bekliyor'),
         ('completed', 'Tamamlandı'),
         ('cancelled', 'İptal Edildi')
     ], default='scheduled')

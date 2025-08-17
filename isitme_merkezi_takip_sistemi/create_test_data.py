@@ -12,6 +12,7 @@ django.setup()
 from django.contrib.auth.models import User
 from patients.models import Patient
 from hearing_tests.models import HearingTest
+from appointments.models import Appointment
 from django.utils import timezone
 
 def create_test_data():
@@ -112,7 +113,35 @@ def create_test_data():
         )
         print(f"Test raporu oluşturuldu: {patient} - {test_type} - {status}")
     
-    print(f"\nToplam {len(test_patients)} hasta ve 20 test raporu oluşturuldu.")
+    # Create test appointments
+    appointment_types = ['consultation', 'hearing_test', 'device_fitting', 'follow_up', 'maintenance']
+    appointment_statuses = ['scheduled', 'pending', 'completed', 'cancelled']
+    
+    # Clear existing appointment data (optional - comment out if you want to keep existing data)
+    # Appointment.objects.all().delete()
+    
+    for i in range(15):  # Create 15 appointments
+        patient = random.choice(test_patients)
+        appointment_type = random.choice(appointment_types)
+        status = random.choice(appointment_statuses)
+        
+        # Random date within next 30 days for scheduled/pending, past 30 days for completed
+        if status in ['scheduled', 'pending']:
+            appointment_date = timezone.now() + timedelta(days=random.randint(1, 30))
+        else:
+            appointment_date = timezone.now() - timedelta(days=random.randint(1, 30))
+        
+        appointment = Appointment.objects.create(
+            patient=patient,
+            appointment_date=appointment_date,
+            appointment_type=appointment_type,
+            status=status,
+            notes=f'Randevu notu {i+1}: {patient} için {appointment_type} randevusu.',
+            user=test_doctor
+        )
+        print(f"Randevu oluşturuldu: {patient} - {appointment_type} - {status} - {appointment_date.strftime('%Y-%m-%d %H:%M')}")
+    
+    print(f"\nToplam {len(test_patients)} hasta, 20 test raporu ve 15 randevu oluşturuldu.")
     print("Test verisi başarıyla oluşturuldu!")
 
 if __name__ == '__main__':
