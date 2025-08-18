@@ -1,12 +1,7 @@
-/* Grid CSS - CSS Grid, Flexbox ve responsive grid system */
-/* Bu dosya tüm proje genelinde kullanılan grid layout sistemini içerir */
+/* Grid CSS - Style klasöründeki grid.css'den referans alır */
+/* Bu dosya sayfaya özel grid stillerini içerir */
 
-/* CSS Grid Layout Utilities */
-/* Flexbox Utilities */
-/* Responsive Grid Breakpoints */
-/* Container ve Row Yapıları */
-/* Column Systems */
-/* Grid Gap ve Spacing */
-/* Grid Alignment */
-/* Grid Responsive Behavior */
-/* Grid Auto-fit ve Auto-fill */
+/* Style klasöründeki ortak grid.css'yi import et */
+/* Örnek: .grid, .flex, .grid-cols-* vb. */
+
+/* Sayfaya özel grid stilleri buraya eklenebilir */

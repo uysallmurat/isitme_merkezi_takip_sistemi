@@ -1,9 +1,6 @@
 /* Responsive CSS - Style klasöründeki responsive.css'den referans alır */
 /* Bu dosya sayfaya özel responsive stillerini içerir */
 
-/* Style klasöründeki ortak responsive.css'yi import et */
-@import url('../style/responsive.css');
-
 /* Sayfaya özel responsive stilleri buraya eklenebilir */
 /* Örnek: .mobile-layout, .tablet-grid, .desktop-view vb. */
 

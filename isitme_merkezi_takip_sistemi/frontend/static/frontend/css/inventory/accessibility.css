@@ -1,8 +1,5 @@
 /* Accessibility CSS - Style klasöründeki accessibility.css'den referans alır */
 /* Bu dosya sayfaya özel accessibility stillerini içerir */
 
-/* Style klasöründeki ortak accessibility.css'yi import et */
-@import url('../style/accessibility.css');
-
 /* Sayfaya özel accessibility stilleri buraya eklenebilir */
 /* Örnek: .page-focus, .screen-reader, .keyboard-nav vb. */

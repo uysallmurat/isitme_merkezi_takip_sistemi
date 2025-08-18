@@ -1,29 +1,6 @@
 /* Grid CSS - Style klasöründeki grid.css'den referans alır */
 /* Bu dosya sayfaya özel grid düzeni stillerini içerir */
 
-/* Style klasöründeki ortak grid.css'yi import et */
-@import url('../style/grid.css');
-
 /* Sayfaya özel grid düzeni stilleri buraya eklenebilir */
 /* Örnek: .grid-container, .grid-item vb. */
 
-.stats-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.date-range-filter {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-}

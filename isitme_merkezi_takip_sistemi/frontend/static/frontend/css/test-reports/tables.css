@@ -1,9 +1,6 @@
 /* Tables CSS - Style klasöründeki tables.css'den referans alır */
 /* Bu dosya sayfaya özel table stillerini içerir */
 
-/* Style klasöründeki ortak tables.css'yi import et */
-@import url('../style/tables.css');
-
 /* Test Reports specific table styles */
 /* Bu dosyada sadece test-reports ekranına özel tablo stilleri bulunur */
 /* Ortak tablo stilleri style/tables.css dosyasından import edilir */

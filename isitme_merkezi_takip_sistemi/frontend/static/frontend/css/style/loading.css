@@ -1,13 +1,244 @@
 /* Loading CSS - Skeleton loaders, spinners ve loading animations */
 /* Bu dosya tüm proje genelinde loading state stillerini içerir */
 
-/* Skeleton Loaders */
-/* Spinners */
-/* Progress Bars */
-/* Loading Animations */
-/* Loading States */
-/* Shimmer Effects */
-/* Pulse Animations */
-/* Loading Overlays */
-/* Loading Text */
-/* Loading Icons */
+/* Loading Spinner */
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    display: inline-block;
+}
+
+.loading-spinner.primary {
+    border: 2px solid rgba(255, 111, 0, 0.3);
+    border-top-color: var(--primary-orange);
+}
+
+.loading-spinner.large {
+    width: 32px;
+    height: 32px;
+    border-width: 3px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Page Transition Effects */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-blue) 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.page-transition.show,
+.page-transition.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.page-transition-content {
+    text-align: center;
+    color: white;
+}
+
+.page-transition-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+.page-transition-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Progress Bar */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-blue) 100%);
+    z-index: 9998;
+    transition: width 0.3s ease;
+}
+
+/* Fade In Animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide In Animations */
+.slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: linear-gradient(90deg, 
+        var(--neutral-200) 25%, 
+        var(--neutral-100) 50%, 
+        var(--neutral-200) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+    height: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-text.large {
+    height: 1.5rem;
+}
+
+.skeleton-card {
+    height: 120px;
+    border-radius: var(--border-radius);
+}
+
+/* Pulse Animation */
+.pulse {
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Button Loading State */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Form Loading State */
+.form-loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.form-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive Loading */
+@media (max-width: 768px) {
+    .loading-spinner.large {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .page-transition-spinner {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .page-transition-text {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-spinner {
+        width: 16px;
+        height: 16px;
+        border-width: 1.5px;
+    }
+    
+    .loading-spinner.large {
+        width: 24px;
+        height: 24px;
+        border-width: 2px;
+    }
+    
+    .page-transition-spinner {
+        width: 28px;
+        height: 28px;
+        border-width: 2px;
+    }
+}

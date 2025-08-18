@@ -1,7 +1,9 @@
 /* 
  * Main CSS - Modüler CSS Yapısı
- * Bu dosya appointments klasöründeki tüm modüler CSS dosyalarını import eder
+ * Bu klasöründeki tüm modüler CSS dosyalarını import eder
  */
+ /* tüm ortak stiller getirilir */
+ @import url('../style/main.css');
 
 /* Temel CSS Değişkenleri ve Layout */
 @import url('./variables.css');

@@ -1,8 +1,4 @@
 /* Dark Mode CSS - Style klasöründeki dark-mode.css'den referans alır */
 /* Bu dosya sayfaya özel dark mode stillerini içerir */
-
-/* Style klasöründeki ortak dark-mode.css'yi import et */
-@import url('../style/dark-mode.css');
-
 /* Sayfaya özel dark mode stilleri buraya eklenebilir */
 /* Örnek: .dark-card, .dark-table, .dark-modal vb. */

@@ -1,8 +1,6 @@
 /* Buttons CSS - Style klasöründeki buttons.css'den referans alır */
 /* Bu dosya sayfaya özel button stillerini içerir */
 
-/* Style klasöründeki ortak buttons.css'yi import et */
-@import url('../style/buttons.css');
 
 /* Test Reports specific button styles */
 /* Bu dosyada sadece test-reports ekranına özel buton stilleri bulunur */

@@ -1,6 +1,54 @@
 /* Print CSS - Print-specific styles ve print media queries */
 /* Bu dosya tüm proje genelinde print stillerini içerir */
 
+/* ===== ORTAK PRINT SİSTEMİ ===== */
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-only {
+        display: block !important;
+    }
+    
+    .page-bg {
+        background: white !important;
+    }
+    
+    .sidebar,
+    .topbar {
+        display: none !important;
+    }
+    
+    .main-content {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .content-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .btn-primary,
+    .btn-secondary,
+    .btn-small {
+        display: none !important;
+    }
+    
+    table {
+        border-collapse: collapse;
+    }
+    
+    th, td {
+        border: 1px solid #ccc !important;
+        padding: 0.5rem !important;
+    }
+}
+
+/* ===== GENEL PRINT KATEGORİLERİ ===== */
 /* Print Media Queries */
 /* Page Breaks */
 /* Print-friendly Colors */

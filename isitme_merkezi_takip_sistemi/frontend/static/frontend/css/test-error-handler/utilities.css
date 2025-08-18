@@ -1,12 +1,7 @@
-/* Utilities CSS - Spacing, display, position ve diğer utility class'lar */
-/* Bu dosya tüm proje genelinde kullanılan yardımcı CSS class'larını içerir */
+/* Utilities CSS - Style klasöründeki utilities.css'den referans alır */
+/* Bu dosya sayfaya özel utility stillerini içerir */
 
-/* Spacing Utilities - Margin ve Padding */
-/* Display Properties - Flex, Grid, Block, Inline */
-/* Position Utilities - Relative, Absolute, Fixed */
-/* Z-Index Management */
-/* Overflow Handling */
-/* Visibility ve Opacity */
-/* Cursor Styles */
-/* User Select */
-/* Pointer Events */
+/* Style klasöründeki ortak utilities.css'yi import et */
+/* Örnek: .text-center, .hidden, .mt-*, .mb-*, .p-* vb. */
+
+/* Sayfaya özel utility stilleri buraya eklenebilir */

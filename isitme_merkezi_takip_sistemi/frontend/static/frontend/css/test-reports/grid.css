@@ -1,9 +1,6 @@
 /* Grid CSS - Style klasöründeki grid.css'den referans alır */
 /* Bu dosya sayfaya özel grid stillerini içerir */
 
-/* Style klasöründeki ortak grid.css'yi import et */
-@import url('../style/grid.css');
-
 /* Sayfaya özel grid stilleri buraya eklenebilir */
 
 /* Bu dosya için özel grid stilleri bulunmamaktadır */

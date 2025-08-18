@@ -1,8 +1,6 @@
 /* Icons CSS - Style klasöründeki icons.css'den referans alır */
 /* Bu dosya sayfaya özel icon stillerini içerir */
 
-/* Style klasöründeki ortak icons.css'yi import et */
-@import url('../style/icons.css');
 
 /* Sayfaya özel icon stilleri buraya eklenebilir */
 /* Örnek: .page-icon, .status-icon, .action-icon vb. */

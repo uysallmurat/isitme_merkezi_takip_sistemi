@@ -2,9 +2,6 @@
 /* Bu dosya sayfaya özel animasyon stillerini içerir */
 
 /* Style klasöründeki ortak animations.css'yi import et */
-@import url('../style/animations.css');
-
-/* Sayfaya özel animasyon stilleri buraya eklenebilir */
 /* Örnek: .page-fade-in, .slide-up, .pulse vb. */
 
 

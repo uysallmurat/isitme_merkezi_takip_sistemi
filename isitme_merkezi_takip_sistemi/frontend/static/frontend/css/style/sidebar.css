@@ -1,0 +1,206 @@
+/* Sidebar CSS - Yan menü bileşenleri ve navigasyon stilleri */
+/* Bu dosya tüm proje genelinde sidebar bileşenlerini içerir */
+
+/* Sidebar Ana Container */
+.sidebar {
+    width: 240px;
+    background: 
+        linear-gradient(180deg, 
+            rgba(255, 255, 255, 0.92) 0%, 
+            rgba(250, 250, 250, 0.88) 50%,
+            rgba(248, 249, 250, 0.85) 100%
+        ),
+        linear-gradient(45deg, 
+            rgba(255, 111, 0, 0.02) 0%, 
+            rgba(33, 150, 243, 0.02) 100%
+        );
+    border-right: 1px solid rgba(255, 111, 0, 0.08);
+    padding: 2rem 1.5rem;
+    box-shadow: 
+        8px 0 32px rgba(0, 0, 0, 0.06),
+        2px 0 8px rgba(255, 111, 0, 0.03),
+        inset -1px 0 0 rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px) saturate(150%);
+    position: relative;
+    z-index: 50;
+}
+
+/* Sidebar Gradient Border */
+.sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, 
+        var(--primary-orange) 0%, 
+        var(--accent-orange) 25%,
+        var(--primary-blue) 50%,
+        var(--primary-green) 75%,
+        var(--primary-purple) 100%
+    );
+    opacity: 0.3;
+}
+
+/* Sidebar Logo Bölümü */
+.sidebar-logo {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    background: 
+        linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.8) 0%, 
+            rgba(255, 111, 0, 0.05) 100%
+        );
+    border: 1px solid rgba(255, 111, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(255, 111, 0, 0.08);
+}
+
+.sidebar-logo-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(255, 111, 0, 0.3));
+}
+
+.sidebar-logo-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--neutral-700);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Sidebar Menü Listesi */
+.sidebar ul { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0;
+}
+
+.sidebar li { 
+    margin-bottom: 0.5rem; 
+}
+
+/* Sidebar Menü Linkleri */
+.sidebar a {
+    color: var(--neutral-700);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius-sm);
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Sidebar Link Hover Efekti */
+.sidebar a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: 
+        linear-gradient(90deg, 
+            rgba(255, 111, 0, 0.08) 0%, 
+            rgba(255, 111, 0, 0.04) 50%,
+            transparent 100%
+        );
+    transition: var(--transition);
+    z-index: 0;
+    border-radius: var(--border-radius-sm);
+}
+
+.sidebar a:hover {
+    color: var(--neutral-800);
+    background: 
+        linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.6) 0%, 
+            rgba(255, 111, 0, 0.05) 100%
+        );
+    transform: translateX(4px);
+    box-shadow: 
+        0 4px 16px rgba(255, 111, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+}
+
+.sidebar a:hover::before {
+    width: 100%;
+}
+
+.sidebar a > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Sidebar İkonlar */
+.sidebar a i {
+    color: var(--neutral-500);
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.sidebar a.active i {
+    color: var(--primary-orange);
+}
+
+/* Sidebar Aktif Link */
+.sidebar a.active {
+    color: var(--neutral-800);
+    background: 
+        linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.8) 0%, 
+            rgba(255, 111, 0, 0.1) 100%
+        );
+    box-shadow: 
+        0 4px 16px rgba(255, 111, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    transform: translateX(4px);
+}
+
+/* Responsive Sidebar */
+@media (max-width: 1024px) {
+    .sidebar { 
+        width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar { 
+        width: 100%;
+        padding: 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--neutral-200);
+    }
+    
+    .sidebar-logo {
+        display: none;
+    }
+    
+    .sidebar ul {
+        display: flex;
+        gap: 0.5rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+    
+    .sidebar li {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    
+    .sidebar a {
+        white-space: nowrap;
+        padding: 0.5rem 1rem;
+    }
+}

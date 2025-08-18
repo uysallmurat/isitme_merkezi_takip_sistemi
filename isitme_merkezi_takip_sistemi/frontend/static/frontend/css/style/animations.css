@@ -1,6 +1,101 @@
 /* Animations CSS - Animasyonlar, geçişler ve keyframe'ler */
 /* Bu dosya tüm proje genelinde animasyon kurallarını içerir */
 
+/* ===== ORTAK ANİMASYONLAR ===== */
+
+/* Fade In Animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Page Transition Effects */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-blue) 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.page-transition.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.page-transition-content {
+    text-align: center;
+    color: white;
+}
+
+.page-transition-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+.page-transition-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Loading Spinner Animation */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Modal Animations */
+@keyframes modalSlideIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes confirmationSlideIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Progress Bar */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-blue) 100%);
+    z-index: 9998;
+    transition: width 0.3s ease;
+}
+
+/* ===== GENEL ANİMASYON KATEGORİLERİ ===== */
 /* Page Transitions */
 /* Loading Spinners */
 /* Fade In/Out Effects */

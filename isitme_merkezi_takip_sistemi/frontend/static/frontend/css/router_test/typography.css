@@ -1,11 +1,7 @@
-/* Typography CSS - Font aileleri, boyutları, ağırlıkları ve text stilleri */
-/* Bu dosya tüm proje genelinde kullanılan tipografi kurallarını içerir */
+/* Typography CSS - Style klasöründeki typography.css'den referans alır */
+/* Bu dosya sayfaya özel typography stillerini içerir */
 
-/* Font Family Tanımları */
-/* Font Boyutları ve Ağırlıkları */
-/* Line Height ve Letter Spacing */
-/* Text Alignment ve Decoration */
-/* Heading Hierarchy (h1, h2, h3, h4, h5, h6) */
-/* Paragraph Styles */
-/* Link Typography */
-/* Code ve Pre Styles */
+/* Style klasöründeki ortak typography.css'yi import et */
+/* Örnek: h1-h6, p, .text-primary, .font-bold vb. */
+
+/* Sayfaya özel typography stilleri buraya eklenebilir */

@@ -1,8 +1,5 @@
 /* Utilities CSS - Style klasöründeki utilities.css'den referans alır */
 /* Bu dosya sayfaya özel utility stillerini içerir */
 
-/* Style klasöründeki ortak utilities.css'yi import et */
-@import url('../style/utilities.css');
-
 /* Sayfaya özel utility stilleri buraya eklenebilir */
 /* Örnek: .page-spacing, .display, .position vb. */

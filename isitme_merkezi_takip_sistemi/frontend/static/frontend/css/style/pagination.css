@@ -2,15 +2,79 @@
 /* Bu dosya tüm proje genelinde pagination bileşenlerini içerir */
 
 /* Pagination Container */
+.pagination-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
 /* Pagination Buttons */
-/* Active State Styles */
-/* Disabled State Styles */
+.pagination {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.pagination button {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--neutral-200);
+    background: var(--white);
+    color: var(--neutral-700);
+    cursor: pointer;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+    font-weight: 500;
+}
+
 /* Hover Effects */
-/* Page Number Display */
-/* Navigation Arrows */
-/* Pagination Info */
+.pagination button:hover {
+    background: var(--neutral-100);
+    border-color: var(--primary-orange);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Active State Styles */
+.pagination button.active {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-orange) 100%);
+    color: var(--white);
+    border-color: var(--primary-orange);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Disabled State Styles */
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* Responsive Pagination */
-/* Accessibility Features */
+@media (max-width: 768px) {
+    .pagination-container {
+        margin-top: 1.5rem;
+    }
+    
+    .pagination {
+        gap: 0.25rem;
+    }
+    
+    .pagination button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .pagination button {
+        padding: 0.5rem;
+        min-width: 2.5rem;
+    }
+}
 
 
 

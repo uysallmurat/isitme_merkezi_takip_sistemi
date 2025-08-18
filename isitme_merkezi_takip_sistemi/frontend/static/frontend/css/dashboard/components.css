@@ -1,9 +1,5 @@
 /* Components CSS - Style klasöründeki components.css'den referans alır */
 /* Bu dosya sayfaya özel bileşen stillerini içerir */
-
-/* Style klasöründeki ortak components.css'yi import et */
-@import url('../style/components.css');
-
 /* Sayfaya özel bileşen stilleri buraya eklenebilir */
 /* Örnek: .page-card, .info-box, .tooltip vb. */
 

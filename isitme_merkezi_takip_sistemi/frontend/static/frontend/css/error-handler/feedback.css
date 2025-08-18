@@ -1,9 +1,6 @@
 /* Feedback CSS - Style klasöründeki feedback.css'den referans alır */
 /* Bu dosya sayfaya özel feedback stillerini içerir */
 
-/* Style klasöründeki ortak feedback.css'yi import et */
-@import url('../style/feedback.css');
-
 /* Sayfaya özel feedback stilleri buraya eklenebilir */
 /* Örnek: .page-notification, .status-message, .alert vb. */
 

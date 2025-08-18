@@ -1,13 +1,7 @@
-/* Print CSS - Print-specific styles ve print media queries */
-/* Bu dosya tüm proje genelinde print stillerini içerir */
+/* Print CSS - Style klasöründeki print.css'den referans alır */
+/* Bu dosya sayfaya özel print stillerini içerir */
 
-/* Print Media Queries */
-/* Page Breaks */
-/* Print-friendly Colors */
-/* Print Layout Adjustments */
-/* Print Typography */
-/* Print Navigation */
-/* Print Forms */
-/* Print Tables */
-/* Print Images */
-/* Print Page Setup */
+/* Style klasöründeki ortak print.css'yi import et */
+/* Örnek: @media print, .print-only, .no-print vb. */
+
+/* Sayfaya özel print stilleri buraya eklenebilir */

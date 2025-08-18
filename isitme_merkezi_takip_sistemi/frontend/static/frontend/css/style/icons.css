@@ -1,6 +1,53 @@
 /* Icons CSS - Icon boyutları, renkleri, alignment ve animations */
 /* Bu dosya tüm proje genelinde kullanılan icon stillerini içerir */
 
+/* ===== ORTAK ICON SİSTEMİ ===== */
+
+/* Icon Styles */
+.icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+}
+
+.icon-large {
+    font-size: 1.5rem;
+}
+
+.icon-xl {
+    font-size: 2rem;
+}
+
+.icon-2xl {
+    font-size: 2.5rem;
+}
+
+.icon-primary {
+    color: var(--primary-orange);
+}
+
+.icon-secondary {
+    color: var(--neutral-600);
+}
+
+.icon-success {
+    color: var(--primary-green);
+}
+
+.icon-warning {
+    color: var(--primary-orange);
+}
+
+.icon-error {
+    color: #f44336;
+}
+
+.icon-info {
+    color: var(--primary-blue);
+}
+
+/* ===== GENEL ICON KATEGORİLERİ ===== */
 /* Icon Boyutları ve Renkleri */
 /* Icon Alignment ve Positioning */
 /* Icon Animations ve Transitions */

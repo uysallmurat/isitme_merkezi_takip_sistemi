@@ -1,9 +1,6 @@
 /* Accessibility CSS - Style klasöründeki accessibility.css'den referans alır */
 /* Bu dosya sayfaya özel erişilebilirlik stillerini içerir */
 
-/* Style klasöründeki ortak accessibility.css'yi import et */
-@import url('../style/accessibility.css');
-
 /* Sayfaya özel erişilebilirlik stilleri buraya eklenebilir */
 /* Örnek: .sr-only, .focus-visible vb. */
 
