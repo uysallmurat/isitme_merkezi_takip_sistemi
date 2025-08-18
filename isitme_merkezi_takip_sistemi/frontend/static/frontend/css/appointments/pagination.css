@@ -1,0 +1,48 @@
+/* Pagination CSS - Sayfalama stilleri */
+@import url('../style/pagination.css');
+
+/* Pagination Styles */
+.pagination-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.pagination button {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--neutral-200);
+    background: var(--white);
+    color: var(--neutral-700);
+    cursor: pointer;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.pagination button:hover {
+    background: var(--neutral-100);
+    border-color: var(--primary-orange);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.pagination button.active {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-orange) 100%);
+    color: var(--white);
+    border-color: var(--primary-orange);
+    box-shadow: var(--shadow-sm);
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+

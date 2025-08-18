@@ -1,0 +1,67 @@
+/* Style klasöründeki ortak tables.css'yi import et */
+@import url('../style/tables.css');
+/* Tables CSS - Tablo stilleri */
+
+/* Inventory specific table styles */
+.filter-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--white);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-lg);
+    padding: 1rem;
+    min-width: 250px;
+    z-index: 1000;
+}
+
+.filter-dropdown input,
+.filter-dropdown select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.filter-dropdown input:focus,
+.filter-dropdown select:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255,111,0,0.1);
+}
+
+.date-range-filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.filter-options {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--border-radius-sm);
+}
+
+.filter-option {
+    padding: 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--neutral-200);
+    transition: var(--transition);
+}
+
+.filter-option:hover {
+    background: var(--neutral-100);
+}
+
+.filter-option:last-child {
+    border-bottom: none;
+}
+
+
+

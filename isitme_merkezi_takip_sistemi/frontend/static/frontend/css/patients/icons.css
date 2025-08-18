@@ -1,0 +1,11 @@
+/* Icons CSS - Style klasöründeki icons.css'den referans alır */
+/* Bu dosya sayfaya özel ikon stillerini içerir */
+
+/* Style klasöründeki ortak icons.css'yi import et */
+@import url('../style/icons.css');
+
+/* Sayfaya özel ikon stilleri buraya eklenebilir */
+/* Örnek: .icon-large, .icon-color vb. */
+
+/* Bu dosyada patients.css'den ikon stilleri bulunmamaktadır */
+/* Style klasöründeki ortak ikon stilleri kullanılmaktadır */

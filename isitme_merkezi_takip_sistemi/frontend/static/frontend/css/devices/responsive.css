@@ -1,0 +1,26 @@
+/* Responsive CSS - Style klasöründeki responsive.css'den referans alır */
+/* Bu dosya sayfaya özel responsive stillerini içerir */
+
+/* Style klasöründeki ortak responsive.css'yi import et */
+@import url('../style/responsive.css');
+
+/* Sayfaya özel responsive stilleri buraya eklenebilir */
+
+@media (max-width: 1024px) {
+    .sidebar { 
+        width: 200px;
+    }
+    .stats-cards { 
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .topbar nav a {
+        margin: 0;
+    }
+}
+
+
+

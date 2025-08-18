@@ -1,0 +1,10 @@
+/* Style klasöründeki ortak buttons.css'yi import et */
+@import url('../style/buttons.css');
+/* Buttons CSS - Buton stilleri */
+
+/* Inventory specific button styles */
+/* Bu dosyada sadece inventory ekranına özel buton stilleri bulunur */
+/* Ortak buton stilleri style/buttons.css dosyasından import edilir */
+
+
+

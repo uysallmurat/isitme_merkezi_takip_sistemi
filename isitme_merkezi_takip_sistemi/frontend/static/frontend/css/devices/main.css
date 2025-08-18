@@ -1,0 +1,46 @@
+/* 
+ * Main CSS - Modüler CSS Yapısı
+ * Bu dosya appointments klasöründeki tüm modüler CSS dosyalarını import eder
+ */
+
+/* Temel CSS Değişkenleri ve Layout */
+@import url('./variables.css');
+@import url('./layout.css');
+
+/* Navigasyon ve Sidebar */
+@import url('./navigation.css');
+@import url('./sidebar.css');
+
+/* Bileşenler ve Kartlar */
+@import url('./components.css');
+@import url('./cards.css');
+
+/* Formlar ve Tablolar */
+@import url('./forms.css');
+@import url('./tables.css');
+
+/* Butonlar ve Modaller */
+@import url('./buttons.css');
+@import url('./modals.css');
+
+/* Geri Bildirim ve Yükleme */
+@import url('./feedback.css');
+@import url('./loading.css');
+
+/* Sayfalama ve Animasyonlar */
+@import url('./pagination.css');
+@import url('./animations.css');
+
+/* Grid ve Yardımcı Sınıflar */
+@import url('./grid.css');
+@import url('./utilities.css');
+
+/* Tipografi ve İkonlar */
+@import url('./typography.css');
+@import url('./icons.css');
+
+/* Responsive ve Özel Modlar */
+@import url('./responsive.css');
+@import url('./print.css');
+@import url('./dark-mode.css');
+@import url('./accessibility.css');

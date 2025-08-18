@@ -1,0 +1,16 @@
+/* Components CSS - Style klasöründeki components.css'den referans alır */
+/* Bu dosya sayfaya özel component stillerini içerir */
+
+/* Style klasöründeki ortak components.css'yi import et */
+@import url('../style/components.css');
+
+/* Sayfaya özel component stilleri buraya eklenebilir */
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+

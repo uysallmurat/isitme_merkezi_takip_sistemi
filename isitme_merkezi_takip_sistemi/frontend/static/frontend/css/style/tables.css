@@ -1,0 +1,127 @@
+/* Tables CSS - Tablo elemanları ve stilleri */
+/* Bu dosya tüm proje genelinde tablo bileşenlerini içerir */
+
+/* Table Container */
+.table-container {
+    overflow-x: auto;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--neutral-200);
+}
+
+/* Basic Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--neutral-200);
+    font-size: 0.95rem;
+}
+
+th {
+    background: linear-gradient(135deg, var(--neutral-50) 0%, var(--neutral-100) 100%);
+    font-weight: 600;
+    color: var(--neutral-800);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Table Rows */
+tbody tr {
+    transition: var(--transition);
+}
+
+tbody tr:hover {
+    background: var(--neutral-50);
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.status-active { 
+    background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+    color: #2E7D32;
+    border: 1px solid #A5D6A7;
+}
+
+.status-inactive { 
+    background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+    color: #C62828;
+    border: 1px solid #EF9A9A;
+}
+
+.status-pending { 
+    background: linear-gradient(135deg, var(--soft-orange) 0%, #FFE0B2 100%);
+    color: #E65100;
+    border: 1px solid var(--accent-orange);
+}
+
+.status-completed { 
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+    color: #0D47A1;
+    border: 1px solid #90CAF9;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Sortable Headers */
+.sortable-header {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition);
+}
+
+.sortable-header:hover {
+    background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-200) 100%);
+}
+
+.sortable-header i {
+    margin-left: 8px;
+    color: var(--neutral-500);
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.sortable-header:hover i {
+    color: var(--primary-orange);
+}
+
+/* Responsive Tables */
+@media (max-width: 768px) {
+    th, td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    th, td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+}
+
+
+

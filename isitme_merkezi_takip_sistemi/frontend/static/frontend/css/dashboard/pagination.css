@@ -1,0 +1,11 @@
+/* Pagination CSS - Style klasöründeki pagination.css'den referans alır */
+/* Bu dosya sayfaya özel pagination stillerini içerir */
+
+/* Style klasöründeki ortak pagination.css'yi import et */
+@import url('../style/pagination.css');
+
+/* Sayfaya özel pagination stilleri buraya eklenebilir */
+/* Örnek: .page-pagination, .page-btn, .page-info vb. */
+
+
+

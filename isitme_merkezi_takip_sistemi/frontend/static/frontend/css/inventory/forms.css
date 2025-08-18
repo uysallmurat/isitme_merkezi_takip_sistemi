@@ -1,0 +1,17 @@
+/* Style klasöründeki ortak forms.css'yi import et */
+@import url('../style/forms.css');
+/* Forms CSS - Form stilleri */
+
+/* Inventory specific form styles */
+.form-row.full-width {
+    grid-column: 1 / -1;
+}
+
+.required::after {
+    content: ' *';
+    color: var(--primary-orange);
+    font-weight: bold;
+}
+
+
+

@@ -1,0 +1,11 @@
+/* Modals CSS - Style klasöründeki modals.css'den referans alır */
+/* Bu dosya sayfaya özel modal stillerini içerir */
+
+/* Style klasöründeki ortak modals.css'yi import et */
+@import url('../style/modals.css');
+
+/* Sayfaya özel modal stilleri buraya eklenebilir */
+/* Örnek: .page-modal, .confirmation-modal, .form-modal vb. */
+
+
+

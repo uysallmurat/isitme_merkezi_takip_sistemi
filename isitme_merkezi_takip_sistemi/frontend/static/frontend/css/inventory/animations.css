@@ -1,0 +1,43 @@
+/* Animations CSS - Animasyon stilleri */
+/* Style klasöründeki ortak animations.css'yi import et */
+@import url('../style/animations.css');
+/* Fade In Animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal Animations */
+@keyframes modalSlideIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes confirmationSlideIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Loading Spinner Animation */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+

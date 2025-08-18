@@ -1,0 +1,46 @@
+/* Loading CSS - Style klasöründeki loading.css'den referans alır */
+/* Bu dosya sayfaya özel loading stillerini içerir */
+
+/* Style klasöründeki ortak loading.css'yi import et */
+@import url('../style/loading.css');
+
+/* Sayfaya özel loading stilleri buraya eklenebilir */
+/* Örnek: .spinner, .loading-bar vb. */
+
+/* Loading Animations */
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    display: inline-block;
+}
+
+.loading-spinner.primary {
+    border: 2px solid rgba(255, 111, 0, 0.3);
+    border-top-color: var(--primary-orange);
+}
+
+.loading-spinner.large {
+    width: 32px;
+    height: 32px;
+    border-width: 3px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Progress Bar */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-blue) 100%);
+    z-index: 9998;
+    transition: width 0.3s ease;
+}

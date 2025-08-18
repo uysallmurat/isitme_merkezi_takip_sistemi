@@ -1,0 +1,8 @@
+/* Print CSS - Style klasöründeki print.css'den referans alır */
+/* Bu dosya sayfaya özel print stillerini içerir */
+
+/* Style klasöründeki ortak print.css'yi import et */
+@import url('../style/print.css');
+
+/* Sayfaya özel print stilleri buraya eklenebilir */
+/* Örnek: .print-layout, .print-table, .print-cards vb. */

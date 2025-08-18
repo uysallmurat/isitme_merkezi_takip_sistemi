@@ -1,0 +1,174 @@
+/* Forms CSS - Form elemanları ve validasyon stilleri */
+/* Bu dosya tüm proje genelinde form bileşenlerini içerir */
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--neutral-700);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.875rem;
+    border: 2px solid var(--neutral-200);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    transition: var(--transition);
+    background: var(--neutral-50);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.1);
+    background: var(--white);
+}
+
+/* Form Section Styling */
+.form-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--neutral-50);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--neutral-200);
+}
+
+.section-title {
+    color: var(--neutral-800);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-orange);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: var(--primary-orange);
+    border-radius: 2px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-row .form-group {
+    margin-bottom: 1rem;
+}
+
+/* Form Labels */
+/* Input Fields */
+/* Text Areas */
+/* Select Boxes */
+/* Checkboxes */
+/* Radio Buttons */
+/* Form Validation */
+/* Error States */
+/* Success States */
+
+/* Required Field Indicator */
+.required {
+    color: #f44336;
+    font-weight: 600;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+/* Filter Dropdown Styles */
+.filter-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--white);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-lg);
+    padding: 1rem;
+    min-width: 250px;
+    z-index: 1000;
+    display: none;
+    backdrop-filter: blur(16px);
+}
+
+.filter-dropdown input,
+.filter-dropdown select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.filter-dropdown input:focus,
+.filter-dropdown select:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255,111,0,0.1);
+}
+
+.date-range-filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.filter-options {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--border-radius-sm);
+}
+
+.filter-option {
+    padding: 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--neutral-200);
+    transition: var(--transition);
+}
+
+.filter-option:hover {
+    background: var(--neutral-100);
+}
+
+.filter-option:last-child {
+    border-bottom: none;
+}
+
+/* Responsive Forms */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+

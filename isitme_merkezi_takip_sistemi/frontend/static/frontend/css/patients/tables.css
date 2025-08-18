@@ -1,0 +1,12 @@
+/* Tables CSS - Style klasöründeki tables.css'den referans alır */
+/* Bu dosya sayfaya özel tablo stillerini içerir */
+
+/* Style klasöründeki ortak tables.css'yi import et */
+@import url('../style/tables.css');
+
+/* Patients specific table styles */
+/* Bu dosyada sadece patients ekranına özel tablo stilleri bulunur */
+/* Ortak tablo stilleri style/tables.css dosyasından import edilir */
+
+
+

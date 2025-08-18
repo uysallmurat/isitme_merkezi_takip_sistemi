@@ -1,0 +1,12 @@
+/* Forms CSS - Style klasöründeki forms.css'den referans alır */
+/* Bu dosya sayfaya özel form stillerini içerir */
+
+/* Style klasöründeki ortak forms.css'yi import et */
+@import url('../style/forms.css');
+
+/* Invoices specific form styles */
+/* Bu dosyada sadece invoices ekranına özel form stilleri bulunur */
+/* Ortak form stilleri style/forms.css dosyasından import edilir */
+
+
+

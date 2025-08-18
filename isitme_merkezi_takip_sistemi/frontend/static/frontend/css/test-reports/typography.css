@@ -1,0 +1,9 @@
+/* Typography CSS - Style klasöründeki typography.css'den referans alır */
+/* Bu dosya sayfaya özel typography stillerini içerir */
+
+/* Style klasöründeki ortak typography.css'yi import et */
+@import url('../style/typography.css');
+
+/* Sayfaya özel typography stilleri buraya eklenebilir */
+
+/* Bu dosya için özel typography stilleri bulunmamaktadır */

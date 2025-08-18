@@ -1,0 +1,52 @@
+/* Icons CSS - Style klasöründeki icons.css'den referans alır */
+/* Bu dosya sayfaya özel ikon stillerini içerir */
+
+/* Style klasöründeki ortak icons.css'yi import et */
+@import url('../style/icons.css');
+
+/* Sayfaya özel ikon stilleri buraya eklenebilir */
+/* Örnek: .icon, .icon-large vb. */
+
+/* Icon Styles */
+.icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+}
+
+.icon-large {
+    font-size: 1.5rem;
+}
+
+.icon-xl {
+    font-size: 2rem;
+}
+
+.icon-2xl {
+    font-size: 2.5rem;
+}
+
+.icon-primary {
+    color: var(--primary-orange);
+}
+
+.icon-secondary {
+    color: var(--neutral-600);
+}
+
+.icon-success {
+    color: var(--primary-green);
+}
+
+.icon-warning {
+    color: var(--primary-orange);
+}
+
+.icon-error {
+    color: #f44336;
+}
+
+.icon-info {
+    color: var(--primary-blue);
+}

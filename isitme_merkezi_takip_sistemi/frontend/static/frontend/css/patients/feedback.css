@@ -1,0 +1,102 @@
+/* Feedback CSS - Style klasöründeki feedback.css'den referans alır */
+/* Bu dosya sayfaya özel bildirim stillerini içerir */
+
+/* Style klasöründeki ortak feedback.css'yi import et */
+@import url('../style/feedback.css');
+
+/* Sayfaya özel bildirim stilleri buraya eklenebilir */
+/* Örnek: .toast, .notification vb. */
+
+/* Advanced Feedback Systems */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: var(--shadow-lg);
+    border-left: 4px solid;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 300px;
+    pointer-events: auto;
+    transform: translateX(400px);
+    transition: var(--transition);
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast.success {
+    border-left-color: var(--primary-green);
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, var(--white) 100%);
+}
+
+.toast.error {
+    border-left-color: #f44336;
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.05) 0%, var(--white) 100%);
+}
+
+.toast.warning {
+    border-left-color: var(--primary-orange);
+    background: linear-gradient(135deg, rgba(255, 111, 0, 0.05) 0%, var(--white) 100%);
+}
+
+.toast.info {
+    border-left-color: var(--primary-blue);
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, var(--white) 100%);
+}
+
+.toast-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.toast.success .toast-icon { color: var(--primary-green); }
+.toast.error .toast-icon { color: #f44336; }
+.toast.warning .toast-icon { color: var(--primary-orange); }
+.toast.info .toast-icon { color: var(--primary-blue); }
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+    color: var(--neutral-800);
+}
+
+.toast-message {
+    font-size: 0.85rem;
+    color: var(--neutral-600);
+    margin: 0;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: var(--neutral-500);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.toast-close:hover {
+    background: var(--neutral-100);
+    color: var(--neutral-700);
+}
+
+
+

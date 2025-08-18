@@ -1,0 +1,17 @@
+/* Buttons CSS - Style klasöründeki buttons.css'den referans alır */
+/* Bu dosya sayfaya özel buton stillerini içerir */
+
+/* Style klasöründeki ortak buttons.css'yi import et */
+@import url('../style/buttons.css');
+
+/* Patients specific button styles */
+/* Bu dosyada sadece patients ekranına özel buton stilleri bulunur */
+/* Ortak buton stilleri style/buttons.css dosyasından import edilir */
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+
+

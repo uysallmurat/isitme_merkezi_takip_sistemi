@@ -1,0 +1,11 @@
+/* Print CSS - Style klasöründeki print.css'den referans alır */
+/* Bu dosya sayfaya özel yazdırma stillerini içerir */
+
+/* Style klasöründeki ortak print.css'yi import et */
+@import url('../style/print.css');
+
+/* Sayfaya özel yazdırma stilleri buraya eklenebilir */
+/* Örnek: @media print, .print-only vb. */
+
+/* Bu dosyada patients.css'den yazdırma stilleri bulunmamaktadır */
+/* Style klasöründeki ortak yazdırma stilleri kullanılmaktadır */

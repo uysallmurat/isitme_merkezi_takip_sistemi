@@ -1,0 +1,61 @@
+/* Dark Mode CSS - Style klasöründeki dark-mode.css'den referans alır */
+/* Bu dosya sayfaya özel karanlık mod stillerini içerir */
+
+/* Style klasöründeki ortak dark-mode.css'yi import et */
+@import url('../style/dark-mode.css');
+
+/* Sayfaya özel karanlık mod stilleri buraya eklenebilir */
+/* Örnek: .dark-theme, .dark-mode vb. */
+
+/* Dark Mode Styles */
+[data-theme="dark"] {
+    --primary-orange: #FF8A65;
+    --accent-orange: #FFCC02;
+    --soft-orange: #3E2723;
+    --primary-blue: #64B5F6;
+    --primary-green: #81C784;
+    --primary-purple: #BA68C8;
+    --neutral-50: #121212;
+    --neutral-100: #1E1E1E;
+    --neutral-200: #2D2D2D;
+    --neutral-300: #424242;
+    --neutral-400: #616161;
+    --neutral-500: #757575;
+    --neutral-600: #9E9E9E;
+    --neutral-700: #BDBDBD;
+    --neutral-800: #E0E0E0;
+    --neutral-900: #F5F5F5;
+    --white: #1E1E1E;
+}
+
+[data-theme="dark"] .page-bg {
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 138, 101, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(100, 181, 246, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, var(--neutral-50) 0%, #1a1a1a 100%);
+}
+
+[data-theme="dark"] .content-card {
+    background: var(--neutral-100);
+    border-color: var(--neutral-300);
+}
+
+[data-theme="dark"] .sidebar {
+    background: 
+        linear-gradient(180deg, 
+            rgba(30, 30, 30, 0.92) 0%, 
+            rgba(26, 26, 26, 0.88) 50%,
+            rgba(24, 24, 24, 0.85) 100%
+        );
+    border-color: var(--neutral-300);
+}
+
+[data-theme="dark"] .topbar {
+    background: 
+        linear-gradient(135deg, 
+            rgba(30, 30, 30, 0.95) 0%, 
+            rgba(26, 26, 26, 0.90) 50%,
+            rgba(24, 24, 24, 0.85) 100%
+        );
+    border-color: var(--neutral-300);
+}

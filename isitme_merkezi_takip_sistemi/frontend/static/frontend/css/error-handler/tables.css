@@ -1,0 +1,11 @@
+/* Tables CSS - Style klasöründeki tables.css'den referans alır */
+/* Bu dosya sayfaya özel tablo stillerini içerir */
+
+/* Style klasöründeki ortak tables.css'yi import et */
+@import url('../style/tables.css');
+
+/* Sayfaya özel tablo stilleri buraya eklenebilir */
+/* Örnek: .page-table, .table-row, .status-cell vb. */
+
+
+

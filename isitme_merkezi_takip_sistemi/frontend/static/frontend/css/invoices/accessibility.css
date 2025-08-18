@@ -1,0 +1,70 @@
+/* Accessibility CSS - Style klasöründeki accessibility.css'den referans alır */
+/* Bu dosya sayfaya özel erişilebilirlik stillerini içerir */
+
+/* Style klasöründeki ortak accessibility.css'yi import et */
+@import url('../style/accessibility.css');
+
+/* Sayfaya özel erişilebilirlik stilleri buraya eklenebilir */
+/* Örnek: .sr-only, .focus-visible vb. */
+
+/* Accessibility Styles */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.focus-visible:focus {
+    outline: 2px solid var(--primary-orange);
+    outline-offset: 2px;
+}
+
+.focus-visible:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .btn-primary,
+    .btn-secondary,
+    .btn-small {
+        border: 2px solid currentColor;
+    }
+    
+    .content-card {
+        border: 2px solid var(--neutral-800);
+    }
+    
+    .sidebar {
+        border-right: 2px solid var(--neutral-800);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .page-transition {
+        transition: none;
+    }
+    
+    .sidebar a:hover {
+        transform: none;
+    }
+    
+    .btn-primary:hover {
+        transform: none;
+    }
+}

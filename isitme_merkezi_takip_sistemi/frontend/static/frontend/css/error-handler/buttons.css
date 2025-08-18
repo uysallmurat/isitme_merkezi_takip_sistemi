@@ -1,0 +1,11 @@
+/* Buttons CSS - Style klasöründeki buttons.css'den referans alır */
+/* Bu dosya sayfaya özel buton stillerini içerir */
+
+/* Style klasöründeki ortak buttons.css'yi import et */
+@import url('../style/buttons.css');
+
+/* Sayfaya özel buton stilleri buraya eklenebilir */
+/* Örnek: .action-btn, .status-btn, .edit-btn vb. */
+
+
+

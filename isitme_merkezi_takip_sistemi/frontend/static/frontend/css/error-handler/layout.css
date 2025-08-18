@@ -1,0 +1,11 @@
+/* Layout CSS - Style klasöründeki layout.css'den referans alır */
+/* Bu dosya sayfaya özel layout stillerini içerir */
+
+/* Style klasöründeki ortak layout.css'yi import et */
+@import url('../style/layout.css');
+
+/* Sayfaya özel layout stilleri buraya eklenebilir */
+/* Örnek: .page-grid, .sidebar, .main-content vb. */
+
+
+

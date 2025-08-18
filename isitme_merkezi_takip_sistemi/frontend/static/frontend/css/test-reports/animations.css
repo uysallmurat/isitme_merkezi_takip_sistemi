@@ -1,0 +1,19 @@
+/* Animations CSS - Style klasöründeki animations.css'den referans alır */
+/* Bu dosya sayfaya özel animation stillerini içerir */
+
+/* Style klasöründeki ortak animations.css'yi import et */
+@import url('../style/animations.css');
+
+/* Sayfaya özel animation stilleri buraya eklenebilir */
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
