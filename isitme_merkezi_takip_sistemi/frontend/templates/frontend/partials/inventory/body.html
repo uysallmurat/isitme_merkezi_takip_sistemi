@@ -1,20 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stok Yönetimi | İşitme Merkezi Takip Sistemi</title>
-    <link rel="stylesheet" href="{% static 'frontend/css/inventory/main.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="{% static 'frontend/js/error-handler.js' %}"></script>
-</head>
-<body class="page-bg">
-    <!-- base js--> 
-    <script src="{% static 'frontend/js/base.js' %}"></script>
-    <!-- inventory js -->
-    <script src="{% static 'frontend/js/inventory.js' %}"></script>
-
+ <!-- Base Body Importları -->
+{% include 'frontend/partials/base/body.html' %}
+ 
     <!-- Progress Bar -->
     <div class="progress-bar" id="progressBar"></div>
     
@@ -428,176 +414,175 @@
             </div>
         </div>
     </div>
-    <!-- Ürün Görüntüleme Modal -->
-    <div id="viewProductModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fa-solid fa-eye"></i> Ürün Detayları</h2>
-                <button type="button" class="close" onclick="closeViewProductModal()">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <label>Ürün ID:</label>
-                        <span id="viewProductId">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Ürün Adı:</label>
-                        <span id="viewProductName">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Tür:</label>
-                        <span id="viewProductType">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Marka:</label>
-                        <span id="viewProductBrand">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Model:</label>
-                        <span id="viewProductModel">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Birim:</label>
-                        <span id="viewProductUnit">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Mevcut Stok:</label>
-                        <span id="viewProductCurrentStock">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Minimum Stok:</label>
-                        <span id="viewProductMinimumStock">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Birim Fiyat:</label>
-                        <span id="viewProductUnitPrice">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Stok Durumu:</label>
-                        <span id="viewProductStockStatus" class="status-badge">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Tedarikçi:</label>
-                        <span id="viewProductSupplier">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Konum:</label>
-                        <span id="viewProductLocation">-</span>
-                    </div>
-                    <div class="detail-item full-width">
-                        <label>Açıklama:</label>
-                        <span id="viewProductDescription">-</span>
-                    </div>
-                    <div class="detail-item full-width">
-                        <label>Notlar:</label>
-                        <span id="viewProductNotes">-</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-secondary" onclick="closeViewProductModal()">
-                    <i class="fa-solid fa-times"></i> Kapat
-                </button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Ürün Düzenleme Modal -->
-    <div id="editProductModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fa-solid fa-edit"></i> Ürün Düzenle</h2>
-                <button type="button" class="close" onclick="closeEditProductModal()">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-            </div>
-            <form id="editProductForm" onsubmit="event.preventDefault(); submitEditProduct();">
-                {% csrf_token %}
-                <input type="hidden" name="product_id" id="editProductId">
+        <!-- Ürün Görüntüleme Modal -->
+        <div id="viewProductModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fa-solid fa-eye"></i> Ürün Detayları</h2>
+                    <button type="button" class="close" onclick="closeViewProductModal()">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
                 <div class="modal-body">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="editProductName">Ürün Adı *</label>
-                            <input type="text" name="name" id="editProductName" required>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <label>Ürün ID:</label>
+                            <span id="viewProductId">-</span>
                         </div>
-                        <div class="form-group">
-                            <label for="editProductType">Ürün Türü</label>
-                            <select name="item_type" id="editProductType">
-                                <option value="">Tür Seçin</option>
-                                <option value="Battery">Pil</option>
-                                <option value="Ear_Tip">Kulak Ucu</option>
-                                <option value="Tube">Tüp</option>
-                                <option value="Filter">Filtre</option>
-                                <option value="Wax_Guard">Kulak Kiri Koruması</option>
-                                <option value="Accessory">Aksesuar</option>
-                                <option value="Other">Diğer</option>
-                            </select>
+                        <div class="detail-item">
+                            <label>Ürün Adı:</label>
+                            <span id="viewProductName">-</span>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="editProductBrand">Marka</label>
-                            <input type="text" name="brand" id="editProductBrand">
+                        <div class="detail-item">
+                            <label>Tür:</label>
+                            <span id="viewProductType">-</span>
                         </div>
-                        <div class="form-group">
-                            <label for="editProductModel">Model</label>
-                            <input type="text" name="model" id="editProductModel">
+                        <div class="detail-item">
+                            <label>Marka:</label>
+                            <span id="viewProductBrand">-</span>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="editProductUnit">Birim</label>
-                            <input type="text" name="unit" id="editProductUnit" placeholder="Adet, Paket, Metre...">
+                        <div class="detail-item">
+                            <label>Model:</label>
+                            <span id="viewProductModel">-</span>
                         </div>
-                        <div class="form-group">
-                            <label for="editProductMinimumStock">Minimum Stok</label>
-                            <input type="number" name="minimum_stock" id="editProductMinimumStock" min="0">
+                        <div class="detail-item">
+                            <label>Birim:</label>
+                            <span id="viewProductUnit">-</span>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="editProductUnitPrice">Birim Fiyat (TL)</label>
-                            <input type="number" name="unit_price" id="editProductUnitPrice" step="0.01" min="0">
+                        <div class="detail-item">
+                            <label>Mevcut Stok:</label>
+                            <span id="viewProductCurrentStock">-</span>
                         </div>
-                        <div class="form-group">
-                            <label for="editProductSupplier">Tedarikçi</label>
-                            <select name="supplier" id="editProductSupplier">
-                                <option value="">Tedarikçi Seçin</option>
-                            </select>
+                        <div class="detail-item">
+                            <label>Minimum Stok:</label>
+                            <span id="viewProductMinimumStock">-</span>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editProductLocation">Konum</label>
-                        <input type="text" name="location" id="editProductLocation" placeholder="Depo konumu...">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editProductDescription">Açıklama</label>
-                        <textarea name="description" id="editProductDescription" rows="3" placeholder="Ürün açıklaması..."></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="editProductNotes">Notlar</label>
-                        <textarea name="notes" id="editProductNotes" rows="3" placeholder="Ek notlar..."></textarea>
+                        <div class="detail-item">
+                            <label>Birim Fiyat:</label>
+                            <span id="viewProductUnitPrice">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Stok Durumu:</label>
+                            <span id="viewProductStockStatus" class="status-badge">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Tedarikçi:</label>
+                            <span id="viewProductSupplier">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Konum:</label>
+                            <span id="viewProductLocation">-</span>
+                        </div>
+                        <div class="detail-item full-width">
+                            <label>Açıklama:</label>
+                            <span id="viewProductDescription">-</span>
+                        </div>
+                        <div class="detail-item full-width">
+                            <label>Notlar:</label>
+                            <span id="viewProductNotes">-</span>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeEditProductModal()">
-                        <i class="fa-solid fa-times"></i> İptal
-                    </button>
-                    <button type="submit" class="btn-primary">
-                        <i class="fa-solid fa-save"></i> Güncelle
+                    <button type="button" class="btn-secondary" onclick="closeViewProductModal()">
+                        <i class="fa-solid fa-times"></i> Kapat
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
-</body>
-</html> 
+    
+        <!-- Ürün Düzenleme Modal -->
+        <div id="editProductModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fa-solid fa-edit"></i> Ürün Düzenle</h2>
+                    <button type="button" class="close" onclick="closeEditProductModal()">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+                <form id="editProductForm" onsubmit="event.preventDefault(); submitEditProduct();">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" id="editProductId">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editProductName">Ürün Adı *</label>
+                                <input type="text" name="name" id="editProductName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editProductType">Ürün Türü</label>
+                                <select name="item_type" id="editProductType">
+                                    <option value="">Tür Seçin</option>
+                                    <option value="Battery">Pil</option>
+                                    <option value="Ear_Tip">Kulak Ucu</option>
+                                    <option value="Tube">Tüp</option>
+                                    <option value="Filter">Filtre</option>
+                                    <option value="Wax_Guard">Kulak Kiri Koruması</option>
+                                    <option value="Accessory">Aksesuar</option>
+                                    <option value="Other">Diğer</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editProductBrand">Marka</label>
+                                <input type="text" name="brand" id="editProductBrand">
+                            </div>
+                            <div class="form-group">
+                                <label for="editProductModel">Model</label>
+                                <input type="text" name="model" id="editProductModel">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editProductUnit">Birim</label>
+                                <input type="text" name="unit" id="editProductUnit" placeholder="Adet, Paket, Metre...">
+                            </div>
+                            <div class="form-group">
+                                <label for="editProductMinimumStock">Minimum Stok</label>
+                                <input type="number" name="minimum_stock" id="editProductMinimumStock" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editProductUnitPrice">Birim Fiyat (TL)</label>
+                                <input type="number" name="unit_price" id="editProductUnitPrice" step="0.01" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="editProductSupplier">Tedarikçi</label>
+                                <select name="supplier" id="editProductSupplier">
+                                    <option value="">Tedarikçi Seçin</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="editProductLocation">Konum</label>
+                            <input type="text" name="location" id="editProductLocation" placeholder="Depo konumu...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="editProductDescription">Açıklama</label>
+                            <textarea name="description" id="editProductDescription" rows="3" placeholder="Ürün açıklaması..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="editProductNotes">Notlar</label>
+                            <textarea name="notes" id="editProductNotes" rows="3" placeholder="Ek notlar..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeEditProductModal()">
+                            <i class="fa-solid fa-times"></i> İptal
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-save"></i> Güncelle
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>

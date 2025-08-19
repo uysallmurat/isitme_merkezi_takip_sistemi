@@ -1,0 +1,934 @@
+ <!-- Base Scripts Importları -->
+ {% include 'frontend/partials/base/scripts.html' %}
+
+ <script>
+    const API_BASE_URL = '/api';
+    
+    // Sayfa yüklendiğinde
+    document.addEventListener('DOMContentLoaded', function() {
+        loadInventory();
+        loadInventoryStats();
+        setupFilters();
+        
+        // Form submit event listener
+        document.getElementById('newProductForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const productData = Object.fromEntries(formData.entries());
+            
+            // CSRF token'ı veri objesinden çıkar
+            delete productData.csrfmiddlewaretoken;
+            
+            // Debug için veriyi yazdır
+            console.log('Gönderilen veri:', productData);
+            
+            // CSRF token'ı modal içindeki formdan al
+            const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken,
+                    },
+                    body: JSON.stringify(productData)
+                });
+                
+                console.log('Başarılı yanıt:', response);
+                errorHandler.showSuccess('Ürün başarıyla eklendi');
+                closeNewProductModal();
+                loadInventory();
+                loadInventoryStats();
+            } catch (error) {
+                console.error('Hata detayı:', error);
+                // Hata zaten errorHandler tarafından gösterildi
+            }
+        });
+    });
+
+    // Stok verilerini yükle
+    async function loadInventory() {
+        try {
+            // Filtreleme parametrelerini oluştur
+            let url = `${API_BASE_URL}/stock_items/stock_items/?`;
+            
+            if (activeFilters.name) url += `search=${encodeURIComponent(activeFilters.name)}&`;
+            if (activeFilters.category) url += `category=${encodeURIComponent(activeFilters.category)}&`;
+            if (activeFilters.stock) url += `stock=${encodeURIComponent(activeFilters.stock)}&`;
+            if (activeFilters.price) url += `price=${encodeURIComponent(activeFilters.price)}&`;
+            if (activeFilters.supplier) url += `supplier=${encodeURIComponent(activeFilters.supplier)}&`;
+            if (activeFilters.status) url += `status=${encodeURIComponent(activeFilters.status)}&`;
+            if (activeFilters.brand) url += `brand=${encodeURIComponent(activeFilters.brand)}&`;
+            if (activeFilters.model) url += `model=${encodeURIComponent(activeFilters.model)}&`;
+            
+            console.log('Filtreleme URL:', url);
+            
+            const response = await errorHandler.apiRequest(url);
+            renderInventory(response.results || response);
+        } catch (error) {
+            renderInventory([]);
+        }
+    }
+
+    // Stok istatistiklerini yükle
+    async function loadInventoryStats() {
+        try {
+            // Tüm stok ürünlerini al
+            const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/`);
+            const stockItems = response.results || response;
+            console.log('İstatistik için stok ürünleri:', stockItems);
+            
+            // İstatistikleri hesapla
+            const stats = calculateStockStats(stockItems);
+            
+            // Kartları güncelle
+            document.getElementById('totalProducts').textContent = stats.totalProducts;
+            document.getElementById('stockValue').textContent = `₺${stats.stockValue.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+            document.getElementById('lowStock').textContent = stats.lowStock;
+            document.getElementById('outOfStock').textContent = stats.outOfStock;
+            
+        } catch (error) {
+            console.error('Stok istatistikleri yüklenemedi:', error);
+            // Hata durumunda sıfır göster
+            document.getElementById('totalProducts').textContent = '0';
+            document.getElementById('stockValue').textContent = '₺0,00';
+            document.getElementById('lowStock').textContent = '0';
+            document.getElementById('outOfStock').textContent = '0';
+        }
+    }
+
+    // Stok istatistiklerini hesapla
+    function calculateStockStats(stockItems) {
+        let totalProducts = stockItems.length;
+        let stockValue = 0;
+        let lowStock = 0;
+        let outOfStock = 0;
+        
+        stockItems.forEach(item => {
+            const quantity = parseInt(item.current_stock || 0);
+            const unitPrice = parseFloat(item.unit_price || 0);
+            const criticalLevel = parseInt(item.minimum_stock || 5);
+            
+            // Stok değeri hesapla
+            stockValue += quantity * unitPrice;
+            
+            // Stok durumlarını kontrol et
+            if (quantity === 0) {
+                outOfStock++;
+            } else if (quantity <= criticalLevel) {
+                lowStock++;
+            }
+        });
+        
+        return {
+            totalProducts,
+            stockValue,
+            lowStock,
+            outOfStock
+        };
+    }
+
+    // Stok verilerini tabloya render et
+    function renderInventory(products) {
+        const tbody = document.getElementById('inventoryTable');
+        
+        if (products.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Ürün bulunamadı</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = products.map(product => `
+            <tr>
+                <td>${product.name || '-'}</td>
+                <td>${getCategoryText(product.item_type)}</td>
+                <td>${product.current_stock || 0}</td>
+                <td>₺${product.unit_price || 0}</td>
+                <td>${product.supplier_name || '-'}</td>
+                <td>
+                    <span class="status-badge status-${getStockStatus(product.current_stock)}">
+                        ${getStockStatusText(product.current_stock)}
+                    </span>
+                </td>
+                <td class="action-buttons">
+                    <button class="btn-small btn-view" onclick="viewProduct(${product.id})">
+                        <i class="fa-solid fa-eye"></i> Görüntüle
+                    </button>
+                    <button class="btn-small btn-edit" onclick="editProduct(${product.id})">
+                        <i class="fa-solid fa-edit"></i> Düzenle
+                    </button>
+                    <button class="btn-small btn-delete" onclick="deleteProduct(${product.id})">
+                        <i class="fa-solid fa-trash"></i> Sil
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Kategori metnini getir
+    function getCategoryText(category) {
+        switch(category) {
+            case 'Battery': return 'Pil';
+            case 'Ear_Tip': return 'Kulak Ucu';
+            case 'Tube': return 'Tüp';
+            case 'Filter': return 'Filtre';
+            case 'Wax_Guard': return 'Kulak Kiri Koruması';
+            case 'Accessory': return 'Aksesuar';
+            case 'Other': return 'Diğer';
+            default: return category || '-';
+        }
+    }
+
+    // Stok durumunu getir
+    function getStockStatus(quantity) {
+        if (!quantity || quantity === 0) return 'out';
+        if (quantity <= 5) return 'low';
+        if (quantity <= 20) return 'medium';
+        return 'high';
+    }
+
+    // Stok durum metnini getir
+    function getStockStatusText(quantity) {
+        switch(getStockStatus(quantity)) {
+            case 'high': return 'Yüksek Stok';
+            case 'medium': return 'Orta Stok';
+            case 'low': return 'Düşük Stok';
+            case 'out': return 'Stok Dışı';
+            default: return 'Bilinmiyor';
+        }
+    }
+
+    // Global filter state
+    let activeFilters = {
+        name: '',
+        category: '',
+        stock: '',
+        price: '',
+        supplier: '',
+        status: '',
+        brand: '',
+        model: ''
+    };
+
+    let currentPage = 1;
+
+    // Filtreleri kur
+    function setupFilters() {
+        const mainSearch = document.getElementById('mainSearch');
+        
+        // Ana arama filtresi
+        if (mainSearch) {
+            mainSearch.addEventListener('input', debounce(() => {
+                applyFilters();
+            }, 500));
+        }
+    }
+
+    // Filtreleri uygula
+    async function applyFilters() {
+        const mainSearch = document.getElementById('mainSearch');
+        if (mainSearch) {
+            activeFilters.name = mainSearch.value;
+        }
+        
+        // Filtreleri uygula
+        loadInventory();
+    }
+
+    // Debounce fonksiyonu
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Sütun başlığı filtre fonksiyonları
+    function toggleFilter(columnName) {
+        // Close all other filters first
+        closeAllFilters();
+        
+        const filterDropdown = document.getElementById(`${columnName}-filter`);
+        if (filterDropdown) {
+            filterDropdown.style.display = 'block';
+            
+            // Load name options if opening name filter
+            if (columnName === 'name') {
+                loadNameOptions();
+            }
+        }
+    }
+
+    function closeAllFilters() {
+        const allFilters = document.querySelectorAll('.filter-dropdown');
+        allFilters.forEach(filter => {
+            filter.style.display = 'none';
+        });
+    }
+
+    // Close filters when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.sortable-header')) {
+            closeAllFilters();
+        }
+    });
+
+    async function loadNameOptions() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/stock_items/stock_items/`);
+            const data = await response.json();
+            const names = [...new Set(data.results.map(item => item.name))];
+            
+            const optionsContainer = document.getElementById('name-options');
+            optionsContainer.innerHTML = '';
+            
+            names.forEach(name => {
+                const option = document.createElement('div');
+                option.className = 'filter-option';
+                option.textContent = name;
+                option.onclick = () => selectNameFilter(name);
+                optionsContainer.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Ürün adı seçenekleri yüklenirken hata:', error);
+        }
+    }
+
+    function selectNameFilter(name) {
+        document.querySelector('#name-filter input').value = name;
+        filterByName(name);
+        closeAllFilters();
+    }
+
+    function filterByName(value) {
+        activeFilters.name = value;
+        applyColumnFilters();
+    }
+
+    function filterByCategory(value) {
+        activeFilters.category = value;
+        applyColumnFilters();
+    }
+
+    function filterByStock(value) {
+        activeFilters.stock = value;
+        applyColumnFilters();
+    }
+
+    function filterByPrice(value) {
+        activeFilters.price = value;
+        applyColumnFilters();
+    }
+
+    function filterBySupplier(value) {
+        activeFilters.supplier = value;
+        applyColumnFilters();
+    }
+
+    function filterByStatus(value) {
+        activeFilters.status = value;
+        applyColumnFilters();
+    }
+
+    function filterByBrand(value) {
+        activeFilters.brand = value;
+        applyColumnFilters();
+    }
+
+    function filterByModel(value) {
+        activeFilters.model = value;
+        applyColumnFilters();
+    }
+
+    function applyColumnFilters() {
+        currentPage = 1;
+        loadInventory();
+    }
+
+    function clearAllFilters() {
+        // Reset all filter inputs
+        document.querySelectorAll('.filter-dropdown input, .filter-dropdown select').forEach(input => {
+            input.value = '';
+        });
+        
+        // Reset global filter state
+        activeFilters = {
+            name: '',
+            category: '',
+            stock: '',
+            price: '',
+            supplier: '',
+            status: '',
+            brand: '',
+            model: ''
+        };
+        
+        // Clear main search
+        const mainSearch = document.getElementById('mainSearch');
+        if (mainSearch) {
+            mainSearch.value = '';
+        }
+        
+        currentPage = 1;
+        loadInventory();
+    }
+
+    // Stok işlemleri
+    function openNewProductModal() {
+        const modal = document.getElementById('newProductModal');
+        modal.style.display = 'block';
+        document.getElementById('newProductForm').reset();
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    }
+
+    function closeNewProductModal() {
+        const modal = document.getElementById('newProductModal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    function openStockInModal() {
+        const modal = document.getElementById('stockInModal');
+        modal.style.display = 'block';
+        loadProductsForStockIn();
+        loadSuppliers();
+        // Bugünün tarihini set et
+        document.getElementById('transactionDate').value = new Date().toISOString().split('T')[0];
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    }
+
+    function closeStockInModal() {
+        const modal = document.getElementById('stockInModal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    function openStockOutModal() {
+        const modal = document.getElementById('stockOutModal');
+        modal.style.display = 'block';
+        loadProductsForStockOut();
+        // Bugünün tarihini set et
+        document.getElementById('stockOutDate').value = new Date().toISOString().split('T')[0];
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    }
+
+    function closeStockOutModal() {
+        const modal = document.getElementById('stockOutModal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    async function viewProduct(id) {
+        try {
+            const product = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/${id}/`);
+            
+            // Modal içeriğini doldur
+            document.getElementById('viewProductId').textContent = product.id;
+            document.getElementById('viewProductName').textContent = product.name || '-';
+            
+            // Item type'ı Türkçe'ye çevir
+            const itemTypes = {
+                'Battery': 'Pil',
+                'Ear_Tip': 'Kulak Ucu',
+                'Tube': 'Tüp', 
+                'Filter': 'Filtre',
+                'Wax_Guard': 'Kulak Kiri Koruması',
+                'Accessory': 'Aksesuar',
+                'Other': 'Diğer'
+            };
+            document.getElementById('viewProductType').textContent = itemTypes[product.item_type] || product.item_type || '-';
+            
+            document.getElementById('viewProductBrand').textContent = product.brand || '-';
+            document.getElementById('viewProductModel').textContent = product.model || '-';
+            document.getElementById('viewProductDescription').textContent = product.description || 'Açıklama yok';
+            document.getElementById('viewProductUnit').textContent = product.unit || 'Adet';
+            document.getElementById('viewProductCurrentStock').textContent = product.current_stock || '0';
+            document.getElementById('viewProductMinimumStock').textContent = product.minimum_stock || '0';
+            document.getElementById('viewProductUnitPrice').textContent = product.unit_price ? `${product.unit_price} TL` : '-';
+            document.getElementById('viewProductSupplier').textContent = product.supplier_name || `Tedarikçi ID: ${product.supplier || '-'}`;
+            document.getElementById('viewProductLocation').textContent = product.location || '-';
+            document.getElementById('viewProductNotes').textContent = product.notes || 'Not yok';
+            
+            // Stok durumu badge'i
+            const stockBadge = document.getElementById('viewProductStockStatus');
+            const currentStock = parseInt(product.current_stock || 0);
+            const minimumStock = parseInt(product.minimum_stock || 0);
+            
+            if (currentStock <= 0) {
+                stockBadge.textContent = 'Tükendi';
+                stockBadge.className = 'status-badge danger';
+            } else if (currentStock <= minimumStock) {
+                stockBadge.textContent = 'Kritik Seviye';
+                stockBadge.className = 'status-badge warning';
+            } else {
+                stockBadge.textContent = 'Yeterli';
+                stockBadge.className = 'status-badge success';
+            }
+            
+            // Modal'ı göster
+            const modal = document.getElementById('viewProductModal');
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            
+        } catch (error) {
+            console.error('Ürün detayları yüklenemedi:', error);
+        }
+    }
+
+    async function editProduct(id) {
+        try {
+            // Ürün verilerini yükle
+            const product = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/${id}/`);
+            
+            // Tedarikçileri yükle
+            const suppliers = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/suppliers/`);
+            const supplierSelect = document.getElementById('editProductSupplier');
+            supplierSelect.innerHTML = '<option value="">Tedarikçi Seçin</option>';
+            suppliers.forEach(supplier => {
+                const selected = supplier.id === product.supplier ? 'selected' : '';
+                supplierSelect.innerHTML += `<option value="${supplier.id}" ${selected}>${supplier.name}</option>`;
+            });
+            
+            // Form alanlarını doldur
+            document.getElementById('editProductId').value = product.id;
+            document.getElementById('editProductName').value = product.name || '';
+            document.getElementById('editProductType').value = product.item_type || '';
+            document.getElementById('editProductBrand').value = product.brand || '';
+            document.getElementById('editProductModel').value = product.model || '';
+            document.getElementById('editProductDescription').value = product.description || '';
+            document.getElementById('editProductUnit').value = product.unit || 'Adet';
+            document.getElementById('editProductMinimumStock').value = product.minimum_stock || '';
+            document.getElementById('editProductUnitPrice').value = product.unit_price || '';
+            document.getElementById('editProductLocation').value = product.location || '';
+            document.getElementById('editProductNotes').value = product.notes || '';
+            
+            // Modal'ı göster
+            const modal = document.getElementById('editProductModal');
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            
+        } catch (error) {
+            console.error('Ürün düzenleme verisi yüklenemedi:', error);
+        }
+    }
+    
+    function closeViewProductModal() {
+        const modal = document.getElementById('viewProductModal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+    
+    function closeEditProductModal() {
+        const modal = document.getElementById('editProductModal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+    
+    async function submitEditProduct() {
+        const form = document.getElementById('editProductForm');
+        const formData = new FormData(form);
+        
+        const productData = {
+            name: formData.get('name'),
+            item_type: formData.get('item_type'),
+            brand: formData.get('brand'),
+            model: formData.get('model'),
+            description: formData.get('description'),
+            unit: formData.get('unit'),
+            minimum_stock: formData.get('minimum_stock'),
+            unit_price: formData.get('unit_price'),
+            supplier: formData.get('supplier') || null,
+            location: formData.get('location'),
+            notes: formData.get('notes')
+        };
+        
+        // Validasyon
+        if (!productData.name) {
+            errorHandler.showError('Ürün adı zorunludur');
+            return;
+        }
+        
+        // Sayısal alanları kontrol et
+        if (productData.minimum_stock && isNaN(productData.minimum_stock)) {
+            errorHandler.showError('Minimum stok sayısal olmalıdır');
+            return;
+        }
+        
+        if (productData.unit_price && isNaN(productData.unit_price)) {
+            errorHandler.showError('Birim fiyat sayısal olmalıdır');
+            return;
+        }
+        
+        try {
+            const productId = formData.get('product_id');
+            
+            console.log('Gönderilen ürün verisi:', productData);
+            console.log('Ürün ID:', productId);
+            
+            const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/${productId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify(productData)
+            });
+            
+            console.log('API Response:', response);
+            errorHandler.showSuccess('Ürün başarıyla güncellendi');
+            closeEditProductModal();
+            loadInventory();
+            
+        } catch (error) {
+            console.error('Ürün güncellenirken hata:', error);
+            console.error('Hata detayları:', error.message);
+            
+            if (error.message.includes('400')) {
+                errorHandler.showError('Form verilerinde hata var. Lütfen tüm alanları kontrol edin.');
+            } else {
+                errorHandler.showError('Ürün güncellenirken bir hata oluştu: ' + error.message);
+            }
+        }
+    }
+
+    async function deleteProduct(id) {
+        showConfirmation(
+            'Ürünü Sil',
+            'Bu ürünü silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
+            'danger',
+            async () => {
+                try {
+                    await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/${id}/`, {
+                        method: 'DELETE'
+                    });
+                    errorHandler.showSuccess('Ürün silindi');
+                    loadInventory();
+                } catch (error) {
+                    // Hata zaten errorHandler tarafından gösterildi
+                }
+            }
+        );
+    }
+
+    // Stok girişi fonksiyonları
+    async function loadProductsForStockIn() {
+        try {
+            const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/`);
+            const products = response.results || response;
+            const select = document.getElementById('stockInProduct');
+            
+            // Mevcut seçenekleri temizle (ilk seçenek hariç)
+            select.innerHTML = '<option value="">Ürün seçin...</option>';
+            
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.textContent = `${product.name} (${product.current_stock} ${product.unit || 'adet'})`;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Ürünler yüklenirken hata:', error);
+        }
+    }
+
+    async function loadSuppliers() {
+        try {
+            const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/suppliers/`);
+            const suppliers = response.results || response;
+            const select = document.getElementById('stockInSupplier');
+            
+            // Mevcut seçenekleri temizle (ilk seçenek hariç)
+            select.innerHTML = '<option value="">Tedarikçi seçin...</option>';
+            
+            suppliers.forEach(supplier => {
+                const option = document.createElement('option');
+                option.value = supplier.id;
+                option.textContent = supplier.name;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Tedarikçiler yüklenirken hata:', error);
+        }
+    }
+
+    async function loadProductsForStockOut() {
+        try {
+            const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/stock_items/`);
+            const products = response.results || response;
+            const productSelect = document.getElementById('stockOutProduct');
+            
+            productSelect.innerHTML = '<option value="">Ürün seçin...</option>';
+            
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.textContent = `${product.name} (Stok: ${product.current_stock})`;
+                option.dataset.stock = product.current_stock;
+                productSelect.appendChild(option);
+            });
+
+            // Ürün seçildiğinde mevcut stok miktarını göster
+            productSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const availableStock = selectedOption.dataset.stock || '0';
+                document.getElementById('availableStock').textContent = availableStock;
+                
+                // Miktar input'unun max değerini set et
+                const quantityInput = document.getElementById('stockOutQuantity');
+                quantityInput.max = availableStock;
+                
+                if (parseInt(availableStock) === 0) {
+                    quantityInput.disabled = true;
+                    quantityInput.placeholder = 'Stokta yok';
+                } else {
+                    quantityInput.disabled = false;
+                    quantityInput.placeholder = `Max: ${availableStock}`;
+                }
+            });
+        } catch (error) {
+            console.error('Stok çıkışı ürün yükleme hatası:', error);
+        }
+    }
+
+    // Toplam tutar hesaplama
+    function calculateTotalAmount() {
+        const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+        const unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
+        const totalAmount = quantity * unitPrice;
+        document.getElementById('totalAmount').value = totalAmount.toFixed(2);
+    }
+
+    // Stok girişi form submit
+    document.addEventListener('DOMContentLoaded', function() {
+        // Miktar ve birim fiyat değiştiğinde toplam tutarı hesapla
+        document.getElementById('quantity').addEventListener('input', calculateTotalAmount);
+        document.getElementById('unitPrice').addEventListener('input', calculateTotalAmount);
+        
+                         // Stok girişi form submit
+             document.getElementById('stockInForm').addEventListener('submit', async function(e) {
+                 e.preventDefault();
+                 
+                 const formData = new FormData(this);
+                 const stockInData = Object.fromEntries(formData.entries());
+                 
+                 // CSRF token'ı veri objesinden çıkar
+                 delete stockInData.csrfmiddlewaretoken;
+                 
+                 // Backend'de hesaplanan alanları çıkar
+                 delete stockInData.total_amount;
+                 
+                 // Transaction type'ı ekle
+                 stockInData.transaction_type = 'In';
+                 
+                 // User ID'yi ekleme (backend'de otomatik handle ediliyor)
+                 // stockInData.user = 1;
+                 
+                 // Tarih formatını test script ile aynı yap (sadece YYYY-MM-DD)
+                 if (stockInData.transaction_date) {
+                     // T00:00:00Z kısmını çıkar, sadece tarih bırak
+                     stockInData.transaction_date = stockInData.transaction_date;
+                 }
+                 
+                                                            // Backend string formatında bekliyor, dönüşüm yapmayalım
+                 // Sadece boş değerleri kontrol edelim
+                 if (!stockInData.stock_item) {
+                     alert('Lütfen bir ürün seçin');
+                     return;
+                 }
+                 
+                 if (!stockInData.quantity) {
+                     alert('Lütfen miktar girin');
+                     return;
+                 }
+                 
+                 console.log('Stok girişi verisi:', stockInData);
+                 
+                 // CSRF token'ı modal içindeki formdan al
+                 const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+                 
+                 try {
+                     const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/transactions/`, {
+                         method: 'POST',
+                         headers: {
+                             'Content-Type': 'application/json',
+                             'X-CSRFToken': csrfToken,
+                         },
+                         body: JSON.stringify(stockInData)
+                     });
+                     
+                     errorHandler.showSuccess('Stok girişi başarıyla yapıldı');
+                     closeStockInModal();
+                     loadInventory(); // Stok listesini yenile
+                     loadInventoryStats(); // İstatistikleri yenile
+                 } catch (error) {
+                     console.error('Stok girişi hatası:', error);
+                     
+                     // Detaylı hata mesajını al
+                     if (error.response) {
+                         error.response.json().then(errorData => {
+                             console.error('Backend hata detayı:', errorData);
+                             if (errorData.details) {
+                                 console.error('Validation errors:', errorData.details);
+                             }
+                         }).catch(() => {
+                             console.error('Hata response parse edilemedi');
+                         });
+                     }
+                 }
+             });
+
+             // Stok çıkışı form submit
+             document.getElementById('stockOutForm').addEventListener('submit', async function(e) {
+                 e.preventDefault();
+                 
+                 const formData = new FormData(this);
+                 const stockOutData = Object.fromEntries(formData.entries());
+                 
+                 // CSRF token'ı veri objesinden çıkar
+                 delete stockOutData.csrfmiddlewaretoken;
+                 
+                 // Transaction type'ı ekle
+                 stockOutData.transaction_type = 'Out';
+                 
+                 // Reason alanını çıkar (notes'a ekleyelim)
+                 const reason = stockOutData.reason;
+                 delete stockOutData.reason;
+                 if (reason && stockOutData.notes) {
+                     stockOutData.notes = `Çıkış Nedeni: ${reason}. ${stockOutData.notes}`;
+                 } else if (reason) {
+                     stockOutData.notes = `Çıkış Nedeni: ${reason}`;
+                 }
+                 
+                 // Sadece boş değerleri kontrol edelim
+                 if (!stockOutData.stock_item) {
+                     alert('Lütfen bir ürün seçin');
+                     return;
+                 }
+                 
+                 if (!stockOutData.quantity) {
+                     alert('Lütfen miktar girin');
+                     return;
+                 }
+                 
+                 console.log('Stok çıkışı verisi:', stockOutData);
+                 
+                 // CSRF token'ı modal içindeki formdan al
+                 const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+                 
+                 try {
+                     const response = await errorHandler.apiRequest(`${API_BASE_URL}/stock_items/transactions/`, {
+                         method: 'POST',
+                         headers: {
+                             'Content-Type': 'application/json',
+                             'X-CSRFToken': csrfToken,
+                         },
+                         body: JSON.stringify(stockOutData)
+                     });
+                     
+                     errorHandler.showSuccess('Stok çıkışı başarıyla yapıldı');
+                     closeStockOutModal();
+                     loadInventory(); // Stok listesini yenile
+                     loadInventoryStats(); // İstatistikleri yenile
+                 } catch (error) {
+                     console.error('Stok çıkışı hatası:', error);
+                     
+                     // Detaylı hata mesajını al
+                     if (error.response) {
+                         error.response.json().then(errorData => {
+                             console.error('Backend hata detayı:', errorData);
+                             if (errorData.details) {
+                                 console.error('Validation errors:', errorData.details);
+                             }
+                         }).catch(() => {
+                             console.error('Hata response parse edilemedi');
+                         });
+                     }
+                 }
+             });
+    });
+
+    // Modal dışına tıklayınca kapat
+    window.onclick = function(event) {
+        const newProductModal = document.getElementById('newProductModal');
+        const stockInModal = document.getElementById('stockInModal');
+        const stockOutModal = document.getElementById('stockOutModal');
+        const viewProductModal = document.getElementById('viewProductModal');
+        const editProductModal = document.getElementById('editProductModal');
+        const confirmationOverlay = document.getElementById('confirmationOverlay');
+        
+        if (event.target === newProductModal) {
+            closeNewProductModal();
+        }
+        if (event.target === stockInModal) {
+            closeStockInModal();
+        }
+        if (event.target === stockOutModal) {
+            closeStockOutModal();
+        }
+        if (event.target === viewProductModal) {
+            closeViewProductModal();
+        }
+        if (event.target === editProductModal) {
+            closeEditProductModal();
+        }
+        if (event.target === confirmationOverlay) {
+            hideConfirmation();
+        }
+    }
+
+    // Confirmation Modal Functions
+    function showConfirmation(title, message, iconClass, onConfirm) {
+        const overlay = document.getElementById('confirmationOverlay');
+        const icon = document.getElementById('confirmationIcon');
+        const titleEl = document.getElementById('confirmationTitle');
+        const messageEl = document.getElementById('confirmationMessage');
+        const confirmBtn = document.getElementById('confirmationConfirm');
+        
+        // Icon class'ını güncelle
+        icon.className = `confirmation-icon ${iconClass}`;
+        
+        // İçeriği güncelle
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+        
+        // Confirm butonuna click event ekle
+        confirmBtn.onclick = () => {
+            onConfirm();
+            hideConfirmation();
+        };
+        
+        // Modal'ı göster
+        overlay.classList.add('show');
+    }
+
+    function hideConfirmation() {
+        const overlay = document.getElementById('confirmationOverlay');
+        overlay.classList.remove('show');
+    }
+</script>

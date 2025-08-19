@@ -1,0 +1,13 @@
+<!-- Base Head Importları -->
+{% include 'frontend/partials/base/head.html' %}
+
+{% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Giriş | İşitme Merkezi Takip Sistemi{% endblock %}</title>
+
+<!-- CSS Importları -->
+<link rel="stylesheet" href="{% static 'frontend/css/inventory/main.css' %}">
+
+<!-- Sayfa özel CSS'leri için blok -->
+{% block extra_css %}{% endblock %}

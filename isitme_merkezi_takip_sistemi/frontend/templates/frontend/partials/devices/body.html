@@ -1,20 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cihaz Yönetimi | İşitme Merkezi Takip Sistemi</title>
-    <link rel="stylesheet" href="{% static 'frontend/css/devices/main.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="{% static 'frontend/js/error-handler.js' %}"></script>
-</head>
-<body class="page-bg">
-    <!-- base js--> 
-    <script src="{% static 'frontend/js/base.js' %}"></script>
-    <!-- devices js -->
-    <script src="{% static 'frontend/js/devices.js' %}"></script>
-
+ <!-- Base Body Importları -->
+{% include 'frontend/partials/base/body.html' %}
+ 
     <!-- Progress Bar -->
     <div class="progress-bar" id="progressBar"></div>
     
@@ -289,6 +275,3 @@
             </div>
         </div>
     </div>
-
-</body>
-</html> 

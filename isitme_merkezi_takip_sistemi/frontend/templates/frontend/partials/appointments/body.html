@@ -1,0 +1,371 @@
+ <!-- Base Body Importları -->
+{% include 'frontend/partials/base/body.html' %}
+ 
+
+
+ <!-- Progress Bar -->
+ <div class="progress-bar" id="progressBar"></div>
+    
+ <!-- Toast Container -->
+ <div class="toast-container" id="toastContainer"></div>
+ 
+ <!-- Page Transition -->
+ <div class="page-transition" id="pageTransition">
+     <div class="page-transition-content">
+         <div class="page-transition-spinner"></div>
+         <div class="page-transition-text">Yükleniyor...</div>
+     </div>
+ </div>
+ 
+ <!-- Confirmation Modal -->
+ <div class="confirmation-overlay" id="confirmationOverlay">
+     <div class="confirmation-modal">
+         <div class="confirmation-icon" id="confirmationIcon">
+             <i class="fa-solid fa-exclamation-triangle"></i>
+         </div>
+         <div class="confirmation-title" id="confirmationTitle">Emin misiniz?</div>
+         <div class="confirmation-message" id="confirmationMessage">Bu işlem geri alınamaz.</div>
+         <div class="confirmation-actions">
+             <button class="btn-cancel" id="confirmationCancel">İptal</button>
+             <button class="btn-confirm" id="confirmationConfirm">Onayla</button>
+         </div>
+     </div>
+ </div>
+ <div class="topbar">
+     <div class="logo">MAVİ İŞİTME MERKEZİ</div>
+     <nav>
+         <a href="/logout/" class="logout-link nav-link" onclick="confirmLogout(event)">
+             <i class="fa-solid fa-right-from-bracket"></i>
+             Çıkış
+         </a>
+     </nav>
+ </div>
+ <div class="page-container">
+     <aside class="sidebar">
+         <div class="sidebar-logo">
+             <span class="sidebar-logo-icon">🎧</span>
+             <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
+         </div>
+         <ul>
+             <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
+             <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
+             <li><a href="/appointments/" class="nav-link nav-item active" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
+             <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
+             <li><a href="/test-reports/" class="nav-link nav-item" data-route="/tests"><i class="fa-solid fa-file-medical"></i> TEST RAPORLARI</a></li>
+             <li><a href="/inventory/" class="nav-link nav-item" data-route="/inventory"><i class="fa-solid fa-boxes-stacked"></i> STOK YÖNETİMİ</a></li>
+             <li><a href="/invoices/" class="nav-link nav-item" data-route="/invoices"><i class="fa-solid fa-file-invoice-dollar"></i> FATURA YÖNETİMİ</a></li>
+         </ul>
+     </aside>
+     <main class="main-content">
+         <div class="page-header">
+             <div class="title-section">
+                 <h1 class="page-title">
+                     <i class="fa-solid fa-calendar-check"></i>
+                     Randevu Yönetimi
+                 </h1>
+             </div>
+             <div class="main-search-container">
+                 <div class="filter-group">
+                     <input type="text" id="mainSearch" placeholder="Hasta adi ile ara..." onkeyup="applyFilters()">
+                 </div>
+             </div>
+             <div class="header-buttons">
+                 <button type="button" class="clear-filters-btn" onclick="clearAllFilters()">
+                     <i class="fa-solid fa-filter-circle-xmark"></i>
+                     Filtreleri Temizle
+                 </button>
+                 <button type="button" class="btn-primary" onclick="openNewAppointmentModal()">
+                     <i class="fa-solid fa-plus"></i>
+                     Yeni Randevu
+                 </button>
+             </div>
+         </div>
+         
+         <div class="stats-cards">
+             <div class="stat-card interactive-element fade-in">
+                 <div class="stat-icon appointments">
+                     <i class="fa-solid fa-calendar"></i>
+                 </div>
+                 <div class="stat-content">
+                     <div class="stat-number" id="totalAppointments">
+                         <span class="loading-spinner primary"></span>
+                     </div>
+                     <div class="stat-label">Toplam Randevu</div>
+                 </div>
+             </div>
+             <div class="stat-card interactive-element fade-in">
+                 <div class="stat-icon today">
+                     <i class="fa-solid fa-clock"></i>
+                 </div>
+                 <div class="stat-content">
+                     <div class="stat-number" id="todayAppointments">
+                         <span class="loading-spinner primary"></span>
+                     </div>
+                     <div class="stat-label">Bugünkü Randevular</div>
+                 </div>
+             </div>
+             <div class="stat-card interactive-element fade-in">
+                 <div class="stat-icon completed">
+                     <i class="fa-solid fa-check-circle"></i>
+                 </div>
+                 <div class="stat-content">
+                     <div class="stat-number" id="completedAppointments">
+                         <span class="loading-spinner primary"></span>
+                     </div>
+                     <div class="stat-label">Tamamlanan Randevular</div>
+                 </div>
+             </div>
+             <div class="stat-card interactive-element fade-in">
+                 <div class="stat-icon weekly">
+                     <i class="fa-solid fa-calendar-week"></i>
+                 </div>
+                 <div class="stat-content">
+                     <div class="stat-number" id="weeklyAppointments">
+                         <span class="loading-spinner primary"></span>
+                     </div>
+                     <div class="stat-label">Bu Hafta Randevular</div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="content-card">
+             <div class="table-container">
+                 <table>
+                     <thead>
+                         <tr>
+                             <th class="sortable-header" onclick="toggleFilter('name')">
+                                 <i class="fa-solid fa-user"></i>
+                                 Ad Soyad
+                                 <i class="fa-solid fa-filter"></i>
+                                 <div class="filter-dropdown" id="name-filter">
+                                     <input type="text" placeholder="Ad soyad ara..." onkeyup="filterByName(this.value)">
+                                     <div class="filter-options" id="name-options"></div>
+                                 </div>
+                             </th>
+                             <th class="sortable-header" onclick="toggleFilter('date')">
+                                 <i class="fa-solid fa-calendar"></i>
+                                 Tarih
+                                 <i class="fa-solid fa-filter"></i>
+                                 <div class="filter-dropdown" id="date-filter">
+                                     <input type="date" onchange="filterByDate(this.value)">
+                                 </div>
+                             </th>
+                             <th class="sortable-header" onclick="toggleFilter('time')">
+                                 <i class="fa-solid fa-clock"></i>
+                                 Saat
+                                 <i class="fa-solid fa-filter"></i>
+                                 <div class="filter-dropdown" id="time-filter">
+                                     <input type="time" onchange="filterByTime(this.value)">
+                                 </div>
+                             </th>
+                             <th class="sortable-header" onclick="toggleFilter('type')">
+                                 <i class="fa-solid fa-tag"></i>
+                                 Tür
+                                 <i class="fa-solid fa-filter"></i>
+                                 <div class="filter-dropdown" id="type-filter">
+                                     <select onchange="filterByType(this.value)">
+                                         <option value="">Tümü</option>
+                                         <option value="consultation">Konsültasyon</option>
+                                         <option value="hearing_test">İşitme Testi</option>
+                                         <option value="device_fitting">Cihaz Uygulaması</option>
+                                         <option value="follow_up">Kontrol</option>
+                                         <option value="maintenance">Bakım</option>
+                                     </select>
+                                 </div>
+                             </th>
+                             <th class="sortable-header" onclick="toggleFilter('status')">
+                                 <i class="fa-solid fa-info-circle"></i>
+                                 Durum
+                                 <i class="fa-solid fa-filter"></i>
+                                 <div class="filter-dropdown" id="status-filter">
+                                     <select onchange="filterByStatus(this.value)">
+                                         <option value="">Tümü</option>
+                                         <option value="scheduled">Planlandı</option>
+                                         <option value="completed">Tamamlandı</option>
+                                         <option value="cancelled">İptal Edildi</option>
+                                     </select>
+                                 </div>
+                             </th>
+                             <th>İşlemler</th>
+                         </tr>
+                     </thead>
+                     <tbody id="appointmentsTable">
+                         <tr>
+                             <td colspan="6" style="text-align: center; padding: 2rem;">
+                                 <span class="loading-spinner primary"></span> Yükleniyor...
+                             </td>
+                         </tr>
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+     </main>
+ </div>
+
+ <!-- Yeni Randevu Ekleme Modal -->
+ <div id="newAppointmentModal" class="modal" style="display: none;">
+     <div class="modal-content">
+         <div class="modal-header">
+             <h2>Yeni Randevu Ekle</h2>
+             <span class="close" onclick="closeNewAppointmentModal()">&times;</span>
+         </div>
+         <div class="modal-body">
+             <form id="newAppointmentForm">
+                 {% csrf_token %}
+                 <div class="form-group">
+                     <label for="patientSelect">Hasta *</label>
+                     <select id="patientSelect" name="patient" required>
+                         <option value="">Hasta seçin...</option>
+                     </select>
+                 </div>
+                 <div class="form-group">
+                     <label for="appointmentDate">Tarih *</label>
+                     <input type="date" id="appointmentDate" name="appointment_date" required>
+                 </div>
+                 <div class="form-group">
+                     <label for="appointmentTime">Saat *</label>
+                     <input type="time" id="appointmentTime" name="appointment_time" required>
+                 </div>
+                 <div class="form-group">
+                     <label for="appointmentType">Randevu Türü *</label>
+                     <select id="appointmentType" name="appointment_type" required>
+                         <option value="">Tür seçin...</option>
+                         <option value="consultation">Konsültasyon</option>
+                         <option value="hearing_test">İşitme Testi</option>
+                         <option value="device_fitting">Cihaz Uygulaması</option>
+                         <option value="follow_up">Kontrol</option>
+                         <option value="maintenance">Bakım</option>
+                     </select>
+                 </div>
+                 <div class="form-group">
+                     <label for="notes">Notlar</label>
+                     <textarea id="notes" name="notes" rows="3" placeholder="Randevu ile ilgili notlar..."></textarea>
+                 </div>
+                 <div class="form-actions">
+                     <button type="button" onclick="closeNewAppointmentModal()" class="btn-secondary">İptal</button>
+                     <button type="submit" class="btn-primary">Kaydet</button>
+                 </div>
+             </form>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Randevu Görüntüleme Modal -->
+ <div id="viewAppointmentModal" class="modal">
+     <div class="modal-content">
+         <div class="modal-header">
+             <h2><i class="fa-solid fa-eye"></i> Randevu Detayları</h2>
+             <button type="button" class="close" onclick="closeViewAppointmentModal()">
+                 <i class="fa-solid fa-times"></i>
+             </button>
+         </div>
+         <div class="modal-body">
+             <div class="detail-grid">
+                 <div class="detail-item">
+                     <label>Randevu ID:</label>
+                     <span id="viewAppointmentId">-</span>
+                 </div>
+                 <div class="detail-item">
+                     <label>Hasta:</label>
+                     <span id="viewAppointmentPatient">-</span>
+                 </div>
+                 <div class="detail-item">
+                     <label>Tarih:</label>
+                     <span id="viewAppointmentDate">-</span>
+                 </div>
+                 <div class="detail-item">
+                     <label>Saat:</label>
+                     <span id="viewAppointmentTime">-</span>
+                 </div>
+                 <div class="detail-item">
+                     <label>Randevu Türü:</label>
+                     <span id="viewAppointmentType">-</span>
+                 </div>
+                 <div class="detail-item">
+                     <label>Durum:</label>
+                     <span id="viewAppointmentStatus" class="status-badge">-</span>
+                 </div>
+                 <div class="detail-item full-width">
+                     <label>Notlar:</label>
+                     <span id="viewAppointmentNotes">-</span>
+                 </div>
+             </div>
+         </div>
+         <div class="modal-footer">
+             <button type="button" class="btn-secondary" onclick="closeViewAppointmentModal()">
+                 <i class="fa-solid fa-times"></i> Kapat
+             </button>
+         </div>
+     </div>
+ </div>
+
+ <!-- Randevu Düzenleme Modal -->
+ <div id="editAppointmentModal" class="modal">
+     <div class="modal-content">
+         <div class="modal-header">
+             <h2><i class="fa-solid fa-edit"></i> Randevu Düzenle</h2>
+             <button type="button" class="close" onclick="closeEditAppointmentModal()">
+                 <i class="fa-solid fa-times"></i>
+             </button>
+         </div>
+         <form id="editAppointmentForm" onsubmit="event.preventDefault(); submitEditAppointment();">
+             {% csrf_token %}
+             <input type="hidden" name="appointment_id" id="editAppointmentId">
+             <div class="modal-body">
+                 <div class="form-row">
+                     <div class="form-group">
+                         <label for="editAppointmentPatient">Hasta *</label>
+                         <select name="patient" id="editAppointmentPatient" required>
+                             <option value="">Hasta Seçin</option>
+                         </select>
+                     </div>
+                     <div class="form-group">
+                         <label for="editAppointmentDate">Randevu Tarihi *</label>
+                         <input type="date" name="appointment_date" id="editAppointmentDate" required>
+                     </div>
+                 </div>
+                 
+                 <div class="form-row">
+                     <div class="form-group">
+                         <label for="editAppointmentTime">Randevu Saati *</label>
+                         <input type="time" name="appointment_time" id="editAppointmentTime" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="editAppointmentType">Randevu Türü</label>
+                         <select name="appointment_type" id="editAppointmentType">
+                             <option value="consultation">Konsültasyon</option>
+                             <option value="hearing_test">İşitme Testi</option>
+                             <option value="device_fitting">Cihaz Uygulaması</option>
+                             <option value="follow_up">Kontrol</option>
+                             <option value="maintenance">Bakım</option>
+                         </select>
+                     </div>
+                 </div>
+                 
+                 <div class="form-row">
+                     <div class="form-group">
+                         <label for="editAppointmentStatus">Durum</label>
+                         <select name="status" id="editAppointmentStatus">
+                             <option value="scheduled">Planlandı</option>
+                             <option value="completed">Tamamlandı</option>
+                             <option value="cancelled">İptal Edildi</option>
+                         </select>
+                     </div>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label for="editAppointmentNotes">Notlar</label>
+                     <textarea name="notes" id="editAppointmentNotes" rows="3" placeholder="Randevu notları..."></textarea>
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn-secondary" onclick="closeEditAppointmentModal()">
+                     <i class="fa-solid fa-times"></i> İptal
+                 </button>
+                 <button type="submit" class="btn-primary">
+                     <i class="fa-solid fa-save"></i> Güncelle
+                 </button>
+             </div>
+         </form>
+     </div>
+ </div>
