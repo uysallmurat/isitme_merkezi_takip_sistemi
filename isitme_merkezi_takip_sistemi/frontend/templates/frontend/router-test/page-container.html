@@ -1,0 +1,48 @@
+{% load static %}
+<div class="container">
+    <h1>🧭 Router Test Sayfası</h1>
+    <p>JavaScript Router sistemini test edin - Sprint 5 Navigasyon Sistemi</p>
+    
+    <div class="breadcrumb" id="breadcrumb">
+        Test Sayfası
+    </div>
+    
+    <div class="menu">
+        <a href="#" data-route="/dashboard">📊 Dashboard</a>
+        <a href="#" data-route="/patients">👥 Hastalar</a>
+        <a href="#" data-route="/appointments">📅 Randevular</a>
+        <a href="#" data-route="/devices">🎧 Cihazlar</a>
+        <a href="#" data-route="/tests">📋 Test Raporları</a>
+        <a href="#" data-route="/inventory">📦 Stok</a>
+    </div>
+    
+    <div class="content" id="content">
+        <h2>Router Test Alanı</h2>
+        <p>Yukarıdaki menü linklerine tıklayın</p>
+        <p><strong>Mevcut Route:</strong> <span id="currentRoute">-</span></p>
+    </div>
+    
+    <div class="debug" id="debug">
+        <strong>Debug Bilgileri:</strong><br>
+        Router Status: Yükleniyor...
+    </div>
+    
+    <!-- Test Kontrolleri -->
+    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+        <h3>🧪 Test Kontrolleri</h3>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0;">
+            <button onclick="testRouter()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer;">
+                🧪 Router Test
+            </button>
+            <button onclick="testNavigation()" style="background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer;">
+                🧭 Navigation Test
+            </button>
+            <button onclick="testBreadcrumb()" style="background: #ffc107; color: #212529; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer;">
+                🍞 Breadcrumb Test
+            </button>
+            <button onclick="testLoading()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer;">
+                ⏳ Loading Test
+            </button>
+        </div>
+    </div>
+</div>

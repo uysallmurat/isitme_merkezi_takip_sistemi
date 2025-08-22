@@ -1,0 +1,195 @@
+{% load static %} 
+     <!-- Yeni Fatura Modal -->
+     <div id="newInvoiceModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-file-invoice"></i> Yeni Fatura Oluştur</h2>
+                <button class="close-btn" onclick="closeNewInvoiceModal()">&times;</button>
+            </div>
+            <form id="newInvoiceForm">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patient_id">Hasta <span class="required">*</span></label>
+                        <select id="patient_id" name="patient" required>
+                            <option value="">Hasta Seçin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice_date">Fatura Tarihi <span class="required">*</span></label>
+                        <input type="date" id="invoice_date" name="invoice_date" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="amount">Tutar (TL) <span class="required">*</span></label>
+                        <input type="text" id="amount" name="amount" placeholder="0.00" required 
+                               pattern="[0-9.,]+" oninput="formatAmountInput(this)">
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Durum</label>
+                        <select id="status" name="status">
+                            <option value="Draft">Taslak</option>
+                            <option value="Issued">Düzenlendi</option>
+                            <option value="Paid">Ödendi</option>
+                            <option value="Cancelled">İptal Edildi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Açıklama</label>
+                    <textarea id="description" name="description" rows="4" 
+                              placeholder="Fatura açıklaması..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeNewInvoiceModal()">İptal</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-save"></i> Fatura Oluştur
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fatura Görüntüle Modal -->
+    <div id="viewInvoiceModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-eye"></i> Fatura Detayları</h2>
+                <button class="close-btn" onclick="closeViewInvoiceModal()">&times;</button>
+            </div>
+            <div class="invoice-details">
+                <div class="invoice-header">
+                    <div class="invoice-info">
+                        <h3 id="invoiceTitle">Fatura #</h3>
+                        <div class="invoice-meta">
+                            <span id="invoiceDate">Tarih: -</span>
+                            <span id="invoiceStatus" class="status-badge">-</span>
+                        </div>
+                    </div>
+                    <div class="invoice-amount">
+                        <div class="amount-label">Toplam Tutar</div>
+                        <div class="amount-value" id="invoiceAmount">₺0.00</div>
+                    </div>
+                </div>
+                
+                <div class="invoice-body">
+                    <div class="section">
+                        <h4><i class="fa-solid fa-user"></i> Hasta Bilgileri</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Ad Soyad:</label>
+                                <span id="patientName">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h4><i class="fa-solid fa-file-text"></i> Fatura Detayları</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Açıklama:</label>
+                                <span id="invoiceDescription">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Oluşturma Tarihi:</label>
+                                <span id="invoiceCreated">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Son Güncelleme:</label>
+                                <span id="invoiceUpdated">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeViewInvoiceModal()">Kapat</button>
+                    <button type="button" class="btn-primary" onclick="editInvoiceFromView()">
+                        <i class="fa-solid fa-edit"></i> Düzenle
+                    </button>
+                    <button type="button" class="btn-secondary" disabled title="Yakında eklenecek">
+                        <i class="fa-solid fa-download"></i> PDF İndir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fatura Düzenle Modal -->
+    <div id="editInvoiceModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-edit"></i> Fatura Düzenle</h2>
+                <button class="close-btn" onclick="closeEditInvoiceModal()">&times;</button>
+            </div>
+            <div class="invoice-details">
+                <div class="invoice-header">
+                    <div class="invoice-info">
+                        <h3 id="editInvoiceTitle">Fatura #</h3>
+                        <div class="invoice-meta">
+                            <span id="editInvoiceDate">Düzenleme Tarihi: -</span>
+                            <span id="editInvoiceStatus" class="status-badge">-</span>
+                        </div>
+                    </div>
+                    <div class="invoice-amount">
+                        <div class="amount-label">Mevcut Tutar</div>
+                        <div class="amount-value" id="editInvoiceAmount">₺0.00</div>
+                    </div>
+                </div>
+                
+                <form id="editInvoiceForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit_invoice_id" name="invoice_id">
+                    
+                    <div class="section">
+                        <h4><i class="fa-solid fa-user"></i> Hasta Bilgileri</h4>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label for="edit_patient_id">Hasta <span class="required">*</span></label>
+                                <select id="edit_patient_id" name="patient" required>
+                                    <option value="">Hasta Seçin</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_invoice_date">Fatura Tarihi <span class="required">*</span></label>
+                                <input type="date" id="edit_invoice_date" name="invoice_date" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h4><i class="fa-solid fa-money-bill-wave"></i> Fatura Detayları</h4>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label for="edit_amount">Tutar (TL) <span class="required">*</span></label>
+                                <input type="text" id="edit_amount" name="amount" placeholder="0.00" required 
+                                       pattern="[0-9.,]+" oninput="formatAmountInput(this); updateEditAmount(this)">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_status">Durum</label>
+                                <select id="edit_status" name="status" onchange="updateEditStatus(this)">
+                                    <option value="Draft">Taslak</option>
+                                    <option value="Issued">Düzenlendi</option>
+                                    <option value="Paid">Ödendi</option>
+                                    <option value="Cancelled">İptal Edildi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_description">Açıklama</label>
+                            <textarea id="edit_description" name="description" rows="4" 
+                                      placeholder="Fatura açıklaması..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeEditInvoiceModal()">İptal</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-save"></i> Güncelle
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

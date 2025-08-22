@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}İşitme Merkezi Takip Sistemi{% endblock %}</title>
+    
+    <!-- Ortak CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="{% static 'frontend/js/error-handler.js' %}"></script>
+    
+    <!-- Modül özel CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="page-bg">
+    <!-- Base JavaScript -->
+    <script src="{% static 'frontend/js/base.js' %}"></script>
+    
+    <!-- Modül özel JavaScript -->
+    {% block extra_js %}{% endblock %}
+
+    <!-- Ortak UI Bileşenleri -->
+    {% include 'frontend/components/progress-bar.html' %}
+    {% include 'frontend/components/toast-container.html' %}
+    {% include 'frontend/components/page-transition.html' %}
+    {% include 'frontend/components/confirmation-modal.html' %}
+    
+    <!-- Layout -->
+    {% include 'frontend/layout/topbar.html' %}
+    
+    <div class="page-container">
+        {% include 'frontend/layout/sidebar.html' %}
+        
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

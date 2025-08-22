@@ -1,0 +1,79 @@
+{% load static %}
+     <!-- Yeni Cihaz Modal -->
+     <div id="newDeviceModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Yeni Cihaz Ekle</h2>
+                <span class="close" onclick="closeNewDeviceModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="newDeviceForm">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="deviceType">Cihaz Türü *</label>
+                            <select id="deviceType" name="device_type" required>
+                                <option value="">Tür seçin...</option>
+                                <option value="BTE">Behind The Ear (Kulak Arkası)</option>
+                                <option value="ITE">In The Ear (Kulak İçi)</option>
+                                <option value="ITC">In The Canal (Kanal İçi)</option>
+                                <option value="CIC">Completely In Canal (Tam Kanal İçi)</option>
+                                <option value="RIC">Receiver In Canal (Kanal İçi Alıcı)</option>
+                                <option value="Accessory">Aksesuar</option>
+                                <option value="Other">Diğer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="deviceStatus">Durum *</label>
+                            <select id="deviceStatus" name="status" required>
+                                <option value="">Durum seçin...</option>
+                                <option value="Available">Mevcut</option>
+                                <option value="In_Use">Kullanımda</option>
+                                <option value="Maintenance">Bakımda</option>
+                                <option value="Retired">Emekli</option>
+                                <option value="Lost">Kayıp</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="deviceBrand">Marka *</label>
+                            <input type="text" id="deviceBrand" name="brand" required placeholder="Örn: Phonak, Oticon, ReSound">
+                        </div>
+                        <div class="form-group">
+                            <label for="deviceModel">Model *</label>
+                            <input type="text" id="deviceModel" name="model" required placeholder="Örn: Audeo Paradise P90">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="serialNumber">Seri Numarası *</label>
+                            <input type="text" id="serialNumber" name="serial_number" required placeholder="Benzersiz seri numarası">
+                        </div>
+                        <div class="form-group">
+                            <label for="purchaseDate">Satın Alma Tarihi *</label>
+                            <input type="date" id="purchaseDate" name="purchase_date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="purchasePrice">Satın Alma Fiyatı (₺) *</label>
+                            <input type="number" id="purchasePrice" name="purchase_price" step="0.01" min="0" required placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="warrantyExpiry">Garanti Bitiş Tarihi</label>
+                            <input type="date" id="warrantyExpiry" name="warranty_expiry" placeholder="Opsiyonel">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="deviceNotes">Notlar</label>
+                        <textarea id="deviceNotes" name="notes" rows="3" placeholder="İsteğe bağlı notlar ve açıklamalar"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeNewDeviceModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Cihaz Ekle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

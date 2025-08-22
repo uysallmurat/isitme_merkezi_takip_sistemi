@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    {% include 'frontend/base/head.html' %}
+
+    <!-- Sayfa özel head içeriği -->
+    {% block head %}{% endblock %}
+    <!-- Sayfa özel CSS -->
+    {% block custom_css %}{% endblock %}
+</head>
+<body class="page-bg">
+
+    <!-- Sayfa özel JavaScript -->
+    {% include 'frontend/base/js.html' %}
+    {% block custom_js %}{% endblock %}
+    
+    <!-- Ortak bileşenler -->
+    {% include 'frontend/base/progress-bar.html' %}
+    {% block progress_bar %}{% endblock %}
+
+    {% include 'frontend/base/toast-container.html' %}
+    {% block toast_container %}{% endblock %}
+
+    {% include 'frontend/base/page-transition.html' %}
+    {% block page_transition %}{% endblock %}
+
+    {% include 'frontend/base/confirmation-modal.html' %} 
+    {% block confirmation_modal %}{% endblock %}
+
+    {% include 'frontend/base/topbar.html' %}
+    {% block topbar %}{% endblock %}
+    
+    <!-- Ana sayfa içeriği -->
+    {% include 'frontend/base/page-container.html' %}
+    {% block page_content %}{% endblock %}
+    
+    <!-- Sayfa özel modallar -->
+    {% include 'frontend/base/modal.html' %}
+    {% block custom_modals %}{% endblock %}
+    
+    <!-- Sayfa özel JavaScript (body sonunda) -->
+    {% block custom_js_end %}{% endblock %}
+</body>
+</html>

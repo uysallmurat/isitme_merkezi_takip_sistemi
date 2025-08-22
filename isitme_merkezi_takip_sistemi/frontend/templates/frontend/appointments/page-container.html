@@ -1,0 +1,161 @@
+{% load static %}
+<div class="page-container">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">🎧</span>
+            <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
+        </div>
+        <ul>
+            <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
+            <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
+            <li><a href="/appointments/" class="nav-link nav-item active" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
+            <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
+            <li><a href="/test-reports/" class="nav-link nav-item" data-route="/tests"><i class="fa-solid fa-file-medical"></i> TEST RAPORLARI</a></li>
+            <li><a href="/inventory/" class="nav-link nav-item" data-route="/inventory"><i class="fa-solid fa-boxes-stacked"></i> STOK YÖNETİMİ</a></li>
+            <li><a href="/invoices/" class="nav-link nav-item" data-route="/invoices"><i class="fa-solid fa-file-invoice-dollar"></i> FATURA YÖNETİMİ</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        <div class="page-header">
+            <div class="title-section">
+                <h1 class="page-title">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Randevu Yönetimi
+                </h1>
+            </div>
+            <div class="main-search-container">
+                <div class="filter-group">
+                    <input type="text" id="mainSearch" placeholder="Hasta adi ile ara..." onkeyup="applyFilters()">
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button type="button" class="clear-filters-btn" onclick="clearAllFilters()">
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                    Filtreleri Temizle
+                </button>
+                <button type="button" class="btn-primary" onclick="openNewAppointmentModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Randevu
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats-cards">
+            <div class="stat-card interactive-element fade-in">
+                <div class="stat-icon appointments">
+                    <i class="fa-solid fa-calendar"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalAppointments">
+                        <span class="loading-spinner primary"></span>
+                    </div>
+                    <div class="stat-label">Toplam Randevu</div>
+                </div>
+            </div>
+            <div class="stat-card interactive-element fade-in">
+                <div class="stat-icon today">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="todayAppointments">
+                        <span class="loading-spinner primary"></span>
+                    </div>
+                    <div class="stat-label">Bugünkü Randevular</div>
+                </div>
+            </div>
+            <div class="stat-card interactive-element fade-in">
+                <div class="stat-icon completed">
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="completedAppointments">
+                        <span class="loading-spinner primary"></span>
+                    </div>
+                    <div class="stat-label">Tamamlanan Randevular</div>
+                </div>
+            </div>
+            <div class="stat-card interactive-element fade-in">
+                <div class="stat-icon weekly">
+                    <i class="fa-solid fa-calendar-week"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="weeklyAppointments">
+                        <span class="loading-spinner primary"></span>
+                    </div>
+                    <div class="stat-label">Bu Hafta Randevular</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sortable-header" onclick="toggleFilter('name')">
+                                <i class="fa-solid fa-user"></i>
+                                Ad Soyad
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="name-filter">
+                                    <input type="text" placeholder="Ad soyad ara..." onkeyup="filterByName(this.value)">
+                                    <div class="filter-options" id="name-options"></div>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('date')">
+                                <i class="fa-solid fa-calendar"></i>
+                                Tarih
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="date-filter">
+                                    <input type="date" onchange="filterByDate(this.value)">
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('time')">
+                                <i class="fa-solid fa-clock"></i>
+                                Saat
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="time-filter">
+                                    <input type="time" onchange="filterByTime(this.value)">
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('type')">
+                                <i class="fa-solid fa-tag"></i>
+                                Tür
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="type-filter">
+                                    <select onchange="filterByType(this.value)">
+                                        <option value="">Tümü</option>
+                                        <option value="consultation">Konsültasyon</option>
+                                        <option value="hearing_test">İşitme Testi</option>
+                                        <option value="device_fitting">Cihaz Uygulaması</option>
+                                        <option value="follow_up">Kontrol</option>
+                                        <option value="maintenance">Bakım</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('status')">
+                                <i class="fa-solid fa-info-circle"></i>
+                                Durum
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="status-filter">
+                                    <select onchange="filterByStatus(this.value)">
+                                        <option value="">Tümü</option>
+                                        <option value="scheduled">Planlandı</option>
+                                        <option value="completed">Tamamlandı</option>
+                                        <option value="cancelled">İptal Edildi</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointmentsTable">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem;">
+                                <span class="loading-spinner primary"></span> Yükleniyor...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main></div>

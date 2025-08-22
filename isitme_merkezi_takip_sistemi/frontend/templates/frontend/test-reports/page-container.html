@@ -1,0 +1,155 @@
+{% load static %}
+<div class="page-container">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">🎧</span>
+            <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
+        </div>
+        <ul>
+            <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
+            <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
+            <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
+            <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
+            <li><a href="/test-reports/" class="nav-link nav-item active" data-route="/tests"><i class="fa-solid fa-file-medical"></i> TEST RAPORLARI</a></li>
+            <li><a href="/inventory/" class="nav-link nav-item" data-route="/inventory"><i class="fa-solid fa-boxes-stacked"></i> STOK YÖNETİMİ</a></li>
+            <li><a href="/invoices/" class="nav-link nav-item" data-route="/invoices"><i class="fa-solid fa-file-invoice-dollar"></i> FATURA YÖNETİMİ</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">			
+        <div class="page-header">
+            <div class="title-section">
+                <h1 class="page-title">
+                    <i class="fa-solid fa-file-medical"></i>
+                    Test Raporları
+                </h1>
+            </div>
+            <div class="main-search-container">
+                <div class="filter-group">
+                    <input type="text" id="mainSearch" placeholder="Hasta adı, test türü, doktor veya durum ile ara..." onkeyup="applyFilters()">
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button type="button" class="clear-filters-btn" onclick="clearAllFilters()">
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                    Filtreleri Temizle
+                </button>
+                <button type="button" class="btn-primary" onclick="openNewTestModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Test
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-wave-square"></i>
+                </div>
+                <div class="stat-content">
+                <div class="stat-number" id="totalTests">0</div>
+                <div class="stat-label">Toplam Test</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                <div class="stat-number" id="completedTests">0</div>
+                <div class="stat-label">Tamamlanan Testler</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                <div class="stat-number" id="pendingTests">0</div>
+                <div class="stat-label">Bekleyen Testler</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-calendar-week"></i>
+                </div>
+                <div class="stat-content">
+                <div class="stat-number" id="weeklyTests">0</div>
+                <div class="stat-label">Bu Hafta Testler</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sortable-header" onclick="toggleFilter('patient')">
+                                Hasta <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="patient-filter">
+                                    <input type="text" placeholder="Hasta adı ara..." onkeyup="filterByPatient(this.value)">
+                                    <div class="filter-options" id="patient-options"></div>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('testType')">
+                                Test Türü <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="testType-filter">
+                                    <select onchange="filterByTestType(this.value)">
+                                        <option value="">Tümü</option>
+                                        <option value="Pure_Tone">Saf Ses Odyometrisi</option>
+                                        <option value="Speech">Konuşma Odyometrisi</option>
+                                        <option value="Impedance">Empedans Odyometrisi</option>
+                                        <option value="ABR">İşitsel Beyin Sapı Yanıtı</option>
+                                        <option value="OAE">Otoakustik Emisyon</option>
+                                        <option value="Other">Diğer</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('testDate')">
+                                Test Tarihi <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="testDate-filter">
+                                    <div class="date-range-filter">
+                                        <input type="date" id="testDate-start" placeholder="Başlangıç" onchange="filterByTestDate()">
+                                        <input type="date" id="testDate-end" placeholder="Bitiş" onchange="filterByTestDate()">
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('doctor')">
+                                Doktor <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="doctor-filter">
+                                    <input type="text" placeholder="Doktor adı ara..." onkeyup="filterByDoctor(this.value)">
+                                    <div class="filter-options" id="doctor-options"></div>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('status')">
+                                Durum <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="status-filter">
+                                    <select onchange="filterByStatus(this.value)">
+                                        <option value="">Tümü</option>
+                                        <option value="Completed">Tamamlandı</option>
+                                        <option value="Incomplete">Tamamlanmadı</option>
+                                        <option value="Cancelled">İptal Edildi</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('diagnosis')">
+                                Sonuç <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="diagnosis-filter">
+                                    <input type="text" placeholder="Tanı/sonuç ara..." onkeyup="filterByDiagnosis(this.value)">
+                                </div>
+                            </th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="testReportsTable">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 2rem;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </main>
+</div>

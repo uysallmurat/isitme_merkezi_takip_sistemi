@@ -1,0 +1,181 @@
+{% load static %}
+<div class="page-container">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">🎧</span>
+            <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
+        </div>
+        <ul>
+            <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
+            <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
+            <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
+            <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
+            <li><a href="/test-reports/" class="nav-link nav-item" data-route="/tests"><i class="fa-solid fa-file-medical"></i> TEST RAPORLARI</a></li>
+            <li><a href="/inventory/" class="nav-link nav-item active" data-route="/inventory"><i class="fa-solid fa-boxes-stacked"></i> STOK YÖNETİMİ</a></li>
+            <li><a href="/invoices/" class="nav-link nav-item" data-route="/invoices"><i class="fa-solid fa-file-invoice-dollar"></i> FATURA YÖNETİMİ</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        
+        <div class="page-header">
+            <div class="title-section">
+                <h1 class="page-title">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    Stok Yönetimi
+                </h1>
+            </div>
+            <div class="main-search-container">
+                <div class="filter-group">
+                    <input type="text" id="mainSearch" placeholder="Ürün adi, kategori ve tedarikçi ile ara..." onkeyup="applyFilters()">
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button type="button" class="clear-filters-btn" onclick="clearAllFilters()">
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                    Filtreleri Temizle
+                </button>
+            </div>
+            <div class="action-buttons">
+                <button type="button" class="btn-primary" onclick="openNewProductModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Ürün
+                </button>
+                <button type="button" class="btn-primary" onclick="openStockInModal()">
+                    <i class="fa-solid fa-arrow-down"></i>
+                    Stok Girişi
+                </button>
+               <button type="button" class="btn-primary" onclick="openStockOutModal()">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    Stok Çıkışı
+                </button>
+            </div>
+        </div>
+        
+        
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalProducts">0</div>
+                    <div class="stat-label">Toplam Ürün</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="stockValue">0</div>
+                    <div class="stat-label">Stok Değeri</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="lowStock">0</div>
+                    <div class="stat-label">Düşük Stok</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-times-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="outOfStock">0</div>
+                    <div class="stat-label">Stok Dışı</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sortable-header" onclick="toggleFilter('name')">
+                                <i class="fa-solid fa-box"></i>
+                                Ürün Adı
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="name-filter">
+                                    <input type="text" placeholder="Ürün adı ara..." onkeyup="filterByName(this.value)">
+                                    <div class="filter-options" id="name-options"></div>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('category')">
+                                <i class="fa-solid fa-tags"></i>
+                                Kategori
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="category-filter">
+                                    <select onchange="filterByCategory(this.value)">
+                                        <option value="">Tümü</option>
+                                        <option value="Battery">Pil</option>
+                                        <option value="Ear_Tip">Kulak Ucu</option>
+                                        <option value="Tube">Tüp</option>
+                                        <option value="Filter">Filtre</option>
+                                        <option value="Wax_Guard">Kulak Kiri Koruması</option>
+                                        <option value="Accessory">Aksesuar</option>
+                                        <option value="Other">Diğer</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('stock')">
+                                <i class="fa-solid fa-cubes"></i>
+                                Stok
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="stock-filter">
+                                    <input type="number" placeholder="Stok miktarı..." onchange="filterByStock(this.value)">
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('price')">
+                                <i class="fa-solid fa-tag"></i>
+                                Fiyat
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="price-filter">
+                                    <input type="number" placeholder="Fiyat..." onchange="filterByPrice(this.value)">
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('supplier')">
+                                <i class="fa-solid fa-truck"></i>
+                                Tedarikçi
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="supplier-filter">
+                                    <select onchange="filterBySupplier(this.value)">
+                                        <option value="">Tümü</option>
+                                        <option value="1">Phonak Türkiye</option>
+                                        <option value="2">Oticon Türkiye</option>
+                                        <option value="3">ReSound Türkiye</option>
+                                        <option value="4">Starkey Türkiye</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('status')">
+                                <i class="fa-solid fa-info-circle"></i>
+                                Durum
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="status-filter">
+                                    <select onchange="filterByStatus(this.value)">
+                                        <option value="">Tümü</option>
+                                        <option value="in_stock">Stokta</option>
+                                        <option value="low">Düşük Stok</option>
+                                        <option value="out">Stok Dışı</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTable">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 2rem;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main></div>

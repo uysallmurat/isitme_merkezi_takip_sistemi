@@ -1,0 +1,425 @@
+{% load static %}
+    <!-- Yeni Test Modal -->
+    <div id="newTestModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Yeni Test Raporu</h2>
+                <span class="close" onclick="closeNewTestModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="newTestForm">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testPatient">Hasta *</label>
+                            <select id="testPatient" name="patient" required>
+                                <option value="">Hasta seçin...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="testType">Test Türü *</label>
+                            <select id="testType" name="test_type" required>
+                                <option value="">Test türü seçin...</option>
+                                <option value="Pure_Tone">Saf Ses Odyometrisi</option>
+                                <option value="Speech">Konuşma Odyometrisi</option>
+                                <option value="Impedance">Empedans Odyometrisi</option>
+                                <option value="ABR">İşitsel Beyin Sapı Yanıtı</option>
+                                <option value="OAE">Otoakustik Emisyon</option>
+                                <option value="Other">Diğer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testDate">Test Tarihi *</label>
+                            <input type="datetime-local" id="testDate" name="test_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="testStatus">Durum *</label>
+                            <select id="testStatus" name="status" required>
+                                <option value="Completed">Tamamlandı</option>
+                                <option value="Incomplete">Tamamlanmadı</option>
+                                <option value="Cancelled">İptal Edildi</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Sağ Kulak Sonuçları -->
+                    <div class="form-section">
+                        <h3>Sağ Kulak Sonuçları (dB HL)</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightEar250">250 Hz</label>
+                                <input type="number" id="rightEar250" name="right_ear_250" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rightEar500">500 Hz</label>
+                                <input type="number" id="rightEar500" name="right_ear_500" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rightEar1000">1000 Hz</label>
+                                <input type="number" id="rightEar1000" name="right_ear_1000" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightEar2000">2000 Hz</label>
+                                <input type="number" id="rightEar2000" name="right_ear_2000" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rightEar4000">4000 Hz</label>
+                                <input type="number" id="rightEar4000" name="right_ear_4000" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="rightEar8000">8000 Hz</label>
+                                <input type="number" id="rightEar8000" name="right_ear_8000" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sol Kulak Sonuçları -->
+                    <div class="form-section">
+                        <h3>Sol Kulak Sonuçları (dB HL)</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="leftEar250">250 Hz</label>
+                                <input type="number" id="leftEar250" name="left_ear_250" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEar500">500 Hz</label>
+                                <input type="number" id="leftEar500" name="left_ear_500" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEar1000">1000 Hz</label>
+                                <input type="number" id="leftEar1000" name="left_ear_1000" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="leftEar2000">2000 Hz</label>
+                                <input type="number" id="leftEar2000" name="left_ear_2000" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEar4000">4000 Hz</label>
+                                <input type="number" id="leftEar4000" name="left_ear_4000" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEar8000">8000 Hz</label>
+                                <input type="number" id="leftEar8000" name="left_ear_8000" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konuşma Testi -->
+                    <div class="form-section">
+                        <h3>Konuşma Testi Sonuçları</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightEarSrt">Sağ Kulak SRT</label>
+                                <input type="number" id="rightEarSrt" name="right_ear_srt" min="0" max="120" placeholder="dB">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEarSrt">Sol Kulak SRT</label>
+                                <input type="number" id="leftEarSrt" name="left_ear_srt" min="0" max="120" placeholder="dB">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rightEarSds">Sağ Kulak SDS (%)</label>
+                                <input type="number" id="rightEarSds" name="right_ear_sds" min="0" max="100" placeholder="%">
+                            </div>
+                            <div class="form-group">
+                                <label for="leftEarSds">Sol Kulak SDS (%)</label>
+                                <input type="number" id="leftEarSds" name="left_ear_sds" min="0" max="100" placeholder="%">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notlar ve Değerlendirme -->
+                    <div class="form-group">
+                        <label for="testNotes">Test Notları</label>
+                        <textarea id="testNotes" name="notes" rows="3" placeholder="Test ile ilgili notlar"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="testDiagnosis">Tanı</label>
+                        <textarea id="testDiagnosis" name="diagnosis" rows="3" placeholder="Tanı ve değerlendirme"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="testRecommendations">Öneriler</label>
+                        <textarea id="testRecommendations" name="recommendations" rows="3" placeholder="Tedavi önerileri"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportPdf">Test Raporu PDF Dosyası</label>
+                        <input type="file" id="reportPdf" name="report_pdf" accept=".pdf" class="file-input">
+                        <small class="help-text">Test raporunun PDF dosyasını yükleyin (opsiyonel)</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="closeNewTestModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Test Raporu Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Raporu Görüntüleme Modal -->
+    <div id="viewTestReportModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-eye"></i> Test Raporu Detayları</h2>
+                <span class="close" onclick="closeViewTestReportModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="report-details">
+                    <div class="detail-section">
+                        <h3>Hasta Bilgileri</h3>
+                        <div class="detail-row">
+                            <label>Hasta Adı:</label>
+                            <span id="viewPatientName">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Test Tarihi:</label>
+                            <span id="viewTestDate">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Test Türü:</label>
+                            <span id="viewTestType">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Doktor:</label>
+                            <span id="viewDoctorName">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Durum:</label>
+                            <span id="viewStatus">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Test Sonuçları</h3>
+                        <div class="hearing-results">
+                            <div class="ear-results">
+                                <h4>Sağ Kulak (dB HL)</h4>
+                                <div class="frequency-results">
+                                    <div class="freq-item">250 Hz: <span id="viewRightEar250">-</span></div>
+                                    <div class="freq-item">500 Hz: <span id="viewRightEar500">-</span></div>
+                                    <div class="freq-item">1000 Hz: <span id="viewRightEar1000">-</span></div>
+                                    <div class="freq-item">2000 Hz: <span id="viewRightEar2000">-</span></div>
+                                </div>
+                            </div>
+                            <div class="ear-results">
+                                <h4>Sol Kulak (dB HL)</h4>
+                                <div class="frequency-results">
+                                    <div class="freq-item">250 Hz: <span id="viewLeftEar250">-</span></div>
+                                    <div class="freq-item">500 Hz: <span id="viewLeftEar500">-</span></div>
+                                    <div class="freq-item">1000 Hz: <span id="viewLeftEar1000">-</span></div>
+                                    <div class="freq-item">2000 Hz: <span id="viewLeftEar2000">-</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Değerlendirme</h3>
+                        <div class="detail-row">
+                            <label>Tanı:</label>
+                            <div id="viewDiagnosis">-</div>
+                        </div>
+                        <div class="detail-row">
+                            <label>Notlar:</label>
+                            <div id="viewNotes">-</div>
+                        </div>
+                        <div class="detail-row">
+                            <label>Öneriler:</label>
+                            <div id="viewRecommendations">-</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" onclick="closeViewTestReportModal()" class="btn-secondary">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Raporu Düzenleme Modal -->
+    <div id="editTestReportModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-edit"></i> Test Raporu Düzenle</h2>
+                <span class="close" onclick="closeEditTestReportModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editTestReportForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="editTestId" name="test_id">
+                    
+                    <!-- Temel Bilgiler -->
+                    <div class="form-section">
+                        <h3>Temel Bilgiler</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editPatientSelect">Hasta *</label>
+                                <select id="editPatientSelect" name="patient" required>
+                                    <option value="">Hasta seçin...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editTestType">Test Türü *</label>
+                                <select id="editTestType" name="test_type" required>
+                                    <option value="">Seçin...</option>
+                                    <option value="Pure_Tone">Saf Ses Odyometrisi</option>
+                                    <option value="Speech">Konuşma Odyometrisi</option>
+                                    <option value="Impedance">Empedans Odyometrisi</option>
+                                    <option value="ABR">İşitsel Beyin Sapı Yanıtı</option>
+                                    <option value="OAE">Otoakustik Emisyon</option>
+                                    <option value="Other">Diğer</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editTestDate">Test Tarihi *</label>
+                                <input type="datetime-local" id="editTestDate" name="test_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editTestStatus">Durum</label>
+                                <select id="editTestStatus" name="status">
+                                    <option value="Completed">Tamamlandı</option>
+                                    <option value="Incomplete">Tamamlanmadı</option>
+                                    <option value="Cancelled">İptal Edildi</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Saf Ses Odyometrisi Sonuçları -->
+                    <div class="form-section">
+                        <h3>Saf Ses Odyometrisi Sonuçları (dB HL)</h3>
+                        <div class="hearing-test-grid">
+                            <div class="ear-section">
+                                <h4>Sağ Kulak</h4>
+                                <div class="frequency-grid">
+                                    <div class="freq-input">
+                                        <label>250 Hz</label>
+                                        <input type="number" id="editRightEar250" name="right_ear_250" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>500 Hz</label>
+                                        <input type="number" id="editRightEar500" name="right_ear_500" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>1000 Hz</label>
+                                        <input type="number" id="editRightEar1000" name="right_ear_1000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>2000 Hz</label>
+                                        <input type="number" id="editRightEar2000" name="right_ear_2000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>4000 Hz</label>
+                                        <input type="number" id="editRightEar4000" name="right_ear_4000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>8000 Hz</label>
+                                        <input type="number" id="editRightEar8000" name="right_ear_8000" min="0" max="120" step="5">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="ear-section">
+                                <h4>Sol Kulak</h4>
+                                <div class="frequency-grid">
+                                    <div class="freq-input">
+                                        <label>250 Hz</label>
+                                        <input type="number" id="editLeftEar250" name="left_ear_250" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>500 Hz</label>
+                                        <input type="number" id="editLeftEar500" name="left_ear_500" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>1000 Hz</label>
+                                        <input type="number" id="editLeftEar1000" name="left_ear_1000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>2000 Hz</label>
+                                        <input type="number" id="editLeftEar2000" name="left_ear_2000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>4000 Hz</label>
+                                        <input type="number" id="editLeftEar4000" name="left_ear_4000" min="0" max="120" step="5">
+                                    </div>
+                                    <div class="freq-input">
+                                        <label>8000 Hz</label>
+                                        <input type="number" id="editLeftEar8000" name="left_ear_8000" min="0" max="120" step="5">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konuşma Odyometrisi Sonuçları -->
+                    <div class="form-section">
+                        <h3>Konuşma Odyometrisi Sonuçları</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editRightEarSrt">Sağ Kulak SRT (dB HL)</label>
+                                <input type="number" id="editRightEarSrt" name="right_ear_srt" min="0" max="120" step="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="editLeftEarSrt">Sol Kulak SRT (dB HL)</label>
+                                <input type="number" id="editLeftEarSrt" name="left_ear_srt" min="0" max="120" step="5">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editRightEarSds">Sağ Kulak SDS (%)</label>
+                                <input type="number" id="editRightEarSds" name="right_ear_sds" min="0" max="100" step="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="editLeftEarSds">Sol Kulak SDS (%)</label>
+                                <input type="number" id="editLeftEarSds" name="left_ear_sds" min="0" max="100" step="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Değerlendirme -->
+                    <div class="form-section">
+                        <h3>Değerlendirme</h3>
+                        <div class="form-group">
+                            <label for="editTestDiagnosis">Tanı</label>
+                            <textarea id="editTestDiagnosis" name="diagnosis" rows="3" placeholder="Test sonucuna göre tanı"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTestNotes">Notlar</label>
+                            <textarea id="editTestNotes" name="notes" rows="3" placeholder="Test ile ilgili notlar"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTestRecommendations">Öneriler</label>
+                            <textarea id="editTestRecommendations" name="recommendations" rows="3" placeholder="Tedavi önerileri"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editReportPdf">Test Raporu PDF Dosyası</label>
+                            <input type="file" id="editReportPdf" name="report_pdf" accept=".pdf" class="file-input">
+                            <small class="help-text">Yeni PDF dosyası yüklemek için seçin (opsiyonel)</small>
+                            <div id="currentPdfInfo" class="current-file-info" style="display: none;">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                <span id="currentPdfName">Mevcut PDF dosyası</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="closeEditTestReportModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Güncelle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

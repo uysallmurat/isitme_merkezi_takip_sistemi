@@ -1,0 +1,178 @@
+{% load static %}
+<div class="page-container">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">🎧</span>
+            <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
+        </div>
+        <ul>
+            <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
+            <li><a href="/patients/" class="nav-link nav-item active" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
+            <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
+            <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
+            <li><a href="/test-reports/" class="nav-link nav-item" data-route="/tests"><i class="fa-solid fa-file-medical"></i> TEST RAPORLARI</a></li>
+            <li><a href="/inventory/" class="nav-link nav-item" data-route="/inventory"><i class="fa-solid fa-boxes-stacked"></i> STOK YÖNETİMİ</a></li>
+            <li><a href="/invoices/" class="nav-link nav-item" data-route="/invoices"><i class="fa-solid fa-file-invoice-dollar"></i> FATURA YÖNETİMİ</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        <div class="page-header">
+            <div class="title-section">
+                <h1 class="page-title">
+                    <i class="fa-solid fa-user-injured"></i>
+                    Hasta Yönetimi
+                </h1>
+            </div>
+            <div class="main-search-container">
+                <div class="filter-group">
+                    <input type="text" id="mainSearch" placeholder="Ad, soyad, telefon veya email ile ara..." onkeyup="applyFilters()">
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button type="button" class="clear-filters-btn" onclick="clearAllFilters()">
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                    Filtreleri Temizle
+                </button>
+                <button type="button" class="btn-primary" onclick="openNewPatientModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Hasta
+                </button>
+            </div>
+        </div>
+        
+
+        
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalPatients">0</div>
+                    <div class="stat-label">Toplam Hasta</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="activePatients">0</div>
+                    <div class="stat-label">Aktif Hastalar</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="newPatients">0</div>
+                    <div class="stat-label">Bu Ay Yeni Hasta</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="appointmentsThisMonth">0</div>
+                    <div class="stat-label">Bu Ay Randevu</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sortable-header" onclick="toggleFilter('tcNumber')">
+                                <i class="fa-solid fa-id-card"></i>
+                                TC Kimlik No 
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="tcNumber-filter">
+                                    <input type="text" placeholder="TC no ara..." onkeyup="filterByTcNumber(this.value)">
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('name')">
+                                <i class="fa-solid fa-user"></i>
+                                Ad Soyad 
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="name-filter">
+                                    <input type="text" placeholder="Ad soyad ara..." onkeyup="filterByName(this.value)">
+                                    <div class="filter-options" id="name-options"></div>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('birthDate')">
+                                <i class="fa-solid fa-calendar-day"></i>
+                                Doğum Tarihi 
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="birthDate-filter">
+                                    <div class="date-range-filter">
+                                        <input type="date" id="birthDate-start" placeholder="Başlangıç" onchange="filterByBirthDate()">
+                                        <input type="date" id="birthDate-end" placeholder="Bitiş" onchange="filterByBirthDate()">
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('phone')">
+                                <i class="fa-solid fa-phone"></i>
+                                Telefon 
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="phone-filter">
+                                    <input type="text" placeholder="Telefon ara..." onkeyup="filterByPhone(this.value)">
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('email')">
+                                <i class="fa-solid fa-envelope"></i>
+                                E-posta 
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="email-filter">
+                                    <input type="text" placeholder="E-posta ara..." onkeyup="filterByPhone(this.value)">
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('lastAppointment')">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                Son Randevu 
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="lastAppointment-filter">
+                                    <div class="date-range-filter">
+                                        <input type="date" id="lastAppointment-start" placeholder="Başlangıç">
+                                        <input type="date" id="lastAppointment-end" placeholder="Bitiş">
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="sortable-header" onclick="toggleFilter('status')">
+                                <i class="fa-solid fa-toggle-on"></i>
+                                Durum 
+                                <i class="fa-solid fa-filter"></i>
+                                <div class="filter-dropdown" id="status-filter">
+                                    <select onchange="filterByStatus(this.value)">
+                                        <option value="">Tümü</option>
+                                        <option value="active">Aktif</option>
+                                        <option value="inactive">Pasif</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <i class="fa-solid fa-cogs"></i>
+                                İşlemler
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientsTable">
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 2rem;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <div id="pagination" class="pagination"></div>
+            </div>
+                     </div>
+     </main>
+ </div>

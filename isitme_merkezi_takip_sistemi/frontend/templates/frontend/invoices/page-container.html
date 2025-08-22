@@ -1,0 +1,109 @@
+{% load static %}
+<div class="page-container">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">🎧</span>
+            <div class="sidebar-logo-text">Hasta Takip Sistemi</div>
+        </div>
+        <ul>
+            <li><a href="/dashboard/" class="nav-link nav-item" data-route="/dashboard"><i class="fa-solid fa-house home-icon"></i> ANASAYFA</a></li>
+            <li><a href="/patients/" class="nav-link nav-item" data-route="/patients"><i class="fa-solid fa-user-injured"></i> HASTALAR</a></li>
+            <li><a href="/appointments/" class="nav-link nav-item" data-route="/appointments"><i class="fa-solid fa-calendar-check"></i> RANDEVULAR</a></li>
+            <li><a href="/devices/" class="nav-link nav-item" data-route="/devices"><i class="fa-solid fa-headset"></i> CİHAZLAR</a></li>
+            <li><a href="/test-reports/" class="nav-link nav-item" data-route="/tests"><i class="fa-solid fa-file-medical"></i> TEST RAPORLARI</a></li>
+            <li><a href="/inventory/" class="nav-link nav-item" data-route="/inventory"><i class="fa-solid fa-boxes-stacked"></i> STOK YÖNETİMİ</a></li>
+            <li><a href="/invoices/" class="nav-link nav-item active" data-route="/invoices"><i class="fa-solid fa-file-invoice-dollar"></i> FATURA YÖNETİMİ</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">           
+        <div class="page-header">
+            <div class="title-section">
+                <h1 class="page-title">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    Fatura Yönetimi
+                </h1>
+            </div>
+            <div class="main-search-container">
+                <div class="filter-group">
+                    <input type="text" id="mainSearch" placeholder="Fatura no, hasta ve durum ile ara..." onkeyup="applyFilters()">
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button type="button" class="clear-filters-btn" onclick="clearAllFilters()">
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                    Filtreleri Temizle
+                </button>
+                <button type="button" class="btn-primary" onclick="openNewPatientModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Fatura
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalRevenue">0</div>
+                    <div class="stat-label">Toplam Gelir</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="pendingPayments">0</div>
+                    <div class="stat-label">Bekleyen Ödemeler</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="overduePayments">0</div>
+                    <div class="stat-label">Gecikmiş Ödemeler</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-file-invoice"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalInvoices">0</div>
+                    <div class="stat-label">Toplam Fatura</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <div class="table-container">
+                <table class="enhanced-table">
+                    <thead>
+                        <tr>
+                            <th class="sticky-col">Fatura No</th>
+                            <th>Hasta</th>
+                            <th>Fatura Tarihi</th>
+                            <th>Tutar</th>
+                            <th>Açıklama</th>
+                            <th>Durum</th>
+                            <th>Oluşturan</th>
+                            <th>Oluşturma Tarihi</th>
+                            <th>Son Güncelleme</th>
+                            <th class="sticky-actions">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoicesTable">
+                        <tr>
+                            <td colspan="10" style="text-align: center; padding: 2rem;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main></div>

@@ -1,0 +1,366 @@
+{% load static %}
+    <!-- Yeni Ürün Ekleme Modal -->
+    <div id="newProductModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Yeni Ürün Ekle</h2>
+                <span class="close" onclick="closeNewProductModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="newProductForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="productName">Ürün Adı *</label>
+                        <input type="text" id="productName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Kategori *</label>
+                        <select id="category" name="item_type" required>
+                            <option value="">Kategori seçin...</option>
+                            <option value="Battery">Pil</option>
+                            <option value="Ear_Tip">Kulak Ucu</option>
+                            <option value="Tube">Tüp</option>
+                            <option value="Filter">Filtre</option>
+                            <option value="Wax_Guard">Kulak Kiri Koruması</option>
+                            <option value="Accessory">Aksesuar</option>
+                            <option value="Other">Diğer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productBrand">Marka</label>
+                        <input type="text" id="productBrand" name="brand" placeholder="Ürün markası...">
+                    </div>
+                    <div class="form-group">
+                        <label for="productModel">Model</label>
+                        <input type="text" id="productModel" name="model" placeholder="Ürün modeli...">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Açıklama</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Ürün açıklaması..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="productUnit">Birim</label>
+                        <input type="text" id="productUnit" name="unit" value="Adet" placeholder="Adet, Paket, Metre...">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Fiyat (₺) *</label>
+                        <input type="number" id="price" name="unit_price" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockQuantity">Stok Miktarı *</label>
+                        <input type="number" id="stockQuantity" name="current_stock" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplier">Tedarikçi</label>
+                        <select id="supplier" name="supplier">
+                            <option value="">Tedarikçi seçin...</option>
+                            <option value="1">Phonak Türkiye</option>
+                            <option value="2">Oticon Türkiye</option>
+                            <option value="3">ReSound Türkiye</option>
+                            <option value="4">Starkey Türkiye</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="minStockLevel">Minimum Stok Seviyesi</label>
+                        <input type="number" id="minStockLevel" name="minimum_stock" min="0" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="productLocation">Konum</label>
+                        <input type="text" id="productLocation" name="location" placeholder="Depo konumu...">
+                    </div>
+                    <div class="form-group">
+                        <label for="productNotes">Notlar</label>
+                        <textarea id="productNotes" name="notes" rows="2" placeholder="Ek notlar..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeNewProductModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stok Girişi Modal -->
+    <div id="stockInModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Stok Girişi</h2>
+                <span class="close" onclick="closeStockInModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="stockInForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="stockInProduct">Ürün *</label>
+                        <select id="stockInProduct" name="stock_item" required>
+                            <option value="">Ürün seçin...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Miktar *</label>
+                        <input type="number" id="quantity" name="quantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="unitPrice">Birim Fiyat (₺)</label>
+                        <input type="number" id="unitPrice" name="unit_price" step="0.01" min="0" placeholder="Opsiyonel">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalAmount">Toplam Tutar (₺)</label>
+                        <input type="number" id="totalAmount" name="total_amount" step="0.01" min="0" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockInSupplier">Tedarikçi</label>
+                        <select id="stockInSupplier" name="supplier">
+                            <option value="">Tedarikçi seçin...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="referenceNumber">Referans No</label>
+                        <input type="text" id="referenceNumber" name="reference_number" placeholder="Fatura/İrsaliye no">
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionDate">İşlem Tarihi *</label>
+                        <input type="date" id="transactionDate" name="transaction_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockInNotes">Notlar</label>
+                        <textarea id="stockInNotes" name="notes" rows="3" placeholder="İsteğe bağlı notlar"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeStockInModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Stok Girişi Yap</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stok Çıkışı Modal -->
+    <div id="stockOutModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Stok Çıkışı</h2>
+                <span class="close" onclick="closeStockOutModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="stockOutForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="stockOutProduct">Ürün *</label>
+                        <select id="stockOutProduct" name="stock_item" required>
+                            <option value="">Ürün seçin...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockOutQuantity">Miktar *</label>
+                        <input type="number" id="stockOutQuantity" name="quantity" min="1" required>
+                        <small class="form-hint">Mevcut stok: <span id="availableStock">-</span></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockOutUnitPrice">Birim Fiyat (₺)</label>
+                        <input type="number" id="stockOutUnitPrice" name="unit_price" step="0.01" min="0" placeholder="Opsiyonel">
+                    </div>
+                    <div class="form-group">
+                        <label for="stockOutReason">Çıkış Nedeni</label>
+                        <select id="stockOutReason" name="reason">
+                            <option value="">Neden seçin...</option>
+                            <option value="Sale">Satış</option>
+                            <option value="Usage">Kullanım</option>
+                            <option value="Damage">Hasar</option>
+                            <option value="Loss">Kayıp</option>
+                            <option value="Transfer">Transfer</option>
+                            <option value="Other">Diğer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockOutReference">Referans No</label>
+                        <input type="text" id="stockOutReference" name="reference_number" placeholder="Satış/Transfer no">
+                    </div>
+                    <div class="form-group">
+                        <label for="stockOutDate">İşlem Tarihi *</label>
+                        <input type="date" id="stockOutDate" name="transaction_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockOutNotes">Notlar</label>
+                        <textarea id="stockOutNotes" name="notes" rows="3" placeholder="İsteğe bağlı notlar"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeStockOutModal()" class="btn-secondary">İptal</button>
+                        <button type="submit" class="btn-primary">Stok Çıkışı Yap</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Ürün Görüntüleme Modal -->
+    <div id="viewProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-eye"></i> Ürün Detayları</h2>
+                <button type="button" class="close" onclick="closeViewProductModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <label>Ürün ID:</label>
+                        <span id="viewProductId">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Ürün Adı:</label>
+                        <span id="viewProductName">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Tür:</label>
+                        <span id="viewProductType">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Marka:</label>
+                        <span id="viewProductBrand">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Model:</label>
+                        <span id="viewProductModel">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Birim:</label>
+                        <span id="viewProductUnit">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Mevcut Stok:</label>
+                        <span id="viewProductCurrentStock">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Minimum Stok:</label>
+                        <span id="viewProductMinimumStock">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Birim Fiyat:</label>
+                        <span id="viewProductUnitPrice">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Stok Durumu:</label>
+                        <span id="viewProductStockStatus" class="status-badge">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Tedarikçi:</label>
+                        <span id="viewProductSupplier">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Konum:</label>
+                        <span id="viewProductLocation">-</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>Açıklama:</label>
+                        <span id="viewProductDescription">-</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>Notlar:</label>
+                        <span id="viewProductNotes">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeViewProductModal()">
+                    <i class="fa-solid fa-times"></i> Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ürün Düzenleme Modal -->
+    <div id="editProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-edit"></i> Ürün Düzenle</h2>
+                <button type="button" class="close" onclick="closeEditProductModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <form id="editProductForm" onsubmit="event.preventDefault(); submitEditProduct();">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" id="editProductId">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editProductName">Ürün Adı *</label>
+                            <input type="text" name="name" id="editProductName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductType">Ürün Türü</label>
+                            <select name="item_type" id="editProductType">
+                                <option value="">Tür Seçin</option>
+                                <option value="Battery">Pil</option>
+                                <option value="Ear_Tip">Kulak Ucu</option>
+                                <option value="Tube">Tüp</option>
+                                <option value="Filter">Filtre</option>
+                                <option value="Wax_Guard">Kulak Kiri Koruması</option>
+                                <option value="Accessory">Aksesuar</option>
+                                <option value="Other">Diğer</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editProductBrand">Marka</label>
+                            <input type="text" name="brand" id="editProductBrand">
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductModel">Model</label>
+                            <input type="text" name="model" id="editProductModel">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editProductUnit">Birim</label>
+                            <input type="text" name="unit" id="editProductUnit" placeholder="Adet, Paket, Metre...">
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductMinimumStock">Minimum Stok</label>
+                            <input type="number" name="minimum_stock" id="editProductMinimumStock" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editProductUnitPrice">Birim Fiyat (TL)</label>
+                            <input type="number" name="unit_price" id="editProductUnitPrice" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductSupplier">Tedarikçi</label>
+                            <select name="supplier" id="editProductSupplier">
+                                <option value="">Tedarikçi Seçin</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editProductLocation">Konum</label>
+                        <input type="text" name="location" id="editProductLocation" placeholder="Depo konumu...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editProductDescription">Açıklama</label>
+                        <textarea name="description" id="editProductDescription" rows="3" placeholder="Ürün açıklaması..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editProductNotes">Notlar</label>
+                        <textarea name="notes" id="editProductNotes" rows="3" placeholder="Ek notlar..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeEditProductModal()">
+                        <i class="fa-solid fa-times"></i> İptal
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-save"></i> Güncelle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
