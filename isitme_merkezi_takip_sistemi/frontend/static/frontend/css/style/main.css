@@ -1,10 +1,7 @@
 /* 
  * Main CSS - Modüler CSS Yapısı
  * Bu klasöründeki tüm modüler CSS dosyalarını import eder
- */
- /* tüm ortak stiller getirilir */
- @import url('../style/main.css');
-
+ 
 /* Temel CSS Değişkenleri ve Layout */
 @import url('./variables.css');
 @import url('./layout.css');

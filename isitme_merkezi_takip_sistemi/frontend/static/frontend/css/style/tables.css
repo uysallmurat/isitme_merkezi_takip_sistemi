@@ -6,12 +6,60 @@
     overflow-x: auto;
     border-radius: var(--border-radius-sm);
     border: 1px solid var(--neutral-200);
+    position: relative;
+    cursor: grab;
+    user-select: none;
+}
+
+.table-container:active {
+    cursor: grabbing;
+}
+
+.table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: var(--neutral-100);
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: var(--neutral-300);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: var(--neutral-400);
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.scroll-indicator.show {
+    opacity: 1;
 }
 
 /* Basic Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 800px; /* Minimum tablo genişliği */
 }
 
 th, td {
@@ -19,6 +67,7 @@ th, td {
     text-align: left;
     border-bottom: 1px solid var(--neutral-200);
     font-size: 0.95rem;
+    white-space: nowrap; /* Sütun içeriğinin satır atlamasını engelle */
 }
 
 th {
